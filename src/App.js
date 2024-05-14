@@ -5,6 +5,7 @@ import {DashboardPage} from './pages/DashboardPage'
 import { Navbar } from './ui_components/Navbar';
 import {IndexedDbTest} from './pages/IndexedDbTest'
 import { Routes,Route } from 'react-router-dom';
+import {CaissePage} from './pages/CaissePage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path='/login' element={<LoginPage/>}></Route>
           <Route path='/dashboard' element={<DashboardPage/>}></Route>
           <Route path='/IndexedDbTest' element={<IndexedDbTest/>}></Route>
+          <Route path='/CaissePage' element={<CaissePage/>}></Route>
 
         </Routes>
     </div>
