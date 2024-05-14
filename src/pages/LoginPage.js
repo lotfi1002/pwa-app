@@ -1,5 +1,5 @@
 // LoginPage.js
-import React, {useState } from 'react';
+import React, {useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import '../css/style.css';
@@ -11,11 +11,30 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const selectIdentityRef = useRef(null);
+  const identityInputRef = useRef(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate(`/dashboard?username=${username}&password=${password}`);
   };
+
+  const togglePasswordVisibility = ()=> {
+    
+    if (password.type === "password") {
+      password.type = "text";
+    } else {
+      password.type = "password";
+    }
+  }
+
+  const  replaceWithInput = ()=> {
+    const selectIdentityElement = selectIdentityRef.current;
+    const identityInpuElement = identityInputRef.current;
+
+    selectIdentityElement.style.display = "none";
+    identityInpuElement.style.display = "inline-block";
+  }
 
   return (
     <>
@@ -34,7 +53,7 @@ export const LoginPage = () => {
 						<div class="textbox-wrap form-group">
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-user"></i></span>
-								<select id="selectIdentity"  >
+								<select id="selectIdentity"  ref={selectIdentityRef} >
 									<option value="JessT">Jessica TBP</option>
 									<option value="marie">Marie TBP</option>
 									<option value="florent">Florent TBP</option>
@@ -52,15 +71,15 @@ export const LoginPage = () => {
 									<option value="sam2@oki.lu">Samuel M2</option>
 									<option value="sam3@oki.lu">Samuel D1</option>
 								</select>
-								<span class="input-group-addon" onclick="replaceWithInput()"><i class="fa fa-pencil"></i></span>
-								<input type="hidden" value="" required="required" class="form-control" onChange={(e) => setUsername(e.target.value)} name="identity"  id="identityInput"/>
+								<span class="input-group-addon" onclick={replaceWithInput}><i class="fa fa-pencil"></i></span>
+								<input type="hidden" value="" required="required" class="form-control" onChange={(e) => setUsername(e.target.value)} name="identity"  id="identityInput" ref={identityInputRef}/>
 							</div>
 						</div>
 						<div class="textbox-wrap form-group">
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-key"></i></span>
-								<input type="password" value="12345" required="required" class="form-control " name="password"  onChange={(e) => setPassword(e.target.value)}/>
-								<span class="input-group-addon" onclick="togglePasswordVisibility()"><i class="fa fa-eye"></i></span>
+								<input type="password"  required="required" class="form-control " name="password"  onChange={(e) => setPassword(e.target.value)}/>
+								<span class="input-group-addon" onclick={togglePasswordVisibility}><i class="fa fa-eye"></i></span>
 							</div>
 						</div>
 					</div>  

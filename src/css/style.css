@@ -577,7 +577,7 @@ select.form-control option {
     background: #000000 !important;
 }
 .clearfix {
-    *zoom: 1;
+    zoom: 1;
 }
 .clearfix:before,
 .clearfix:after {
@@ -2608,7 +2608,7 @@ img.calculator-trigger {
     background: #bdea74;
 }
 @-moz-document url-prefix() {
-    .calculator-base,// Firefox .calculator-trig
+    .calculator-base
     {
         text-indent: -3px;
     }
