@@ -1,8 +1,8 @@
 // LoginPage.js
 import React, {useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../logo.svg';
 import '../css/login.css';
+import '../css/style.css';
 
 
 
@@ -21,26 +21,20 @@ export const LoginPage = () => {
     <>
     <div class="page-back">
       <div class="contents">
-    
-
         <div id="login">
               <div class="container">
-
-
                 <div class="login-form-div">
                         <div class="login-content">
-
-
                         <div class="div-title col-sm-12">
                                 <h3 class="text-primary"> Veuillez vous connecter à votre compte.</h3>
                             </div>
+         <form onSubmit={handleSubmit}>
 
-
-                            <div class="col-sm-12">
+          <div class="col-sm-12">
 						<div class="textbox-wrap form-group">
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-user"></i></span>
-								<select id="selectIdentity">
+								<select id="selectIdentity"  >
 									<option value="JessT">Jessica TBP</option>
 									<option value="marie">Marie TBP</option>
 									<option value="florent">Florent TBP</option>
@@ -59,13 +53,13 @@ export const LoginPage = () => {
 									<option value="sam3@oki.lu">Samuel D1</option>
 								</select>
 								<span class="input-group-addon" onclick="replaceWithInput()"><i class="fa fa-pencil"></i></span>
-								<input type="hidden" value="" required="required" class="form-control" name="identity"  id="identityInput"/>
+								<input type="hidden" value="" required="required" class="form-control" onChange={(e) => setUsername(e.target.value)} name="identity"  id="identityInput"/>
 							</div>
 						</div>
 						<div class="textbox-wrap form-group">
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-key"></i></span>
-								<input type="password" value="<?= DEMO ? '12345678' : ''; ?>" required="required" class="form-control " name="password" />
+								<input type="password" value="12345" required="required" class="form-control " name="password"  onChange={(e) => setPassword(e.target.value)}/>
 								<span class="input-group-addon" onclick="togglePasswordVisibility()"><i class="fa fa-eye"></i></span>
 							</div>
 						</div>
@@ -80,6 +74,7 @@ export const LoginPage = () => {
                                 <button type="submit" class="btn btn-success pull-right"> &nbsp; <i class="fa fa-sign-in"></i></button>
                             </div>
 
+</form>
 
 
                           </div>
