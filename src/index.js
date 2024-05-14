@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './utilities/serviceWorkerRegistration';
+import reportWebVitals from './utilities/reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt'
 

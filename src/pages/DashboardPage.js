@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import OtherComponent from '../components/OtherComponent'
+import OtherComponent from '../ui_components/OtherComponent'
 
 export const DashboardPage = () => {
 

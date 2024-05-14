@@ -1,0 +1,26 @@
+body {
+    min-width: 350px;
+}
+.bblue {
+    background: #fff !important;
+}
+.login-page .page-back {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-size: cover !important;
+   /* //background-position: center !important;*/
+    /*//background-image: url("<?= $bgs[mt_rand(0, count($bgs) - 1)] ?>") !important;*/
+}
+.contents {
+    margin: 16px;
+    border-radius: 6px;
+    padding: 32px 16px;
+/*background: rgba(0, 0, 0, 0.1);*/
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.login-content, .login-page .login-form-links {
+    margin-top: 20px;
+    border-radius: 6px;
+}

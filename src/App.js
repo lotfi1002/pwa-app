@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import {LoginPage} from './pages/LoginPage';
 import {DashboardPage} from './pages/DashboardPage'
-import { Navbar } from './components/Navbar';
+import { Navbar } from './ui_components/Navbar';
 import {IndexedDbTest} from './pages/IndexedDbTest'
 import { Routes,Route } from 'react-router-dom';
 

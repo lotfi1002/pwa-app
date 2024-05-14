@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { initDB } from "react-indexed-db-hook";
-import { DBConfig } from "../DBConfig";
+import { DBConfig } from "../utilities/DBConfig";
 import { useIndexedDB } from 'react-indexed-db-hook';
 
 initDB(DBConfig);
