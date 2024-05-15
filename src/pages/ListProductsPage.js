@@ -1,14 +1,14 @@
 import {db} from '../models/db'
-import React, { useState } from 'react';
 import axios from "axios";
 import { useLiveQuery } from "dexie-react-hooks";
+import { url } from '../utilities/Params';
 
 export const ProductList = () => {
     //const [resp, setResp] = useState('');
     const products = useLiveQuery(() => db.product.toArray());
 
     function componentDidMount(){
-        axios.get('http://localhost/PWA-POS/api/users').then((response) => {
+        axios.get(url+'api/users').then((response) => {
             console.log(response.data) ; 
             });
     };
