@@ -19,7 +19,7 @@ function App() {
 
           <Route path='/product' element={<ProductPage/>}></Route>
           <Route path='/lproducts' element={<ProductList/>}></Route>
-          <Route path='/CaissePage' element={<CaissePage/>}></Route>
+          <Route path='/caisse' element={<CaissePage/>}></Route>
 
         </Routes>
     </div>

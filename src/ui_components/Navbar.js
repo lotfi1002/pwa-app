@@ -7,6 +7,9 @@ export const Navbar = () => {
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/product">Synchrone-DB</Link>
         <Link to="/lproducts">List Products</Link>
+        <Link to="/caisse">Caisse</Link>
+
+        
     </nav>
   )
 }
