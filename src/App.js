@@ -17,14 +17,9 @@ function App() {
           <Route path='/login' element={<LoginPage/>}></Route>
           <Route path='/dashboard' element={<DashboardPage/>}></Route>
 
-
           <Route path='/product' element={<ProductPage/>}></Route>
           <Route path='/lproducts' element={<ProductList/>}></Route>
-          
-
           <Route path='/CaissePage' element={<CaissePage/>}></Route>
-
-          <Route path='/IndexedDbTest' element={<IndexedDbTest/>}></Route>
 
         </Routes>
     </div>
