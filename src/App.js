@@ -6,6 +6,7 @@ import{ProductPage} from './pages/ProductPage'
 import{ProductList} from './pages/ListProductsPage'
 import { Navbar } from './ui_components/Navbar';
 import { Routes,Route } from 'react-router-dom';
+import {CaissePage} from './pages/CaissePage';
 
 function App() {
 
@@ -15,10 +16,17 @@ function App() {
         <Routes>
           <Route path='/login' element={<LoginPage/>}></Route>
           <Route path='/dashboard' element={<DashboardPage/>}></Route>
+
+
           <Route path='/product' element={<ProductPage/>}></Route>
           <Route path='/lproducts' element={<ProductList/>}></Route>
           
-         </Routes>
+
+          <Route path='/CaissePage' element={<CaissePage/>}></Route>
+
+          <Route path='/IndexedDbTest' element={<IndexedDbTest/>}></Route>
+
+        </Routes>
     </div>
   );
 }
