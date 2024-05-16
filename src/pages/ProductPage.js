@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {db} from '../models/db'
 import '../css/style.css';
+import Layout from '../components/Layout/Layout';
 
 export const ProductPage = () => {
    
@@ -18,7 +19,7 @@ async function  handleSave (event ){
               pu
             });
 
-            console.log(id);
+            //console.log(id);
       
             setStatus(`Product  successfully added ${id}`);
             setLibelle('');
@@ -30,6 +31,7 @@ async function  handleSave (event ){
 
 
     return (
+      <Layout>
         <div className="App-header3">
           <h2>Indexed-DB CRUD</h2>
           <div className="form-container">
@@ -54,6 +56,7 @@ async function  handleSave (event ){
           <p>{status}</p>
           
         </div>
+        </Layout>
       );
 
 

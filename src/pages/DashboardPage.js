@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import OtherComponent from '../ui_components/OtherComponent'
+import OtherComponent from '../components/OtherComponent'
 import { useAuth } from '../hooks/AuthProvider';
+import Layout from '../components/Layout/Layout';
+
 
 export const DashboardPage = () => {
 
@@ -17,7 +19,9 @@ export const DashboardPage = () => {
     };
 
     return (
+      
       <>
+      <Layout>
         <header className="App-header2">
         <h2>Welcome, {username}</h2>
         <p>Your password is: {password}</p>
@@ -34,6 +38,7 @@ export const DashboardPage = () => {
       </form>
         <OtherComponent value={inputValue} />
         </header>
+        </Layout>
       </>
     );
 }

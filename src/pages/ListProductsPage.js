@@ -2,6 +2,7 @@ import {db} from '../models/db'
 import { useLiveQuery } from "dexie-react-hooks";
 import { BASE_URL } from '../utilities/Params';
 import api from '../utilities/Api';
+import Layout from '../components/Layout/Layout';
 
 export const ProductList = () => {
     //const [resp, setResp] = useState('');
@@ -29,6 +30,7 @@ export const ProductList = () => {
 
     return (
         <>
+        <Layout>
         <h1> List Of product </h1>
         <ul>
           {products?.map((product) => (
@@ -39,6 +41,7 @@ export const ProductList = () => {
           ))}
        
         </ul>
+        </Layout>
         </>
       );
   };
