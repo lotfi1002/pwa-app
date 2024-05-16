@@ -1,21 +1,69 @@
 // LoginPage.js
-import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../css/login.css";
 import "../css/style.css";
+
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEdit } from "react-icons/fa";
+import { isAppOnline } from "../utilities/CheckOnline";
+import { BASE_URL } from "../utilities/Params";
+import api from "../utilities/Api";
 
 // js code for dynamic behaviore
 export const LoginPage = () => {
   const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+
+// references of html items 
   const selectIdentityRef = useRef(null);
   const identityInputRef = useRef(null);
   const identityUserNameRef = useRef(null);
+  
+  
+  // online connection to backendapi 
+  const onlineSubmit = async (event)=>{
+    // get jwt from backend through credentials
+    let data  ={'login' : username , 'password' : password } ;
+    // Convert the JSON object into a query string
+    await api.put(BASE_URL+`api/auth` , data ).then( (response)=>{
+        const { token, status , resp , user } = response.data;
+        console.log(response);
+   
+       localStorage.setItem('token', token);
+       localStorage.setItem('user', user);
+        
+      } ).catch(
+          (error)=>{
+                console.log(error);
+          }
+      );
+
+  }
+
+  // offline connection with local storage 
+  const offlinelineSubmit = async (event)=>{
+
+    navigate(`/dashboard?username=${username}&password=${password}`);
+  }
+
+// action on button 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate(`/dashboard?username=${username}&password=${password}`);
+
+    isAppOnline().then((value)=>{
+
+      if(value)  // online mode
+        onlineSubmit().then(()=>{
+          console.log("token :"+ localStorage.getItem('token'));
+        });
+      else  // offline mode 
+        offlinelineSubmit();
+    });
+     
+    
   };
 
   const togglePasswordVisibility = () => {
@@ -90,8 +138,7 @@ export const LoginPage = () => {
                             <i class="fa fa-pencil"></i>
                           </span>
                           <input
-                            type="hidden"
-                            value=""
+                            
                             required="required"
                             class="form-control"
                             onChange={(e) => setUsername(e.target.value)}

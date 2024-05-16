@@ -1,1 +1,1 @@
-export const url = "http://localhost/PWA-POS/";
+export const BASE_URL = "http://localhost/PWA-POS/";

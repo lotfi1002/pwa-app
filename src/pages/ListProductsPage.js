@@ -1,19 +1,32 @@
 import {db} from '../models/db'
-import axios from "axios";
 import { useLiveQuery } from "dexie-react-hooks";
-import { url } from '../utilities/Params';
+import { BASE_URL } from '../utilities/Params';
+import api from '../utilities/Api';
 
 export const ProductList = () => {
     //const [resp, setResp] = useState('');
+    // offline 
     const products = useLiveQuery(() => db.product.toArray());
-
+    // online 
     function componentDidMount(){
-        axios.get(url+'api/users').then((response) => {
+        api.get(BASE_URL+'api/users').then((response) => {
             console.log(response.data) ; 
             });
     };
 
     componentDidMount();
+
+
+    function getProduct(){
+
+        api.get(BASE_URL+'api/product/1').then((response) => {
+            console.log(response.data) ; 
+            });
+
+    }
+
+    getProduct();
+
     return (
         <>
         <h1> List Of product </h1>

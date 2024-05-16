@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
+
 import {LoginPage} from './pages/LoginPage';
 import {DashboardPage} from './pages/DashboardPage';
-import{ProductPage} from './pages/ProductPage'
-import{ProductList} from './pages/ListProductsPage'
+import{ProductPage} from './pages/ProductPage';
+import{ProductList} from './pages/ListProductsPage';
+
+import {CaissePage} from './pages/CaissePage';
 import { Navbar } from './ui_components/Navbar';
 import { Routes,Route } from 'react-router-dom';
-import {CaissePage} from './pages/CaissePage';
-
 function App() {
 
   return (
