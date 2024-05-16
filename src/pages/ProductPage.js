@@ -8,9 +8,9 @@ export const ProductPage = () => {
     const [pu, setPu] = useState(0);
     const [status, setStatus] = useState('');
 
-async function  handleSave (){
+async function  handleSave (event ){
+  event.preventDefault();  // to prevent page reload 
 
-       // console.log("me!!!!!!!!");
         try {
             // Add the new product!
             const id = await db.product.add({
@@ -33,7 +33,7 @@ async function  handleSave (){
         <div className="App-header3">
           <h2>Indexed-DB CRUD</h2>
           <div className="form-container">
-          <form>
+          <form onSubmit={handleSave}>
             <input
               className="input-field"
               type="text"
@@ -48,7 +48,7 @@ async function  handleSave (){
               onChange={(e) => setPu(e.target.value)}
               placeholder="Prix Unitaire"
             />
-            <button className="button" onClick={handleSave}>Add</button>
+            <button className="button" >Add</button>
             </form>
           </div>
           <p>{status}</p>

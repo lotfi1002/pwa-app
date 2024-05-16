@@ -5,7 +5,7 @@ import {LoginPage} from './pages/LoginPage';
 import {DashboardPage} from './pages/DashboardPage';
 import{ProductPage} from './pages/ProductPage';
 import{ProductList} from './pages/ListProductsPage';
-
+import{PosPage} from './pages/PosPage';
 import {CaissePage} from './pages/CaissePage';
 import { Navbar } from './ui_components/Navbar';
 import { Routes,Route } from 'react-router-dom';
@@ -15,19 +15,18 @@ import PrivateRoute from './router/PrivateRoute';
 
 
 function App() {
-
   return (
     <div className="App">
        <AuthProvider>
         <Navbar/>
         <Routes>
         <Route path='/login' element={<LoginPage/>}></Route>
-        <Route element={<PrivateRoute />}>
-         
+        <Route element={<PrivateRoute/>}>
             <Route path='/dashboard' element={<DashboardPage/>}></Route>
             <Route path='/product' element={<ProductPage/>}></Route>
             <Route path='/lproducts' element={<ProductList/>}></Route>
             <Route path='/caisse' element={<CaissePage/>}></Route>
+            <Route path='/pos' element={<PosPage/>}></Route>
         </Route>
         </Routes>
         </AuthProvider>
