@@ -24,11 +24,11 @@ function App() {
         <Route path='/login' element={<LoginPage/>}></Route>
         <Route element={<PrivateRoute />}>
          
-          <Route path='/dashboard' element={<DashboardPage/>}></Route>
-          <Route path='/product' element={<ProductPage/>}></Route>
-          <Route path='/lproducts' element={<ProductList/>}></Route>
-          <Route path='/caisse' element={<CaissePage/>}></Route>
-    </Route>
+            <Route path='/dashboard' element={<DashboardPage/>}></Route>
+            <Route path='/product' element={<ProductPage/>}></Route>
+            <Route path='/lproducts' element={<ProductList/>}></Route>
+            <Route path='/caisse' element={<CaissePage/>}></Route>
+        </Route>
         </Routes>
         </AuthProvider>
     </div>
