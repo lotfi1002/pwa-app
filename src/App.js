@@ -11,18 +11,40 @@ import { Routes,Route } from 'react-router-dom';
 import PrivateRoute from './router/PrivateRoute';
 import { isAppOnline } from './utilities/CheckOnline';
 import AuthProvider from './hooks/AuthProvider';
+import UserServices from './services/UserServices'
+import { db } from './models/db';
+import User from './models/User';
 
 
 function App() {
+
+
+
   // each 60 seconds check the mode if online or offline
   useEffect(() => {
     const interval = setInterval(() => {
 
-      isAppOnline().then((value)=>{//  chek application online 
+      isAppOnline().then((online)=>{//  chek application online 
 
-          console.log((value)?"online":"offline");
+          console.log((online)?"online":"offline");
+
+          if(online){
+              UserServices.getUsers("api/users/all").then( (response) => {
+                if(response.data.status){
+                 if(response.data.response != null ) {
+                            response.data.response.forEach((el)=>{
+                                 console.log(User.from(el))  ;
+                                 db.user.add(User.from(el)).then(
+                                  (response)=>{
+                                    console.log("saved in indexdb");
+                                  }
+          
+                                );
+          
+                            } )   ;  }}}); 
+          }
     });
-    }, 60000);
+    }, 5000);
   
     return () => clearInterval(interval);
   }, []);
