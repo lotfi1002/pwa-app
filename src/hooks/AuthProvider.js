@@ -2,6 +2,7 @@ import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utilities/Api";
 import { BASE_URL } from "../utilities/Params";
+import { db } from "../models/db";
 
 const AuthContext = createContext();
 
@@ -53,8 +54,18 @@ const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
+  const loginActionOffline = async (data) => {
+
+// request to fin user in indexdb 
+    const user = await db.user.where("username")
+    .equals(data.username)
+    .first();
+
+    return (user != null)? true: false ; 
+  }
+
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut  }}>
+    <AuthContext.Provider value={{ token, user, loginAction, logOut  ,loginActionOffline }}>
       {children}
     </AuthContext.Provider>
   );

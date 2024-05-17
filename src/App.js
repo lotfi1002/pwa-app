@@ -28,13 +28,14 @@ function App() {
 
           console.log((online)?"online":"offline");
 
-          if(online){
+          if(online){// is online 
+
               UserServices.getUsers("api/users/all").then( (response) => {
                 if(response.data.status){
                  if(response.data.response != null ) {
                             response.data.response.forEach((el)=>{
                                  console.log(User.from(el))  ;
-                                 db.user.add(User.from(el)).then(
+                                 db.user.add(new User(el.id , el.username , el.password , el.email)).then(
                                   (response)=>{
                                     console.log("saved in indexdb");
                                   }
@@ -57,9 +58,10 @@ function App() {
   
        
 <Routes>
-<Route path='/login' element={<LoginPage/>}></Route>
-<Route element={<PrivateRoute/>}>
-
+      <Route path='/login' element={<LoginPage/>}></Route>
+     
+      <Route element={<PrivateRoute/>}>
+      <Route path='/' element={<DashboardPage/>}></Route>
     <Route path='/dashboard' element={<DashboardPage/>}></Route>
     <Route path='/product' element={<ProductPage/>}></Route>
     <Route path='/lproducts' element={<ProductList/>}></Route>

@@ -24,14 +24,22 @@ export const LoginPage = () => {
   // online connection to backendapi 
   const onlineSubmit = async (event)=>{
    
-    let data  ={'login' : username , 'password' : password } ;
+    let data  ={'username' : username , 'password' : password } ;
     await auth.loginAction(data);
   }
 
   // offline connection with local storage 
   const offlinelineSubmit = async (event)=>{
+    let data  ={'username' : username , 'password' : password } ;
+    await auth.loginActionOffline(data).then( (response)=>{
+      
+      if(response === true){
+        console.log("redirect to page ");
+        navigate(`/dashboard?username=${username}&password=${password}`);
+      }
+    } );
 
-    navigate(`/dashboard?username=${username}&password=${password}`);
+   
   }
 
 // action on button 
