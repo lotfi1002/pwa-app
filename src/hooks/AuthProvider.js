@@ -65,13 +65,13 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.setItem('isAuth', 0);
-           
+            //navigate('/login');
 
       }
     } ).catch(
        (error)=>{
-            
              console.log(error);
+             
        }
    );
    
@@ -104,6 +104,7 @@ const AuthProvider = ({ children }) => {
       //console.log(user.lpassword);
             if (hash === user.lpassword) {
               setToken("localtoken");
+              localStorage.setItem('isAuth', 1);
               flag = true ;
               console.log('Passwords match!');
           } else {
