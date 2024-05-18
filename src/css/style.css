@@ -9,7 +9,7 @@ html {
     height: 100%;
 }
 body {
-    background: #f3f3f3;
+    background: #ffffff;
     color: #333;
     border: none;
     font-weight: 400;
@@ -531,8 +531,9 @@ select.form-control option {
 .black {
     color: #000000 !important;
 }
+
 .bblue {
-    background: #428bca !important;
+    background: #fff !important;
 }
 .blightBlue {
     background: #5bc0de !important;

@@ -1,136 +1,111 @@
-// LoginPage.js
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock, FaEdit, FaEye, FaEyeSlash } from "react-icons/fa";
+import { isAppOnline } from "../utilities/CheckOnline";
+import { useAuth } from "../hooks/AuthProvider";
 import "../css/login.css";
 import "../css/style.css";
 
-import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaUser, FaLock, FaEdit } from "react-icons/fa";
-import { isAppOnline } from "../utilities/CheckOnline";
-import { useAuth } from "../hooks/AuthProvider";
-
-// js code for dynamic behaviore
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-
-// references of html items 
   const selectIdentityRef = useRef(null);
   const identityInputRef = useRef(null);
   const identityUserNameRef = useRef(null);
-  const auth = useAuth(); 
-  
-  // online connection to backendapi 
-  const onlineSubmit = async (event)=>{
-   
-    let data  ={'username' : username , 'password' : password } ;
-     auth.loginAction(data , "/dashboard") ;
-  }
+  const auth = useAuth();
 
-  // offline connection with local storage 
-  const offlinelineSubmit = async (event)=>{
-    let data  ={'username' : username , 'password' : password } ;
-    await auth.loginActionOffline(data).then( (response)=>{
-      
-      if(response === true){
-        console.log("redirect to page ");
+  const onlineSubmit = async (event) => {
+    let data = { username: username, password: password };
+    auth.loginAction(data, "/dashboard");
+  };
+
+  const offlinelineSubmit = async (event) => {
+    let data = { username: username, password: password };
+    await auth.loginActionOffline(data).then((response) => {
+      if (response === true) {
+        console.log("redirect to page");
         navigate(`/dashboard?username=${username}&password=${password}`);
       }
-    } );
+    });
+  };
 
-   
-  }
-
-// action on button 
   const handleSubmit = (event) => {
-       event.preventDefault();
-
-    isAppOnline().then((value)=>{
-
-      if(value)  // online mode
-        onlineSubmit().then(()=>{
-          console.log("token :"+ localStorage.getItem('token'));
+    event.preventDefault();
+    isAppOnline().then((value) => {
+      if (value) // online mode
+        onlineSubmit().then(() => {
+          console.log("token :" + localStorage.getItem('token'));
         });
-      else  // offline mode 
+      else // offline mode
         offlinelineSubmit();
     });
-     
-    
   };
 
   const togglePasswordVisibility = () => {
-    if (password.type === "password") {
-      password.type = "text";
-    } else {
-      password.type = "password";
-    }
+    setShowPassword(!showPassword);
   };
 
   const replaceWithInput = () => {
     const selectIdentityElement = selectIdentityRef.current;
-    const identityInpuElement = identityInputRef.current;
+    const identityInputElement = identityInputRef.current;
     const userNameInput = identityUserNameRef.current;
     selectIdentityElement.style.display = "none";
-    identityInpuElement.style.display = "inline-block";
-    userNameInput.placeholder = "Utilisateurs  ";
+    identityInputElement.style.display = "inline-block";
+    userNameInput.style.display = "none";
   };
 
   return (
-    <>
-      <div class="page-back">
-        <div class="contents">
-          <div id="login">
-            <div class="container">
-              <div class="login-form-div">
-                <div class="login-content">
-                  <div class="div-title col-sm-12">
-                    <h3 class="text-primary">
-                      {" "}
-                      Veuillez vous connecter à votre compte.
-                    </h3>
-                  </div>
-                  <form onSubmit={handleSubmit}>
-                    <div class="col-sm-12">
-                      <div class="textbox-wrap form-group">
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            <i class="fa fa-user"></i>
-                          </span>
-                          <select id="selectIdentity" ref={selectIdentityRef}>
-                            <option value="JessT">Jessica TBP</option>
-                            <option value="marie">Marie TBP</option>
-                            <option value="florent">Florent TBP</option>
-                            <option value="jessica" selected>
-                              Jessica TOB
-                            </option>
-                            <option value="marietobalco">Marie TOB</option>
-                            <option value="patricia">Patricia TOB</option>
-                            <option value="agnes">Agnes TOB</option>
-                            <option value="senia">Senia TOB</option>
-                            <option value="anthonyT">Anthony TOB</option>
-                            <option value="florent tobalco">Florent TOB</option>
-                            <option value="mateo">Mateo TOB</option>
-                            <option value="anthonyD">Anthony Dépot</option>
-                            <option value="mattdepot">Mateo Depot</option>
-                            <option value="sam1@oki.lu">Samuel M1</option>
-                            <option value="sam2@oki.lu">Samuel M2</option>
-                            <option value="sam3@oki.lu">Samuel D1</option>
-                          </select>
+    <div className="page-back">
+      <div className="contents">
+        <div id="login">
+          <div className="container">
+            <div className="login-form-div">
+              <div className="login-content">
+                <div className="div-title col-sm-12">
+                  <h3 className="text-primary">
+                    Veuillez vous connecter à votre compte.
+                  </h3>
+                </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="col-sm-12">
+                    <div className="textbox-wrap form-group">
+                      <div className="input-group input-group-flex">
+                        <span className="input-group-icon">
                           <FaUser />
-                          <input
-                            type="text"
-                            placeholder=""
-                            ref={identityUserNameRef}
-                          />
-                          <FaEdit onClick={replaceWithInput} />{" "}
-                          <span
-                            class="input-group-addon"
-                            onclick={replaceWithInput}
-                          >
-                            <i class="fa fa-pencil"></i>
-                          </span>
-                          <input
+                        </span>
+                        <select id="selectIdentity" ref={selectIdentityRef} className="form-control">
+                          <option value="JessT">Jessica TBP</option>
+                          <option value="marie">Marie TBP</option>
+                          <option value="florent">Florent TBP</option>
+                          <option value="jessica" selected>Jessica TOB</option>
+                          <option value="marietobalco">Marie TOB</option>
+                          <option value="patricia">Patricia TOB</option>
+                          <option value="agnes">Agnes TOB</option>
+                          <option value="senia">Senia TOB</option>
+                          <option value="anthonyT">Anthony TOB</option>
+                          <option value="florent tobalco">Florent TOB</option>
+                          <option value="mateo">Mateo TOB</option>
+                          <option value="anthonyD">Anthony Dépot</option>
+                          <option value="mattdepot">Mateo Depot</option>
+                          <option value="sam1@oki.lu">Samuel M1</option>
+                          <option value="sam2@oki.lu">Samuel M2</option>
+                          <option value="sam3@oki.lu">Samuel D1</option>
+                        </select>
+                        <input
+                          type="text"
+                          placeholder=""
+                          ref={identityUserNameRef}
+                          className="form-control"
+                          style={{ display: "none" }}
+                        />
+
+                        <span className="input-group-edit" onClick={replaceWithInput}>
+                          <FaEdit />
+                        </span>
+                        <input
                             
                             required="required"
                             class="form-control"
@@ -138,54 +113,49 @@ export const LoginPage = () => {
                             name="identity"
                             id="identityInput"
                             ref={identityInputRef}
+                            style={{ display: "none" }}
                           />
-                        </div>
-                      </div>
-                      <div class="textbox-wrap form-group">
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            <i class="fa fa-key"></i>
-                          </span>
-                          <input
-                            type="password"
-                            required="required"
-                            class="form-control "
-                            name="password"
-                            onChange={(e) => setPassword(e.target.value)}
-                          />
-                          <FaLock />
-
-                          <span
-                            class="input-group-addon"
-                            onclick={togglePasswordVisibility}
-                          >
-                            <i class="fa fa-eye"></i>
-                          </span>
-                        </div>
                       </div>
                     </div>
-
-                    <div class="form-action col-sm-12">
-                      <div class="checkbox pull-left">
-                        <div class="custom-checkbox"></div>
-                        <span class="checkbox-text pull-left">
-                          <input type="checkbox" />
-
-                          <label for="remember">Se rappeler de moi</label>
+                    <div className="textbox-wrap form-group">
+                      <div className="input-group input-group-flex">
+                        <span className="input-group-icon">
+                          <FaLock />
+                        </span>
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          required="required"
+                          className="form-control"
+                          name="password"
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <span className="input-group-icon" onClick={togglePasswordVisibility}>
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                       </div>
-                      <button type="submit" class="btn btn-success pull-right">
-                        {" "}
-                        &nbsp; <i class="fa fa-sign-in"></i>CONNEXION
-                      </button>
                     </div>
-                  </form>
-                </div>
+                  </div>
+
+                  <div className="form-action col-sm-12">
+                    <div className="checkbox pull-left">
+                      <div className="custom-checkbox"></div>
+                      <span className="checkbox-text pull-left">
+                        <input type="checkbox" />
+                        <label htmlFor="remember">Se rappeler de moi</label>
+                      </span>
+                    </div>
+                    <button type="submit" className="btn btn-success pull-right">
+                      &nbsp; <i className="fa fa-sign-in"></i>CONNEXION
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
+
+export default LoginPage;

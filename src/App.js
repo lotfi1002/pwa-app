@@ -21,7 +21,6 @@ function App() {
     const interval = setInterval(() => {
 
       isAppOnline().then((online)=>{//  chek application online 
-        
         console.log((online)?"online":"offline");
         localStorage.setItem('isOnline', (online)?1:0);
     });
