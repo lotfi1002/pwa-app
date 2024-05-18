@@ -8,13 +8,21 @@ import { isOnline } from '../utilities/CheckOnline';
 
 export const ProductList = () => {
    
+
     
     // offline 
     const products = useLiveQuery(() => db.product.toArray());
     // online 
     function componentDidMount(){
+
         api.get(BASE_URL+'api/users').then((response) => {
-            console.log(response.data) ; 
+            
+              console.log(response.data);
+            
+            }).catch((error)=>{
+              console.log(error);
+             
+
             });
     };
 
@@ -22,7 +30,13 @@ export const ProductList = () => {
     function getProduct(){
 
         api.get(BASE_URL+'api/product/1').then((response) => {
-            console.log(response.data) ; 
+          
+              console.log(response.data);
+            
+            }).catch((error)=>{
+             
+              console.log(error);
+              
             });
 
     }

@@ -5,7 +5,7 @@ import "../css/style.css";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEdit } from "react-icons/fa";
-import { isAppOnline } from "../utilities/CheckOnline";
+import {  isOnline } from "../utilities/CheckOnline";
 import { useAuth } from "../hooks/AuthProvider";
 
 // js code for dynamic behaviore
@@ -45,16 +45,17 @@ export const LoginPage = () => {
 // action on button 
   const handleSubmit = (event) => {
        event.preventDefault();
+       
+       if(isOnline()){
 
-    isAppOnline().then((value)=>{
-
-      if(value)  // online mode
-        onlineSubmit().then(()=>{
+        onlineSubmit(event).then(()=>{
           console.log("token :"+ localStorage.getItem('token'));
         });
-      else  // offline mode 
+
+       }else{
         offlinelineSubmit();
-    });
+       }
+   
      
     
   };

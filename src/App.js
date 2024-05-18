@@ -7,14 +7,14 @@ import{ProductPage} from './pages/ProductPage';
 import{ProductList} from './pages/ListProductsPage';
 import{PosPage} from './pages/PosPage';
 import {CaissePage} from './pages/CaissePage';
-import { Routes,Route } from 'react-router-dom';
+import { Routes,Route, useNavigate } from 'react-router-dom';
 import PrivateRoute from './router/PrivateRoute';
 import AuthProvider from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
 
-
-
 function App() {
+
+  const navigate = useNavigate();
 
   // each 5 seconds check the mode if online or offline
   useEffect(() => {
@@ -24,6 +24,11 @@ function App() {
         
         console.log((online)?"online":"offline");
         localStorage.setItem('isOnline', (online)?1:0);
+
+        if(online && localStorage.getItem('token') === null ){
+              navigate('/login');
+        }
+
     });
     }, 1000);
   
