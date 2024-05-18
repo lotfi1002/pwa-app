@@ -11,9 +11,7 @@ import { Routes,Route } from 'react-router-dom';
 import PrivateRoute from './router/PrivateRoute';
 import { isAppOnline } from './utilities/CheckOnline';
 import AuthProvider from './hooks/AuthProvider';
-import UserServices from './services/UserServices'
-import { db } from './models/db';
-import User from './models/User';
+
 
 
 function App() {
@@ -28,22 +26,6 @@ function App() {
 
           console.log((online)?"online":"offline");
 
-          if(online){// is online 
-
-              UserServices.getUsers("api/users/all").then( (response) => {
-                if(response.data.status){
-                 if(response.data.response != null ) {
-                            response.data.response.forEach((el)=>{
-                                 console.log(User.from(el))  ;
-                                 db.user.add(new User(el.id , el.username , el.password , el.email)).then(
-                                  (response)=>{
-                                    console.log("saved in indexdb");
-                                  }
-          
-                                );
-          
-                            } )   ;  }}}); 
-          }
     });
     }, 5000);
   
@@ -53,20 +35,19 @@ function App() {
 //const isAuth = Boolean( Number(localStorage.getItem("isAuth")));
 //console.log("isAuth : "+isAuth);
   return (
-    <div className="App">
-       <AuthProvider>
+<div className="App">
+<AuthProvider>
   
-       
-<Routes>
-      <Route path='/login' element={<LoginPage/>}></Route>
+       <Routes>
+            <Route path='/login' element={<LoginPage/>}></Route>
      
-      <Route element={<PrivateRoute/>}>
-      <Route path='/' element={<DashboardPage/>}></Route>
-    <Route path='/dashboard' element={<DashboardPage/>}></Route>
-    <Route path='/product' element={<ProductPage/>}></Route>
-    <Route path='/lproducts' element={<ProductList/>}></Route>
-    <Route path='/caisse' element={<CaissePage/>}></Route>
-    <Route path='/pos' element={<PosPage/>}></Route>
+              <Route element={<PrivateRoute/>}>
+                      <Route path='/' element={<DashboardPage/>}></Route>
+                      <Route path='/dashboard' element={<DashboardPage/>}></Route>
+                      <Route path='/product' element={<ProductPage/>}></Route>
+                      <Route path='/lproducts' element={<ProductList/>}></Route>
+                      <Route path='/caisse' element={<CaissePage/>}></Route>
+                      <Route path='/pos' element={<PosPage/>}></Route>
 </Route>
 </Routes>
 

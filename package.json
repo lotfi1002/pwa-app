@@ -9,7 +9,7 @@
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
-    "crypto-browserify": "^3.12.0",
+    "crypto-js": "^4.2.0",
     "dexie": "^4.0.4",
     "dexie-react-hooks": "^1.1.7",
     "node-polyfill-webpack-plugin": "^3.0.0",
