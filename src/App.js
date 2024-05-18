@@ -9,33 +9,30 @@ import{PosPage} from './pages/PosPage';
 import {CaissePage} from './pages/CaissePage';
 import { Routes,Route } from 'react-router-dom';
 import PrivateRoute from './router/PrivateRoute';
-import { isAppOnline } from './utilities/CheckOnline';
 import AuthProvider from './hooks/AuthProvider';
+import { isAppOnline } from './utilities/CheckOnline';
 
 
 
 function App() {
 
-
-
-  // each 60 seconds check the mode if online or offline
+  // each 5 seconds check the mode if online or offline
   useEffect(() => {
     const interval = setInterval(() => {
 
       isAppOnline().then((online)=>{//  chek application online 
-
-          console.log((online)?"online":"offline");
-
+        
+        console.log((online)?"online":"offline");
+        localStorage.setItem('isOnline', (online)?1:0);
     });
-    }, 5000);
+    }, 1000);
   
     return () => clearInterval(interval);
-  }, []);
+  });
   
-//const isAuth = Boolean( Number(localStorage.getItem("isAuth")));
-//console.log("isAuth : "+isAuth);
   return (
 <div className="App">
+
 <AuthProvider>
   
        <Routes>
@@ -52,6 +49,7 @@ function App() {
 </Routes>
 
 </AuthProvider>
+
     </div>
   );
 }

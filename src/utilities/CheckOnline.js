@@ -15,3 +15,9 @@ export const isAppOnline = async() => {
       return false
     }
   }
+
+  export const isOnline = ()=>{
+
+      return Boolean(Number(localStorage.getItem('isOnline')))
+
+  }

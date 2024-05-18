@@ -25,7 +25,7 @@ export const LoginPage = () => {
   const onlineSubmit = async (event)=>{
    
     let data  ={'username' : username , 'password' : password } ;
-    await auth.loginAction(data);
+     auth.loginAction(data , "/dashboard") ;
   }
 
   // offline connection with local storage 

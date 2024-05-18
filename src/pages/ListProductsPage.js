@@ -3,9 +3,12 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { BASE_URL } from '../utilities/Params';
 import api from '../utilities/Api';
 import Layout from '../components/Layout/Layout';
+import { isOnline } from '../utilities/CheckOnline';
+
 
 export const ProductList = () => {
-    //const [resp, setResp] = useState('');
+   
+    
     // offline 
     const products = useLiveQuery(() => db.product.toArray());
     // online 
@@ -14,8 +17,6 @@ export const ProductList = () => {
             console.log(response.data) ; 
             });
     };
-
-    componentDidMount();
 
 
     function getProduct(){
@@ -26,8 +27,11 @@ export const ProductList = () => {
 
     }
 
-    getProduct();
-
+    if(isOnline() === true ){ // online request towards backend 
+     
+      getProduct();
+      componentDidMount();
+  }
     return (
         <>
         <Layout>

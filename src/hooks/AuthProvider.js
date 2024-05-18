@@ -15,16 +15,13 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
-
-  const loginAction = async (data) => {
+  const loginAction = async (data , path) => {
       // get jwt from backend through credentials
- 
        // Convert the JSON object into a query string
-        await api.put(BASE_URL+`api/auth` , data ).then( (response)=>{
+      api.put(BASE_URL+`api/auth` , data ).then( (response)=>{
         const { token, status  , user } = response.data;
-        //console.log(response);
-
-        if(status === true){// good response from web method
+        if(status === true){
+          // good response from web method
             setToken(token);
             localStorage.setItem('token', token);
             localStorage.setItem('user', user);
@@ -38,9 +35,8 @@ const AuthProvider = ({ children }) => {
                                // save user in indexd db database 
                                db.user.add(new User(el.id , el.username , el.password , el.email , '')).then(
                                 (response)=>{
-                                  console.log("saved in indexdb");
+                                  console.log("saved in indexdb "+ response);
                                 }
-        
                               );
         
                           } )   ;  }}}); 
@@ -61,10 +57,7 @@ const AuthProvider = ({ children }) => {
               });
 
             }) ;
-
-         
-            // redirection towards home page 
-            navigate('/dashboard');
+            navigate(path);
 
         }else{ // bad response from web method
             setUser(null);
@@ -72,14 +65,16 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.setItem('isAuth', 0);
+           
 
       }
     } ).catch(
        (error)=>{
+            
              console.log(error);
        }
    );
-
+   
   };
 
   const logOut = () => {
@@ -105,8 +100,8 @@ const AuthProvider = ({ children }) => {
 
       const hash = CryptoJS.SHA1(data.password,CryptoJS.enc.Utf8).toString(CryptoJS.enc.Hex);
       // bycrypt password verification 
-      console.log(hash);
-      console.log(user.lpassword);
+      //console.log(hash);
+      //console.log(user.lpassword);
             if (hash === user.lpassword) {
               setToken("localtoken");
               flag = true ;
@@ -115,9 +110,7 @@ const AuthProvider = ({ children }) => {
             flag = false ;
               console.log('Passwords do not match!');
           }
-    }
-    
-        
+    }   
 
     } catch (error) {
       console.error('Error hashing password:', error);
@@ -127,8 +120,10 @@ const AuthProvider = ({ children }) => {
     return flag ;
   }
 
+
+ 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut  ,loginActionOffline }}>
+    <AuthContext.Provider value={{ token, user , loginAction, logOut  ,loginActionOffline  }}>
       {children}
     </AuthContext.Provider>
   );
