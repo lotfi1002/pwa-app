@@ -6,6 +6,7 @@ import { db } from "../models/db";
 import CryptoJS from 'crypto-js';
 import UserServices from "../services/UserServices";
 import User from "../models/User";
+import CaisseRegisterServices from "../services/CaisseRegister";
 
 
 const AuthContext = createContext();
@@ -57,8 +58,27 @@ const AuthProvider = ({ children }) => {
               });
 
             }) ;
-            navigate(path);
+// chek caisse registe if it's open or close
+       CaisseRegisterServices.chekCaisse("api/caisse/check").then(
 
+        (response) => {
+          console.log(response);
+          if(response != null && response.data != null 
+                  &&response.data.response === false){ 
+                    navigate('/caisse');  
+                    localStorage.setItem("isOpen" , 0);
+          }else{
+            localStorage.setItem("isOpen" , 1);  
+            navigate(path);
+          }
+        }
+
+       ).catch((error)=>{ console.log(error);});
+     
+  
+
+          
+            // caisse verification 
         }else{ // bad response from web method
             setUser(null);
             setToken("");

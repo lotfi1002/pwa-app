@@ -1,7 +1,6 @@
 // CaissePage.js
 import React, { useState } from "react";
 import "../css/CaissePage.css";
-import Layout from "../components/Layout/Layout";
 
 export const CaissePage = () => {
   const [inputValue, setInputValue] = useState(""); // etat local de la valeur 
@@ -12,7 +11,7 @@ export const CaissePage = () => {
 
   return (
     <>
-      <Layout>
+  
       <div className="title">Fond de la caisse</div>
       <input
         type="text"
@@ -47,7 +46,7 @@ export const CaissePage = () => {
           </tr>
         </tbody>
       </table>
-      </Layout>
+      
     </>
   );
 };
