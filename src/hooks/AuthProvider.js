@@ -59,21 +59,19 @@ const AuthProvider = ({ children }) => {
 
             }) ;
 // check caisse registe if it's open or close
-       CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id}).then(
-
+       CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id} ).then(
         (response) => {
-          console.log(response);
-          if(response != null && response.data != null 
-                  &&response.data.response === false){ 
-                    navigate('/caisse');  
-                    localStorage.setItem("isOpen" , 0);
+          let isOpen = Boolean(Number(localStorage.getItem("isOpen"))); 
+
+          if(!isOpen){
+           navigate('/caisse'); 
           }else{
-            localStorage.setItem("isOpen" , 1);  
-            navigate(path);
+           navigate(path);
           }
         }
 
-       ).catch((error)=>{ console.log(error);});
+       );
+       
           
             // caisse verification 
         }else{ // bad response from web method

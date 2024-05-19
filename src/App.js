@@ -28,6 +28,8 @@ function App() {
         if(online && localStorage.getItem('token') === null ){
               navigate('/login');
         }
+       // verify if is closed form backend part 
+       // CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id} )
 
     });
     }, 5000);

@@ -34,8 +34,14 @@ export const LoginPage = () => {
     await auth.loginActionOffline(data).then( (response)=>{
       
       if(response === true){
-        console.log("redirect to page ");
-        navigate(`/pos?username=${username}&password=${password}`);
+        let isOpen = Boolean(Number(localStorage.getItem("isOpen"))); 
+          if(!isOpen){
+           navigate('/caisse'); 
+          }else{
+           navigate(`/pos?username=${username}&password=${password}`);
+          }
+
+        
       }
     } );
 
