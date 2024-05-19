@@ -58,8 +58,8 @@ const AuthProvider = ({ children }) => {
               });
 
             }) ;
-// chek caisse registe if it's open or close
-       CaisseRegisterServices.chekCaisse("api/caisse/check").then(
+// check caisse registe if it's open or close
+       CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id}).then(
 
         (response) => {
           console.log(response);
@@ -74,9 +74,6 @@ const AuthProvider = ({ children }) => {
         }
 
        ).catch((error)=>{ console.log(error);});
-     
-  
-
           
             // caisse verification 
         }else{ // bad response from web method
