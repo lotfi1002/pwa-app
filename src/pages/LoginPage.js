@@ -25,7 +25,7 @@ export const LoginPage = () => {
   const onlineSubmit = async (event)=>{
    
     let data  ={'username' : username , 'password' : password } ;
-     auth.loginAction(data , "/dashboard") ;
+     auth.loginAction(data , "/pos") ;
   }
 
   // offline connection with local storage 
@@ -35,7 +35,7 @@ export const LoginPage = () => {
       
       if(response === true){
         console.log("redirect to page ");
-        navigate(`/dashboard?username=${username}&password=${password}`);
+        navigate(`/pos?username=${username}&password=${password}`);
       }
     } );
 
@@ -45,7 +45,7 @@ export const LoginPage = () => {
 // action on button 
   const handleSubmit = (event) => {
        event.preventDefault();
-       
+
        if(isOnline()){
 
         onlineSubmit(event).then(()=>{
