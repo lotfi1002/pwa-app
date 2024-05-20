@@ -25,7 +25,8 @@ const AuthProvider = ({ children }) => {
           // good response from web method
             setToken(token);
             localStorage.setItem('token', token);
-            localStorage.setItem('user', user);
+            localStorage.setItem('user_id', user.id);
+            //localStorage.setItem('username', user.usrname);
             localStorage.setItem('isAuth', 1);
             // get all users
             UserServices.getUsers("api/users/all").then( (response) => {
@@ -78,7 +79,8 @@ const AuthProvider = ({ children }) => {
             setUser(null);
             setToken("");
             localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            localStorage.removeItem('user_id');
+            //localStorage.removeItem('username');
             localStorage.setItem('isAuth', 0);
             //navigate('/login');
 
@@ -96,7 +98,8 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setToken("");
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem('user_id');
+    //localStorage.removeItem('username');
     localStorage.setItem('isAuth', 0);
     navigate("/login");
   };

@@ -30,6 +30,15 @@ class CaisseRegisterServices {
              }); ;
           }
           
+
+          static async openCaisse(action="api/caisse/open_caisse" , data){
+
+            return await api.put(BASE_URL+action , data);
+      
+          }
+
     }
     
+   
+
     export default CaisseRegisterServices;

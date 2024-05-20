@@ -1,12 +1,59 @@
 // CaissePage.js
 import React, { useState } from "react";
 import "../css/CaissePage.css";
+import { useNavigate } from "react-router-dom";
+import CaisseRegisterServices from "../services/CaisseRegister";
+import { isOnline } from "../utilities/CheckOnline";
+import { db } from "../models/db";
 
 export const CaissePage = () => {
   const [inputValue, setInputValue] = useState(""); // etat local de la valeur 
+  
+  const navigate = useNavigate();
+  
   // une fois le boutton est clique la valeur changera 
   const handleButtonClick = (value) => {
     setInputValue(inputValue + value);
+  };
+
+  const handlesave = () => {
+
+    setInputValue(inputValue);
+    console.log(inputValue);
+    // get user from localstorage 
+    let user_id = localStorage.getItem('user_id');
+    console.log("user id :"+user_id );
+
+    let data = {
+      
+      "user_id" : user_id,
+      "cash_in_hand":inputValue
+
+    };
+// online 
+
+if(isOnline()){
+    CaisseRegisterServices.openCaisse( "api/caisse/open_caisse", data).then(
+
+      (response)=>{
+        
+
+          if(response != null && response.data != null 
+            && response.data.response === true){
+                console.log("open");
+               
+                navigate("/pos");
+            }
+          
+        
+      }
+    );
+  }
+  // offline and online
+  // save in indexdv table pos_--register 
+  db.pos_register.add(data);
+  // local storage flag 
+  localStorage.setItem('isOpen' , 1);
   };
 
   return (
@@ -16,15 +63,16 @@ export const CaissePage = () => {
       <input
         type="text"
         placeholder="Entrez le fond de caisse"
+        value={inputValue}
       />
+      <button onClick={() => handlesave()}>Ouvrire caisse</button>
       <table id="calcu" className="caisse-table">
         <tbody>
         <tr> Ouvrir la caisse </tr>
 
           <tr>
-            <td colSpan="4">
-              <input type="text" id="result" value={inputValue} /> {}
-            </td>
+           
+            
           </tr>
           <tr>
             <td><input type="button" value="C" onClick={() => setInputValue("")} /></td> {}
