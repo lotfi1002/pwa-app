@@ -4,7 +4,8 @@ import "../css/CaissePage.css";
 import { useNavigate } from "react-router-dom";
 import CaisseRegisterServices from "../services/CaisseRegister";
 import { isOnline } from "../utilities/CheckOnline";
-import { db } from "../models/db";
+import DateTime from "../utilities/DateTime";
+import CaisseRegisterDao from "../dao/CaisseRegisterDao";
 
 export const CaissePage = () => {
   const [inputValue, setInputValue] = useState(""); // etat local de la valeur 
@@ -23,37 +24,60 @@ export const CaissePage = () => {
     // get user from localstorage 
     let user_id = localStorage.getItem('user_id');
     console.log("user id :"+user_id );
-
-    let data = {
+    
+    //let data = new PosRegiste(user_id ,inputValue);
+    
+    
+    let data =  {
       
       "user_id" : user_id,
-      "cash_in_hand":inputValue
+      "cash_in_hand":inputValue,
+      "date" : DateTime.getCurrentDateTime(),
+      "status":"open"
 
     };
 // online 
 
+
+
 if(isOnline()){
     CaisseRegisterServices.openCaisse( "api/caisse/open_caisse", data).then(
-
       (response)=>{
-        
-
+      
           if(response != null && response.data != null 
-            && response.data.response === true){
+             && response.data.status === true  && 
+                      response.data.response === true){
                 console.log("open");
-               
+                localStorage.setItem('isOpen' , 1);
                 navigate("/pos");
+            
+              }else{// error or token expiration 
+
+              if(response.data.error != null && 
+                response.data.error === "Failed to access"){
+                  navigate("/login");
+                }
+                console.log(response.data.response);
+                console.log("close");
+                localStorage.setItem('isOpen' ,0);
+
             }
-          
         
       }
     );
   }
+
   // offline and online
   // save in indexdv table pos_--register 
-  db.pos_register.add(data);
+  CaisseRegisterDao.openRegister(data);
   // local storage flag 
   localStorage.setItem('isOpen' , 1);
+
+
+  
+
+ 
+  
   };
 
   return (

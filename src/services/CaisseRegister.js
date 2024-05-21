@@ -1,4 +1,5 @@
 
+import CaisseRegisterDao from "../dao/CaisseRegisterDao";
 import api from "../utilities/Api";
 import { BASE_URL } from "../utilities/Params";
 
@@ -17,9 +18,10 @@ class CaisseRegisterServices {
                           localStorage.setItem("isOpen" , 0);
                           return false ;
                 }else{
-                  localStorage.setItem("isOpen" , 1);  
-                  
-                  return true ;
+                    localStorage.setItem("isOpen" , 1);  
+                    if(CaisseRegisterDao.getOpenRegisterByUserId(data.user_id) === null)
+                      CaisseRegisterDao.openRegister(response.data.response);
+                    return true ;
                 }
               }
       

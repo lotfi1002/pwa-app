@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEdit } from "react-icons/fa";
 import {  isOnline } from "../utilities/CheckOnline";
 import { useAuth } from "../hooks/AuthProvider";
+import CaisseRegisterDao from "../dao/CaisseRegisterDao";
 
 // js code for dynamic behaviore
 export const LoginPage = () => {
@@ -32,15 +33,32 @@ export const LoginPage = () => {
   const offlinelineSubmit = async (event)=>{
     let data  ={'username' : username , 'password' : password } ;
     await auth.loginActionOffline(data).then( (response)=>{
-      
       if(response === true){
+        const id_user = localStorage.getItem("user_id");
+
+        if(id_user != null ){
+          CaisseRegisterDao.getOpenRegisterByUserId(id_user).then(
+
+            (response) => {
+              if (response) {
+                localStorage.setItem("isOpen" , 1 );
+                navigate('/caisse');
+              }else {
+                localStorage.setItem("isOpen" ,  0);
+                navigate('/pos');
+              }
+            }
+          )
+        }
+        // manage the caisse indexeddb 
+        /*
         let isOpen = Boolean(Number(localStorage.getItem("isOpen"))); 
           if(!isOpen){
            navigate('/caisse'); 
           }else{
-           navigate(`/pos?username=${username}&password=${password}`);
+           navigate('/pos');
           }
-
+*/
         
       }
     } );

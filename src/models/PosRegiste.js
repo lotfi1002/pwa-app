@@ -1,12 +1,12 @@
 class PosRegiste {
 
 
-    constructor(id ,date,user_id,cash_in_hand,status,total_cash,
-        total_cheques,total_cc_slips,total_cash_submitted,
-        total_cheques_submitted,total_cc_slips_submitted,
-        note,closed_at,transfer_opened_bills,closed_by,
-        total_ba,total_gains,total_refunds,
-        total_returned   ){
+    constructor(id=NaN ,date,user_id,cash_in_hand,status="Open",total_cash=0,
+        total_cheques=0,total_cc_slips=0,total_cash_submitted=0,
+        total_cheques_submitted=0,total_cc_slips_submitted=0,
+        note=0,closed_at,transfer_opened_bills,closed_by,
+        total_ba=0,total_gains=0,total_refunds=0,
+        total_returned=0   ){
 
         this.id = id ;
         this.date = date;

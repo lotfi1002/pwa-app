@@ -33,13 +33,9 @@ const AuthProvider = ({ children }) => {
               if(response.data.status){
                if(response.data.response != null ) {
                           response.data.response.forEach((el)=>{
-                               console.log(User.from(el))  ;
+                              //console.log(User.from(el))  ;
                                // save user in indexd db database 
-                               db.user.add(new User(el.id , el.username , el.password , el.email , '')).then(
-                                (response)=>{
-                                  console.log("saved in indexdb "+ response);
-                                }
-                              );
+                               db.user.add(new User(el.id , el.username , el.password , el.email , ''));
         
                           } )   ;  }}}); 
 
@@ -71,9 +67,7 @@ const AuthProvider = ({ children }) => {
           }
         }
 
-       );
-       
-          
+       );  
             // caisse verification 
         }else{ // bad response from web method
             setUser(null);
@@ -99,7 +93,7 @@ const AuthProvider = ({ children }) => {
     setToken("");
     localStorage.removeItem("token");
     localStorage.removeItem('user_id');
-    //localStorage.removeItem('username');
+    localStorage.removeItem('username');
     localStorage.setItem('isAuth', 0);
     navigate("/login");
   };
