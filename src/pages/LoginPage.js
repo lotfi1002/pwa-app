@@ -42,10 +42,10 @@ export const LoginPage = () => {
             (response) => {
               if (response) {
                 localStorage.setItem("isOpen" , 1 );
-                navigate('/caisse');
+                navigate('/pos');
               }else {
                 localStorage.setItem("isOpen" ,  0);
-                navigate('/pos');
+                navigate('/caisse');
               }
             }
           )

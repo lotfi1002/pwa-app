@@ -117,16 +117,22 @@ const AuthProvider = ({ children }) => {
             if (hash === user.lpassword) {
               setToken("localtoken");
               localStorage.setItem('isAuth', 1);
+              localStorage.setItem('user_id', user.id);
               flag = true ;
               console.log('Passwords match!');
           } else {
             flag = false ;
+            setToken("localtoken");
+              localStorage.setItem('isAuth', 0);
+              localStorage.removeItem('user_id');
               console.log('Passwords do not match!');
           }
     }   
 
     } catch (error) {
       console.error('Error hashing password:', error);
+      localStorage.setItem('isAuth', 0);
+      localStorage.removeItem('user_id');
       flag =  false ;
     }
 
