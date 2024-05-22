@@ -19,6 +19,20 @@ class CaisseRegisterDao{
     static async openRegister(data ){
         db.pos_register.add(data);
     }
+
+    static async updateRegister(user_id , data ){
+        return await db.pos_register.update(user_id , {'cash_in_hind':data.cash_in_hind});
+        //db.pos_register.update(register.id , register);
+    }
+
+    static async getOneRegister(user_id){
+
+        return await db.pos_register.where({
+            user_id:user_id
+        }).first();
+
+        
+    }
 }
 
 export default CaisseRegisterDao ;

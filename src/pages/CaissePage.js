@@ -23,7 +23,7 @@ export const CaissePage = () => {
     console.log(inputValue);
     // get user from localstorage 
     let user_id = localStorage.getItem('user_id');
-    console.log("user id :"+user_id );
+    //console.log("user id :"+user_id );
     
     //let data = new PosRegiste(user_id ,inputValue);
     
@@ -38,8 +38,6 @@ export const CaissePage = () => {
     };
 // online 
 
-
-
 if(isOnline()){
     CaisseRegisterServices.openCaisse( "api/caisse/open_caisse", data).then(
       (response)=>{
@@ -47,9 +45,10 @@ if(isOnline()){
           if(response != null && response.data != null 
              && response.data.status === true  && 
                       response.data.response === true){
-                console.log("open");
-                localStorage.setItem('isOpen' , 1);
-                navigate("/pos");
+               
+                  console.log("already closed");
+                //localStorage.setItem('isOpen' , 1);
+               
             
               }else{// error or token expiration 
 
@@ -58,20 +57,48 @@ if(isOnline()){
                   navigate("/login");
                 }
                 console.log(response.data.response);
-                console.log("close");
-                localStorage.setItem('isOpen' ,0);
+                console.log("already open");
+                //localStorage.setItem('isOpen' ,1);
 
             }
         
       }
     );
   }
+  // both offline and online
+  CaisseRegisterDao.getOpenRegisterByUserId(data.user_id).then(
 
-  // offline and online
-  // save in indexdv table pos_--register 
-  CaisseRegisterDao.openRegister(data);
+    (response)=>{
+      if(response){// is exsit and open update it 
+        console.log("update");
+        CaisseRegisterDao.getOneRegister(data.user_id).then(
+
+            (rep)=>{
+
+              if(rep != null){
+                console.log("id : "+rep.id);
+                CaisseRegisterDao.updateRegister(rep.id , data) ;
+              }
+
+
+            }
+
+        );
+          //CaisseRegisterDao.updateRegister(data.user_id , data);
+      }else{ // note exist create new one 
+          CaisseRegisterDao.openRegister(data);
+          console.log("add new");
+
+      }
+    }
+
+
+  );
+    
   // local storage flag 
   localStorage.setItem('isOpen' , 1);
+
+  navigate("/pos");
 
 
   

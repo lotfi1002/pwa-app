@@ -72,9 +72,7 @@ export const LoginPage = () => {
 
        if(isOnline()){
 
-        onlineSubmit(event).then(()=>{
-          console.log("token :"+ localStorage.getItem('token'));
-        });
+        onlineSubmit(event);
 
        }else{
         offlinelineSubmit();

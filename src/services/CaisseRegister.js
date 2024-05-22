@@ -12,22 +12,36 @@ class CaisseRegisterServices {
              return await api.put(BASE_URL+action , data).then(
 
               (response) => {
-                console.log(response);
-                if(response != null && response.data != null 
-                        &&response.data.response === false){  
+
+                if(response != null && response.data != null){ 
+
+                      if(response.data.response === false){  
                           localStorage.setItem("isOpen" , 0);
                           return false ;
                 }else{
-                    localStorage.setItem("isOpen" , 1);  
-                    if(CaisseRegisterDao.getOpenRegisterByUserId(data.user_id) === null)
-                      CaisseRegisterDao.openRegister(response.data.response);
-                    return true ;
+
+                  localStorage.setItem("isOpen" , 1);  
+                 
+                  let data =  {
+                    "user_id" : response.data.response.user_id,
+                    "cash_in_hand":response.data.response.cash_in_hand,
+                    "date" : response.data.response.date,
+                    "status":response.data.response.status
+                  };
+                  // add infromation from the backend to pos_register (indexddb)
+                  CaisseRegisterDao.openRegister(data);
+                 
+                  return true ;
                 }
+              }else {
+
+                return false ;
+              }
               }
       
              ).catch((error)=>{ console.log(error);
 
-              return true ;
+              return false ;
 
              }); ;
           }
