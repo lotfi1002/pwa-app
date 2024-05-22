@@ -2,12 +2,12 @@ import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utilities/Api";
 import { BASE_URL } from "../utilities/Params";
-import { db } from "../models/db";
-import CryptoJS from 'crypto-js';
 import UserServices from "../services/UserServices";
 import User from "../models/User";
 import CaisseRegisterServices from "../services/CaisseRegister";
-
+import UserDao from "../dao/UserDao";
+import CryptoJS from 'crypto-js';
+import CaisseRegisterDao from "../dao/CaisseRegisterDao";
 
 const AuthContext = createContext();
 
@@ -16,45 +16,38 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
-  const loginAction = async (data , path) => {
+   
+
+  const loginAction = async (action="api/auth" ,data , path) => {
       // get jwt from backend through credentials
        // Convert the JSON object into a query string
-      api.put(BASE_URL+`api/auth` , data ).then( (response)=>{
+      api.put(BASE_URL+action , data ).then( (response)=>{
         const { token, status  , user } = response.data;
         if(status === true){
           // good response from web method
             setToken(token);
             localStorage.setItem('token', token);
             localStorage.setItem('user_id', user.id);
-            //localStorage.setItem('username', user.usrname);
             localStorage.setItem('isAuth', 1);
-            // get all users
+
+            // get all users from backend 
             UserServices.getUsers("api/users/all").then( (response) => {
               if(response.data.status){
                if(response.data.response != null ) {
                           response.data.response.forEach((el)=>{
-                              //console.log(User.from(el))  ;
                                // save user in indexd db database 
-                               db.user.add(new User(el.id , el.username , el.password , el.email , ''));
-        
+                               if( data.username.localeCompare(el.username)!==0){
+                                
+                                UserDao.putUser(new User(el.id , el.username , el.password , el.email , ''));
+                              
+                              }else{
+                                // crypted password 
+                                const hash = CryptoJS.SHA1(data.password,CryptoJS.enc.Utf8).toString(CryptoJS.enc.Hex);
+                               UserDao.putUser(new User(el.id , el.username , el.password , el.email , hash));
+                              } 
                           } )   ;  }}}); 
 
-            // get user form indexd db data base with the same name 
-
-           db.user.where("username")
-            .equals(data.username)
-            .first().then( (resp)=>{
-              //console.log("resp : " + resp);
-                 // update local password with crypted one 
-              const hash = CryptoJS.SHA1(data.password,CryptoJS.enc.Utf8).toString(CryptoJS.enc.Hex);
-              db.user.update(resp.id, {lpassword: hash}).then(function (updated) {
-                if (updated)
-                  console.log ("Friend number"+ resp.id);
-                else
-                  console.log ("Nothing was updated");
-              });
-
-            }) ;
+          
 // check caisse registe if it's open or close
        CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id} ).then(
         (response) => {
@@ -70,14 +63,14 @@ const AuthProvider = ({ children }) => {
        );  
             // caisse verification 
         }else{ // bad response from web method
-            setUser(null);
+            
+          setUser(null);
             setToken("");
             localStorage.removeItem('token');
             localStorage.removeItem('user_id');
             //localStorage.removeItem('username');
             localStorage.setItem('isAuth', 0);
             //navigate('/login');
-
       }
     } ).catch(
        (error)=>{
@@ -98,45 +91,46 @@ const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
-  const loginActionOffline = async (data) => {
+  const loginActionOffline = async  (data) => {
+   
+    UserDao.login(data).then(
 
-    let flag = false ;
-    try {
-    // request to fin user in indexdb 
+        (response)=>{
 
-    const user = await db.user.where("username")
-    .equals(data.username)
-    .first();
 
-    if (user != null){
+            if(response){
+                 setToken("localtoken");
+                 localStorage.setItem('isAuth', 1);
+                 localStorage.setItem('user_id', response.id);
+                
+                   CaisseRegisterDao.getOpenRegisterByUserId(response.id).then(
+     
+                     (rep) => {
+                       if (rep) {
+                         localStorage.setItem("isOpen" , 1 );
+                         navigate('/pos');
+                       }else {
+                         localStorage.setItem("isOpen" ,  0);
+                         navigate('/caisse');
+                       }
+                     }
+               )
+             
 
-      const hash = CryptoJS.SHA1(data.password,CryptoJS.enc.Utf8).toString(CryptoJS.enc.Hex);
-      // bycrypt password verification 
-      //console.log(hash);
-      //console.log(user.lpassword);
-            if (hash === user.lpassword) {
-              setToken("localtoken");
-              localStorage.setItem('isAuth', 1);
-              localStorage.setItem('user_id', user.id);
-              flag = true ;
-              console.log('Passwords match!');
-          } else {
-            flag = false ;
-            setToken("localtoken");
-              localStorage.setItem('isAuth', 0);
-              localStorage.removeItem('user_id');
-              console.log('Passwords do not match!');
-          }
-    }   
+            }else {
 
-    } catch (error) {
-      console.error('Error hashing password:', error);
-      localStorage.setItem('isAuth', 0);
-      localStorage.removeItem('user_id');
-      flag =  false ;
-    }
+                  setToken("localtoken");
+                  localStorage.setItem('isAuth', 0);
+                  localStorage.removeItem('user_id');
+                  
+            }
 
-    return flag ;
+
+        }
+
+
+    ) ;
+    
   }
 
 

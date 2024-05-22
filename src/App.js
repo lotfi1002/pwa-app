@@ -32,7 +32,7 @@ function App() {
        // CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id} )
 
     });
-    }, 5000);
+    }, 1000);
   
     return () => clearInterval(interval);
   });

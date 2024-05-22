@@ -3,15 +3,14 @@ import "../css/login.css";
 import "../css/style.css";
 
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEdit } from "react-icons/fa";
 import {  isOnline } from "../utilities/CheckOnline";
 import { useAuth } from "../hooks/AuthProvider";
-import CaisseRegisterDao from "../dao/CaisseRegisterDao";
+
 
 // js code for dynamic behaviore
 export const LoginPage = () => {
-  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,45 +22,16 @@ export const LoginPage = () => {
   const auth = useAuth(); 
   
   // online connection to backendapi 
-  const onlineSubmit = async (event)=>{
+  const onlineSubmit =  async ()=>{
    
     let data  ={'username' : username , 'password' : password } ;
-     auth.loginAction(data , "/pos") ;
+     await auth.loginAction("api/auth" , data , "/pos") ;
   }
 
   // offline connection with local storage 
-  const offlinelineSubmit = async (event)=>{
+  const offlinelineSubmit = async  ()=>{
     let data  ={'username' : username , 'password' : password } ;
-    await auth.loginActionOffline(data).then( (response)=>{
-      if(response === true){
-        const id_user = localStorage.getItem("user_id");
-
-        if(id_user != null ){
-          CaisseRegisterDao.getOpenRegisterByUserId(id_user).then(
-
-            (response) => {
-              if (response) {
-                localStorage.setItem("isOpen" , 1 );
-                navigate('/pos');
-              }else {
-                localStorage.setItem("isOpen" ,  0);
-                navigate('/caisse');
-              }
-            }
-          )
-        }
-        // manage the caisse indexeddb 
-        /*
-        let isOpen = Boolean(Number(localStorage.getItem("isOpen"))); 
-          if(!isOpen){
-           navigate('/caisse'); 
-          }else{
-           navigate('/pos');
-          }
-*/
-        
-      }
-    } );
+     await auth.loginActionOffline(data);
 
    
   }

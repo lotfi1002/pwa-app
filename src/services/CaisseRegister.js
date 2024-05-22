@@ -21,15 +21,20 @@ class CaisseRegisterServices {
                 }else{
 
                   localStorage.setItem("isOpen" , 1);  
-                 
-                  let data =  {
-                    "user_id" : response.data.response.user_id,
-                    "cash_in_hand":response.data.response.cash_in_hand,
-                    "date" : response.data.response.date,
-                    "status":response.data.response.status
-                  };
-                  // add infromation from the backend to pos_register (indexddb)
-                  CaisseRegisterDao.openRegister(data);
+                  CaisseRegisterDao.getOpenRegisterByUserId(response.data.response.user_id).then(
+
+                    (rep)=>{
+                      if(!rep){ // user not exit in indexddb
+                        let data =  {
+                          "user_id" : response.data.response.user_id,
+                          "cash_in_hand":response.data.response.cash_in_hand,
+                          "date" : response.data.response.date,
+                          "status":response.data.response.status
+                        };
+                        // add infromation from the backend to pos_register (indexddb)
+                        CaisseRegisterDao.openRegister(data);
+                      }
+                    });
                  
                   return true ;
                 }

@@ -27,7 +27,6 @@ export const CaissePage = () => {
     
     //let data = new PosRegiste(user_id ,inputValue);
     
-    
     let data =  {
       
       "user_id" : user_id,
