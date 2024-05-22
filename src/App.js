@@ -11,13 +11,12 @@ import PrivateRoute from './router/PrivateRoute';
 import CaisseRoute from './router/CaisseRoute';
 import AuthProvider from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
-import CloseCaissePage from './pages/CloseCiassePage';
 
 function App() {
 
   const navigate = useNavigate();
 
-  // each 5 seconds check the mode if online or offline
+  // each 1 second check the mode if online or offline
   useEffect(() => {
     const interval = setInterval(() => {
 
@@ -52,7 +51,6 @@ function App() {
                       <Route path='/product' element={<ProductPage/>}></Route>
                       <Route path='/lproducts' element={<ProductList/>}></Route>
                       <Route path='/caisse' element={<CaissePage/>}></Route>
-                      <Route path='/closecaisse' element={<CloseCaissePage/>}></Route>
                      
 </Route>
 </Routes>
