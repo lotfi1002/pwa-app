@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "../css/CaissePage.css";
 import { useNavigate } from "react-router-dom";
-import CaisseRegisterServices from "../services/CaisseRegister";
+import CaisseRegisterServices from "../services/CaisseRegisterServices";
 import { isOnline } from "../utilities/CheckOnline";
 import DateTime from "../utilities/DateTime";
 import CaisseRegisterDao from "../dao/CaisseRegisterDao";

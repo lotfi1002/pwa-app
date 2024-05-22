@@ -4,10 +4,10 @@ import api from "../utilities/Api";
 import { BASE_URL } from "../utilities/Params";
 import UserServices from "../services/UserServices";
 import User from "../models/User";
-import CaisseRegisterServices from "../services/CaisseRegister";
 import UserDao from "../dao/UserDao";
 import CryptoJS from 'crypto-js';
 import CaisseRegisterDao from "../dao/CaisseRegisterDao";
+import CaisseRegisterServices from "../services/CaisseRegisterServices";
 
 const AuthContext = createContext();
 
@@ -47,21 +47,59 @@ const AuthProvider = ({ children }) => {
                               } 
                           } )   ;  }}}); 
 
-          
-// check caisse registe if it's open or close
-       CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id} ).then(
-        (response) => {
-          let isOpen = Boolean(Number(localStorage.getItem("isOpen"))); 
+            // caisse verification
+            // get  Registre from indexddb bu connected user 
+            CaisseRegisterDao.getOpenRegisterByUserId(user.id).then(
 
-          if(!isOpen){
-           navigate('/caisse'); 
-          }else{
-           navigate(path);
-          }
-        }
+                  (response)=>{
 
-       );  
-            // caisse verification 
+                    if (response) {
+                      localStorage.setItem("isOpen" , 1 );
+                      navigate('/pos');
+                    }else {
+
+                      // check the backend 
+                      CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user.id}).then(
+
+                          (rep)=>{
+
+                            if(rep != null && rep.data != null){
+                                
+                              if(rep.data.response === false){ 
+                                localStorage.setItem("isOpen" , 0);
+                                navigate('/caisse');
+                              }else{// open caisse from backend in indexdb
+                                let data =  {
+                                  "user_id" : rep.data.response.user_id,
+                                  "cash_in_hand":rep.data.response.cash_in_hand,
+                                  "date" : rep.data.response.date,
+                                  "status":rep.data.response.status,
+                                  "commit": 0 
+                                };
+                                // add infromation from the backend to pos_register (indexddb)
+                                CaisseRegisterDao.openRegister(data);
+                                localStorage.setItem("isOpen" ,  1);
+                                navigate('/pos');
+                              }
+
+                            }
+
+                          }
+
+
+                      );
+
+                      
+                      
+                    }
+
+
+                  }
+
+
+            );
+
+
         }else{ // bad response from web method
             
           setUser(null);
@@ -97,12 +135,11 @@ const AuthProvider = ({ children }) => {
 
         (response)=>{
 
-
             if(response){
                  setToken("localtoken");
                  localStorage.setItem('isAuth', 1);
                  localStorage.setItem('user_id', response.id);
-                
+                  // get open register from idexddb by connected user 
                    CaisseRegisterDao.getOpenRegisterByUserId(response.id).then(
      
                      (rep) => {
