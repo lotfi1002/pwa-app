@@ -6,6 +6,7 @@ import CaisseRegisterServices from "../services/CaisseRegisterServices";
 import { isOnline } from "../utilities/CheckOnline";
 import DateTime from "../utilities/DateTime";
 import CaisseRegisterDao from "../dao/CaisseRegisterDao";
+import Layout from '../components/Layout/Layout';
 
 export const CaissePage = () => {
   const [inputValue, setInputValue] = useState(""); // etat local de la valeur 
@@ -108,7 +109,7 @@ if(isOnline()){
 
   return (
     <>
-  
+   <Layout>
       <div className="title">Fond de la caisse</div>
       <input
         type="text"
@@ -144,7 +145,7 @@ if(isOnline()){
           </tr>
         </tbody>
       </table>
-      
+      </Layout>
     </>
   );
 };

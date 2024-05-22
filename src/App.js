@@ -11,6 +11,7 @@ import PrivateRoute from './router/PrivateRoute';
 import CaisseRoute from './router/CaisseRoute';
 import AuthProvider from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
+import CloseCaissePage from './pages/CloseCiassePage';
 
 function App() {
 
@@ -28,9 +29,7 @@ function App() {
         if(online && localStorage.getItem('token') === null ){
               navigate('/login');
         }
-       // verify if is closed form backend part 
-       // CaisseRegisterServices.chekCaisse("api/caisse/check" , {'user_id':user.id} )
-
+      
     });
     }, 1000);
   
@@ -53,6 +52,7 @@ function App() {
                       <Route path='/product' element={<ProductPage/>}></Route>
                       <Route path='/lproducts' element={<ProductList/>}></Route>
                       <Route path='/caisse' element={<CaissePage/>}></Route>
+                      <Route path='/closecaisse' element={<CloseCaissePage/>}></Route>
                      
 </Route>
 </Routes>

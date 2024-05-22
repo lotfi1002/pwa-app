@@ -8,6 +8,7 @@ export const Navbar = () => {
         <Link to="/pos">Pos</Link>
         <Link to="/product">Synchrone-DB</Link>
         <Link to="/lproducts">List Products</Link>
+        <Link to="/closecaisse">Close ciasse</Link>
         <li><button onClick={() => auth.logOut()} className="btn-submit"> Deconnect</button></li>
     </nav>
   )
