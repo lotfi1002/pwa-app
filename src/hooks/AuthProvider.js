@@ -70,11 +70,12 @@ const AuthProvider = ({ children }) => {
                                 navigate('/caisse');
                               }else{// open caisse from backend in indexdb
                                 let data =  {
+                                  "id": rep.data.response.id,
                                   "user_id" : rep.data.response.user_id,
                                   "cash_in_hand":rep.data.response.cash_in_hand,
                                   "date" : rep.data.response.date,
                                   "status":rep.data.response.status,
-                                  "commit": 0 
+                                  "commit": 1 
                                 };
                                 // add infromation from the backend to pos_register (indexddb)
                                 CaisseRegisterDao.openRegister(data);

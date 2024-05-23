@@ -29,11 +29,12 @@ export const CaissePage = () => {
     //let data = new PosRegiste(user_id ,inputValue);
     
     let data =  {
-      
+      "id": 1 ,
       "user_id" : user_id,
       "cash_in_hand":inputValue,
       "date" : DateTime.getCurrentDateTime(),
-      "status":"open"
+      "status":"open",
+      "commit": 0 ,
 
     };
 // online 

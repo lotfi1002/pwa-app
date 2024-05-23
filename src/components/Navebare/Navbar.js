@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/AuthProvider';
 import { isOnline } from '../../utilities/CheckOnline';
 import { Modal, Button } from "react-bootstrap";
@@ -8,7 +8,7 @@ import { Modal, Button } from "react-bootstrap";
 export const Navbar = () => {
   const auth = useAuth();
   const [show, setShow] = useState(false);
-
+  const navigate = useNavigate();
     // champs de fermer caisse 
     const [totaljournne , setTotalJournne] = useState('');
     const [totalcarte , setTotalCarte] = useState('');
@@ -26,8 +26,8 @@ export const Navbar = () => {
       && vespece !== null){
 
         
-
-        auth.logOut()
+        localStorage.setItem("isOpen" , 0 );
+        navigate("/pos");
 
       }
     
