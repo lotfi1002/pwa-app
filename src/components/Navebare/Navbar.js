@@ -8,8 +8,34 @@ import { Modal, Button } from "react-bootstrap";
 export const Navbar = () => {
   const auth = useAuth();
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+
+    // champs de fermer caisse 
+    const [totaljournne , setTotalJournne] = useState('');
+    const [totalcarte , setTotalCarte] = useState('');
+    const [vespece , setVespece] = useState('');
+
+
+
+  const handleClose = () =>{
+    
+    setShow(false);
+    console.log(totaljournne);
+        console.log(totalcarte);
+        console.log(vespece);
+    if(totaljournne != null && totalcarte!= null 
+      && vespece !== null){
+
+        
+
+        auth.logOut()
+
+      }
+    
+   
+  
+  } 
   const handleShow = () => setShow(true);
+
 
   return (
     <>
@@ -26,10 +52,26 @@ export const Navbar = () => {
         } } className="btn-submit"> Close </button></li>
         <li><button onClick={() => auth.logOut()} className="btn-submit"> Deconnect</button></li>
     </nav>
-
+{/* this a modal window of  Fermer la caisse  */}
 <Modal  show={show} onHide={handleClose}>
 <Modal.Title>FERMER LA CAISSE</Modal.Title>
-<Modal.Body> Test Body</Modal.Body>
+<Modal.Body> 
+<div>
+<form onSubmit={handleClose}>
+<label>TOTAL ESPECE JOURNEE :</label>
+<input type="number"   onChange={(e) => setTotalJournne(e.target.value)} value="0.00"
+ />
+<label>Total des relevés de carte bancaire : </label>
+<input type="number"  value="0.00" onChange={(e) => setTotalCarte(e.target.value)} />
+<label>VERSEMENT ESPECE JOURNEE : </label>
+<input type="number" value="0.00" onChange={(e) => setVespece(e.target.value)} />
+</form>
+
+</div>
+
+
+
+</Modal.Body>
 <Modal.Footer>
 <Button variant="primary" onClick={handleClose}>
   Fermer la caisse
