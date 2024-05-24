@@ -8,7 +8,7 @@ class CaisseRegisterDao{
         try {
              user = await db.pos_register.where({
                 user_id: user_id,
-                status: 'open'
+                status: 'open',
             }).first(); // `first` is equivalent to limiting the result to 1
             
         } catch (error) {
@@ -23,8 +23,8 @@ class CaisseRegisterDao{
         db.pos_register.add(data);
     }
 
-    static async updateRegister(user_id , data ){
-        return await db.pos_register.update(user_id , {'cash_in_hind':data.cash_in_hind});
+    static async updateRegister(id , data ){
+        return await db.pos_register.update(id , data);
         //db.pos_register.update(register.id , register);
     }
 

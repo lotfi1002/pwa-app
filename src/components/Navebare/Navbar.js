@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/AuthProvider';
 import { isOnline } from '../../utilities/CheckOnline';
 import { Modal, Button } from "react-bootstrap";
+import CaisseRegisterDao from '../../dao/CaisseRegisterDao';
+import CaisseRegisterServices from '../../services/CaisseRegisterServices';
+import DateTime from '../../utilities/DateTime';
 
 
 export const Navbar = () => {
@@ -19,15 +22,79 @@ export const Navbar = () => {
   const handleClose = () =>{
     
     setShow(false);
-    console.log(totaljournne);
-        console.log(totalcarte);
-        console.log(vespece);
+  
     if(totaljournne != null && totalcarte!= null 
       && vespece !== null){
+        let user_id = localStorage.getItem("user_id");
+        if(user_id != null){
+          CaisseRegisterDao.getOpenRegisterByUserId(user_id).then(
 
-        
-        localStorage.setItem("isOpen" , 0 );
-        navigate("/pos");
+            (response) => {
+              //console.log(response);
+              let data =       { "user_id" : user_id,
+              "id_register":response.id ,
+              "closed_at"  : DateTime.getCurrentDateTime()           ,
+              "total_cash": totaljournne,
+              "total_cheques" : 0,
+              "total_cc_slips" : totalcarte,
+              "total_ba": 0,
+              "total_returned" : 0,
+              "total_refunds" : 0,
+              "total_cash_submitted": vespece,
+              "total_cheques_submitted"  : 0,
+              "total_cc_slips_submitted" : 0,
+              "note": vespece,
+              "status": "closed",
+              "transfer_opened_bills": 0 ,
+              "closed_by": user_id 
+              } ;
+  
+                  CaisseRegisterServices.closeCaisse("api/caisse/close_caisse" , data ).then(
+
+                    (rep)=>{
+
+                      if(rep != null && rep.data != null && rep.data.status === true &&
+                         rep.data.response === true ){
+                        localStorage.setItem("isOpen" , 0 );
+                        navigate("/pos");
+
+                        // modify also the data saved in indexddb 
+                        CaisseRegisterDao.updateRegister(data.id_register , {
+                            "closed_at"  : DateTime.getCurrentDateTime()           ,
+                              "total_cash": totaljournne,   
+                              "total_cheques" : 0,
+                              "total_cc_slips" : totalcarte,
+                              "total_ba": 0,
+                              "total_returned" : 0,
+                              "total_refunds" : 0,
+                              "total_cash_submitted": vespece,
+                              "total_cheques_submitted"  : 0,
+                              "total_cc_slips_submitted" : 0,
+                              "note": vespece,
+                              "status": "closed",
+                              "transfer_opened_bills": 0 ,
+                              "closed_by": user_id ,
+                              "commit": 1 });
+
+                      }else {
+
+                        if(response.data.error != null && 
+                          response.data.error === "Failed to access"){
+                            navigate("/login");
+                          }
+
+                      }
+                    }
+                  ) ;
+  
+  
+            }
+  
+          );
+          
+        }
+       
+       
 
       }
     

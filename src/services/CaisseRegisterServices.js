@@ -20,6 +20,12 @@ class CaisseRegisterServices {
       
         }
 
+        static async closeCaisse(action="api/caisse/close_caisse" , data){
+
+            return await api.put(BASE_URL+action , data);
+      
+        }
+
     }
     
    

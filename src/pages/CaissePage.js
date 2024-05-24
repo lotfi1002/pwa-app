@@ -72,7 +72,7 @@ if(isOnline()){
     (response)=>{
       if(response){// is exsit and open update it 
         console.log("update");
-        CaisseRegisterDao.getOneRegister(data.user_id).then(
+        CaisseRegisterDao.getOpenRegisterByUserId(data.user_id).then(
 
             (rep)=>{
 
@@ -100,11 +100,6 @@ if(isOnline()){
   localStorage.setItem('isOpen' , 1);
 
   navigate("/pos");
-
-
-  
-
- 
   
   };
 
