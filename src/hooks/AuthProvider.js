@@ -77,7 +77,7 @@ const AuthProvider = ({ children }) => {
                                   "status":rep.data.response.status,
                                   "commit": 1 
                                 };
-                                // add infromation from the backend to pos_register (indexddb)
+                                // add information from the backend to pos_register (indexddb)
                                 CaisseRegisterDao.openRegister(data);
                                 localStorage.setItem("isOpen" ,  1);
                                 navigate('/pos');
