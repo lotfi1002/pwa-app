@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/AuthProvider';
 import { isOnline } from '../../utilities/CheckOnline';
 import { Modal, Button } from "react-bootstrap";
@@ -11,7 +11,6 @@ import DateTime from '../../utilities/DateTime';
 export const Navbar = () => {
   const auth = useAuth();
   const [show, setShow] = useState(false);
-  const navigate = useNavigate();
     // champs de fermer caisse 
     const [totaljournne , setTotalJournne] = useState('');
     const [totalcarte , setTotalCarte] = useState('');
@@ -26,12 +25,49 @@ export const Navbar = () => {
     if(totaljournne != null && totalcarte!= null 
       && vespece !== null){
         let user_id = localStorage.getItem("user_id");
+       
         if(user_id != null){
-          CaisseRegisterDao.getOpenRegisterByUserId(user_id).then(
 
-            (response) => {
-              //console.log(response);
-              let data =       { "user_id" : user_id,
+           // check if it is a register already opened in backend 
+
+           CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user_id}).then(
+
+            (rep)=>{
+              const { status , response} = rep.data ;
+            
+              if(status){
+                if(response === false){ 
+                  CaisseRegisterDao.getOpenRegisterByUserId(user_id).then(
+                    
+                    (rep)=>{
+
+                      if(rep != null){
+
+                        CaisseRegisterDao.updateRegister(rep.id , {
+                        "status":"closed",
+                        "commit": 1 } );
+
+
+                      }
+                      localStorage.setItem("isOpen" , 0);
+                        auth.logOut();
+                    }
+
+                  );
+                
+                }else{// open caisse from backend in indexdb
+                 /* 
+                  let data_back =  {
+                    "id": response.id,
+                    "user_id" : response.user_id,
+                    "cash_in_hand":response.cash_in_hand,
+                    "date" : response.date,
+                    "status":response.status,
+                    "commit": 1 
+                  };*/
+
+              let data =       { 
+              "user_id" : user_id,
               "id_register":response.id ,
               "closed_at"  : DateTime.getCurrentDateTime()           ,
               "total_cash": totaljournne,
@@ -48,58 +84,44 @@ export const Navbar = () => {
               "transfer_opened_bills": 0 ,
               "closed_by": user_id 
               } ;
-  
-                  CaisseRegisterServices.closeCaisse("api/caisse/close_caisse" , data ).then(
+                
+              CaisseRegisterServices.closeCaisse("api/caisse/close_caisse" , data ).then(
 
                     (rep)=>{
 
-                      if(rep != null && rep.data != null && rep.data.status === true &&
-                         rep.data.response === true ){
-                        localStorage.setItem("isOpen" , 0 );
-                        navigate("/pos");
+                      const {status , response } = rep.data ;
 
-                        // modify also the data saved in indexddb 
-                        CaisseRegisterDao.updateRegister(data.id_register , {
-                            "closed_at"  : DateTime.getCurrentDateTime()           ,
-                              "total_cash": totaljournne,   
-                              "total_cheques" : 0,
-                              "total_cc_slips" : totalcarte,
-                              "total_ba": 0,
-                              "total_returned" : 0,
-                              "total_refunds" : 0,
-                              "total_cash_submitted": vespece,
-                              "total_cheques_submitted"  : 0,
-                              "total_cc_slips_submitted" : 0,
-                              "note": vespece,
-                              "status": "closed",
-                              "transfer_opened_bills": 0 ,
-                              "closed_by": user_id ,
-                              "commit": 1 });
+                      if(status && response){
 
-                      }else {
+                        //  close local data of indexdb 
 
-                        if(response.data.error != null && 
-                          response.data.error === "Failed to access"){
-                            navigate("/login");
+                        CaisseRegisterDao.getOpenRegisterByUserId(user_id).then(
+                          (rep)=>{
+
+                            if(rep){
+
+                              CaisseRegisterDao.updateRegister(rep.id , data);
+                              
+
+                            }
+
                           }
 
+                        );
+
                       }
+
+                      localStorage.setItem("isOpen" , 0);
+                        auth.logOut();
+
                     }
-                  ) ;
-  
-  
-            }
-  
-          );
+
+                  );}}});
+           
           
         }
-       
-       
-
       }
-    
-   
-  
+
   } 
   const handleShow = () => setShow(true);
 

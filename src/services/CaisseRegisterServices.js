@@ -1,4 +1,3 @@
-
 import api from "../utilities/Api";
 import { BASE_URL } from "../utilities/Params";
 
@@ -9,7 +8,6 @@ class CaisseRegisterServices {
     static async chekCaisse(action="api/caisse/check" , data)   {
             
             return await   api.put(BASE_URL+action , data);
-
            
           }
           

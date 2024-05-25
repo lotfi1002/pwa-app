@@ -10,8 +10,9 @@ import Layout from '../components/Layout/Layout';
 
 export const CaissePage = () => {
   const [inputValue, setInputValue] = useState(""); // etat local de la valeur 
-  
+
   const navigate = useNavigate();
+
   
   // une fois le boutton est clique la valeur changera 
   const handleButtonClick = (value) => {
@@ -21,15 +22,13 @@ export const CaissePage = () => {
   const handlesave = () => {
 
     setInputValue(inputValue);
-    console.log(inputValue);
     // get user from localstorage 
+
     let user_id = localStorage.getItem('user_id');
     //console.log("user id :"+user_id );
-    
-    //let data = new PosRegiste(user_id ,inputValue);
-    
+        
     let data =  {
-      "id" : 1 ,
+      "id" : parseInt(Date.now() * Math.random()) ,
       "user_id" : user_id,
       "cash_in_hand":inputValue,
       "date" : DateTime.getCurrentDateTime(),
@@ -37,89 +36,56 @@ export const CaissePage = () => {
       "commit": 0 ,
 
     };
+
 // online 
-
 if(isOnline()){
-    CaisseRegisterServices.openCaisse( "api/caisse/open_caisse", data).then(
-      (response)=>{
-      
-          if(response != null && response.data != null 
-             && response.data.status === true  && 
-                      response.data.response === true){
-               
-                // check the backend 
-                CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user_id}).then(
 
-                  (rep)=>{
+    // chek backend ciasse 
+     CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user_id}).then(
 
-                    if(rep != null && rep.data != null){
-                        
-                      if(rep.data.response === false){ 
-                        localStorage.setItem("isOpen" , 0);
-                        navigate('/caisse');
-                      }else{// open caisse from backend in indexdb
-                        let data =  {
-                          "id": rep.data.response.id,
-                          "user_id" : rep.data.response.user_id,
-                          "cash_in_hand":rep.data.response.cash_in_hand,
-                          "date" : rep.data.response.date,
-                          "status":rep.data.response.status,
-                          "commit": 1 
-                        };
-                        // add information from the backend to pos_register (indexddb)
-                        CaisseRegisterDao.openRegister(data);
-                        localStorage.setItem("isOpen" ,  1);
-                        navigate('/pos');
-                      }
+      (rep)=>{
+          const {status , response} =  rep.data ;
 
-                    }
+          if(status){
+            if(response !== false  ){ // resiter open
 
-                  }
+              // save or update the resgister in indexdb 
+              let data =  {
+                "id": response.id,
+                "user_id" : response.user_id,
+                "cash_in_hand":response.cash_in_hand,
+                "date" : response.date,
+                "status":response.status,
+                "commit": 1 
+              };
+              // test if the user rigister open locally 
 
-
-              );
-            
-              }else{// error or token expiration 
-
-              if(response.data.error != null && 
-                response.data.error === "Failed to access"){
-                  navigate("/login");
-                }
-                console.log(response.data.response);
-                console.log("already open");
-                //localStorage.setItem('isOpen' ,1);
-
-            }
-        
-      }
-    );
-  }else{
-  // both offline and online
-  CaisseRegisterDao.getOpenRegisterByUserId(data.user_id).then(
-
-    (response)=>{
-      if(response){// is exsit and open update it 
-        console.log("update");
-
-        console.log("id : "+response.id);
-        CaisseRegisterDao.updateRegister(response.id , data) ;
+              CaisseRegisterDao.saveOrRegister(data.user_id , data);
               
-            }
+              localStorage.setItem("isOpen" ,  1);
+              navigate('/pos');
 
-          //CaisseRegisterDao.updateRegister(data.user_id , data);
-      else{ // note exist create new one 
-          CaisseRegisterDao.openRegister(data);
-          console.log("add new");
+            }else { // register closed in the backend 
 
-      }
-    }
+              CaisseRegisterServices.openCaisse( "api/caisse/open_caisse", data).then(
+                    (rep)=>{
 
+                      const {status , response} = rep.data ;
 
-  );
-    
+                      if(status){
+
+                        if(response !== false ){
+                                //in local  
+                                CaisseRegisterDao.saveOrRegister(response.user_id , data );  
+                                localStorage.setItem('isOpen' , 1);
+                                navigate("/pos");
+                        }}});}}});
+
+  }else{
+  //is offline 
+  CaisseRegisterDao.saveOrRegister(data.user_id , data);
   // local storage flag 
   localStorage.setItem('isOpen' , 1);
-
   navigate("/pos");
 }
   

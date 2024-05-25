@@ -36,6 +36,29 @@ class CaisseRegisterDao{
 
         
     }
+
+    static async   saveOrRegister( user_id , data ){
+  
+              //in local  
+              this.getOpenRegisterByUserId(user_id).then(
+  
+                (response)=>{
+                  if(response){// is exsit and open update it 
+                    console.log("update");
+            
+                    console.log("id : "+response.id);
+                    this.updateRegister(response.id , data) ;
+                          
+                        } else{ // note exist create new one 
+                            this.openRegister(data);
+                        console.log("add new");
+            
+                  }
+                }
+              );
+  
+  
+    }
 }
 
 export default CaisseRegisterDao ;

@@ -16,6 +16,7 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
+
    
 
   const loginAction = async (action="api/auth" ,data , path) => {
@@ -31,10 +32,11 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem('isAuth', 1);
 
             // get all users from backend 
-            UserServices.getUsers("api/users/all").then( (response) => {
-              if(response.data.status){
-               if(response.data.response != null ) {
-                          response.data.response.forEach((el)=>{
+            UserServices.getUsers("api/users/all").then( (rep) => {
+              const {status,response } = rep.data;
+              if(status){
+               if(response != null ) {
+                          response.forEach((el)=>{
                                // save user in indexd db database 
                                if( data.username.localeCompare(el.username)!==0){
                                 
@@ -45,10 +47,14 @@ const AuthProvider = ({ children }) => {
                                 const hash = CryptoJS.SHA1(data.password,CryptoJS.enc.Utf8).toString(CryptoJS.enc.Hex);
                                UserDao.putUser(new User(el.id , el.username , el.password , el.email , hash));
                               } 
-                          } )   ;  }}}); 
+                          } )   ;  }
+                        
+                        }
+                        
+                        }); 
 
             // caisse verification
-            // get  Registre from indexddb bu connected user 
+            // get  Registre from indexddb by connected user 
             CaisseRegisterDao.getOpenRegisterByUserId(user.id).then(
 
                   (response)=>{
@@ -56,34 +62,39 @@ const AuthProvider = ({ children }) => {
                     if (response) {
                       localStorage.setItem("isOpen" , 1 );
                       navigate('/pos');
+                    
                     }else {
 
                       // check the backend 
                       CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user.id}).then(
 
                           (rep)=>{
+                            const {status , response} = rep.data;
+                              if(status){
+                              if(response === false){ 
 
-                            if(rep != null && rep.data != null){
-                                
-                              if(rep.data.response === false){ 
                                 localStorage.setItem("isOpen" , 0);
                                 navigate('/caisse');
+
                               }else{// open caisse from backend in indexdb
+                               
                                 let data =  {
-                                  "id": rep.data.response.id,
-                                  "user_id" : rep.data.response.user_id,
-                                  "cash_in_hand":rep.data.response.cash_in_hand,
-                                  "date" : rep.data.response.date,
-                                  "status":rep.data.response.status,
+                                  "id": response.id,
+                                  "user_id" : response.user_id,
+                                  "cash_in_hand":response.cash_in_hand,
+                                  "date" : response.date,
+                                  "status":response.status,
                                   "commit": 1 
                                 };
                                 // add information from the backend to pos_register (indexddb)
-                                CaisseRegisterDao.openRegister(data);
+                                CaisseRegisterDao.saveOrRegister(data.user_id , data);
+                                //CaisseRegisterDao.openRegister(data);
                                 localStorage.setItem("isOpen" ,  1);
                                 navigate('/pos');
                               }
-
                             }
+
+                            
 
                           }
 
