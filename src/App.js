@@ -1,5 +1,6 @@
 import './App.css';
-
+import "./css/style.css";
+import "./css/theme.css";
 import React, {  useEffect,  } from 'react';
 import {LoginPage} from './pages/LoginPage';
 import{PosPage} from './pages/PosPage';
@@ -76,7 +77,7 @@ function App() {
                       <Route path='/' element={<PosPage/>}></Route>
                       <Route path='/pos' element={<PosPage/>}></Route>
               </Route>       
-                      <Route path='/caisse' element={<CaissePage/>}></Route>
+              <Route path='/caisse' element={<CaissePage/>}></Route>
                   
 </Route>
 </Routes>

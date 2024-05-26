@@ -10,6 +10,7 @@ import { APP_NAME } from '../../utilities/Params';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalculator, faCheckCircle, faDashboard, faDollar, faEraser, faKey, faLaptop, faPlay, faPlusCircle, faSignOut, faTh, faTimesCircle, faUser } from '@fortawesome/free-solid-svg-icons'
 import "../../css/navbare.css";
+import UserDropdown from '../UserDropdown';
 
 
 export const Navbar = () => {
@@ -138,35 +139,9 @@ export const Navbar = () => {
 
             <div class="header-nav">
             <ul class="nav navbar-nav pull-right">
-                    <li class="dropdown">
-                        <a class="btn account dropdown-toggle" 
-                        data-toggle="dropdown" href="/logout">
-                            <img alt="" src="./images/male.png" class="mini_avatar img-rounded" />
-                            <div class="user hidden-small">
-                                <span> User name </span>
-                            </div>
-                        </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li>
-                                <a href="/logout">
-                                <FontAwesomeIcon icon={faUser} />   Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/logout">
-                                <FontAwesomeIcon icon={faKey} />  
-                                    Mot de passe
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href='/'  onClick={() => auth.logOut()} >
-                                <FontAwesomeIcon icon={faSignOut} />  
-                                   logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+            <li className="nav-item">
+              <UserDropdown />
+          </li>
             </ul>
             <ul class="nav navbar-nav pull-right">
             <li class="dropdown hidden-xs hidden-small">
