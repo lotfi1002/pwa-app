@@ -13,6 +13,8 @@ const UserDropdown = () => {
   };
 
   return (
+    <ul className="nav navbar-nav pull-right">
+    <li className="nav-item">
     <DropdownButton
       id="dropdown-basic-button"
       title={
@@ -41,6 +43,8 @@ const UserDropdown = () => {
         <FontAwesomeIcon icon={faSignOut} /> Logout
       </Dropdown.Item>
     </DropdownButton>
+    </li>
+          </ul>
   );
 };
 
