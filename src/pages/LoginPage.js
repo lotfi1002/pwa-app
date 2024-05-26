@@ -16,10 +16,11 @@ export const LoginPage = () => {
   const identityInputRef = useRef(null);
   const identityUserNameRef = useRef(null);
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const onlineSubmit = async (event) => {
     let data = { username: username, password: password };
-    auth.loginAction(data, "/dashboard");
+    auth.loginAction("api/auth" ,data);
   };
 
   const offlinelineSubmit = async (event) => {
@@ -27,7 +28,7 @@ export const LoginPage = () => {
     await auth.loginActionOffline(data).then((response) => {
       if (response === true) {
         console.log("redirect to page");
-        navigate(`/dashboard?username=${username}&password=${password}`);
+        navigate('/pos');
       }
     });
   };

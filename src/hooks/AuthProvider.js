@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
 
-  const loginAction = async (action="api/auth" ,data , path) => {
+  const loginAction = async (action="api/auth" ,data) => {
       // get jwt from backend through credentials
        // Convert the JSON object into a query string
       api.put(BASE_URL+action , data ).then( (response)=>{
