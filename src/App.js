@@ -2,21 +2,23 @@ import './App.css';
 
 import React, {  useEffect,  } from 'react';
 import {LoginPage} from './pages/LoginPage';
-import {DashboardPage} from './pages/DashboardPage';
 import{ProductPage} from './pages/ProductPage';
 import{ProductList} from './pages/ListProductsPage';
 import{PosPage} from './pages/PosPage';
 import {CaissePage} from './pages/CaissePage';
 import { Routes,Route, useNavigate } from 'react-router-dom';
 import PrivateRoute from './router/PrivateRoute';
-import AuthProvider from './hooks/AuthProvider';
+import CaisseRoute from './router/CaisseRoute';
+import AuthProvider, { useAuth } from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
+import OtherServices from './services/OtherServices';
 
 function App() {
 
   const navigate = useNavigate();
+  const auth = useAuth();
 
-  // each 5 seconds check the mode if online or offline
+  // each 1 second check the mode if online or offline
   useEffect(() => {
     const interval = setInterval(() => {
 
@@ -27,12 +29,42 @@ function App() {
         if(online && localStorage.getItem('token') === null ){
               navigate('/login');
         }
-
+      
     });
     }, 1000);
   
     return () => clearInterval(interval);
   });
+
+// every 5 min verify the token expiration from the server
+  useEffect(  
+
+    () => {
+
+        const intervalchek = setInterval(
+    
+            ()=>{
+        // chek token expiration 
+
+        OtherServices.chekToken("api/checktoken").then(
+
+          (rep) => {
+            //console.log(rep)
+            const {status, error } = rep.data;
+
+            if(status === false && error === "Failed to access"){
+
+              auth.logOut();
+            }
+      
+    });
+    return () => clearInterval(intervalchek);
+            } ,  500000
+
+        );
+    }
+
+  );
   
   return (
 <div className="App">
@@ -44,10 +76,13 @@ function App() {
             <Route path='/caisse' element={<CaissePage/>}></Route>
 
               <Route element={<PrivateRoute/>}>
-                      <Route path='/' element={<DashboardPage/>}></Route>
-                      <Route path='/dashboard' element={<DashboardPage/>}></Route>
+              <Route element={<CaisseRoute/>}>
+                      <Route path='/' element={<PosPage/>}></Route>
+                      <Route path='/pos' element={<PosPage/>}></Route>
+              </Route>       
                       <Route path='/product' element={<ProductPage/>}></Route>
                       <Route path='/lproducts' element={<ProductList/>}></Route>
+                      <Route path='/caisse' element={<CaissePage/>}></Route>
                       <Route path='/pos' element={<PosPage/>}></Route>
 </Route>
 </Routes>
