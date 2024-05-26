@@ -1,23 +1,28 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/AuthProvider';
 import { isOnline } from '../../utilities/CheckOnline';
 import { Modal, Button } from "react-bootstrap";
 import CaisseRegisterDao from '../../dao/CaisseRegisterDao';
 import CaisseRegisterServices from '../../services/CaisseRegisterServices';
 import DateTime from '../../utilities/DateTime';
+import { APP_NAME } from '../../utilities/Params';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCalculator, faCheckCircle, faDashboard, faDollar, faEraser, faKey, faLaptop, faPlay, faPlusCircle, faSignOut, faTh, faTimesCircle, faUser } from '@fortawesome/free-solid-svg-icons'
+import "../../css/navbare.css";
 
 
 export const Navbar = () => {
-  const auth = useAuth();
-  const [show, setShow] = useState(false);
+    const navigate = useNavigate();
+    const auth = useAuth();
+    const [show, setShow] = useState(false);
     // champs de fermer caisse 
     const [totaljournne , setTotalJournne] = useState('');
     const [totalcarte , setTotalCarte] = useState('');
     const [vespece , setVespece] = useState('');
 
 
-
+// close modale window 
   const handleClose = () =>{
     
     setShow(false);
@@ -102,7 +107,6 @@ export const Navbar = () => {
 
                               CaisseRegisterDao.updateRegister(rep.id , data);
                               
-
                             }
 
                           }
@@ -128,19 +132,135 @@ export const Navbar = () => {
 
   return (
     <>
-    <nav>
-        <Link to="/pos">Pos</Link>
-        <Link to="/product">Synchrone-DB</Link>
-        <Link to="/lproducts">List Products</Link>
-        <li><button onClick={() =>{
-              if(!isOnline()){
-                auth.logOut();   
-            }
-            handleShow();
+    <header id="header" class="navbar">
+      <div class="container">
+            <a class="navbar-brand" href="\pos"><span class="logo"><span class="pos-logo-lg">{APP_NAME}</span><span class="pos-logo-sm"></span></span></a>
 
-        } } className="btn-submit"> Close </button></li>
-        <li><button onClick={() => auth.logOut()} className="btn-submit"> Deconnect</button></li>
-    </nav>
+            <div class="header-nav">
+            <ul class="nav navbar-nav pull-right">
+                    <li class="dropdown">
+                        <a class="btn account dropdown-toggle" 
+                        data-toggle="dropdown" href="/logout">
+                            <img alt="" src="./images/male.png" class="mini_avatar img-rounded" />
+                            <div class="user hidden-small">
+                                <span> User name </span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="/logout">
+                                <FontAwesomeIcon icon={faUser} />   Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/logout">
+                                <FontAwesomeIcon icon={faKey} />  
+                                    Mot de passe
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href='/'  onClick={() => auth.logOut()} >
+                                <FontAwesomeIcon icon={faSignOut} />  
+                                   logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+            <li class="dropdown hidden-xs hidden-small">
+                        <button class="btn pos-tip" title="dashboard" 
+                        data-placement="bottom" >
+                        <FontAwesomeIcon icon={faDashboard} />  
+                        </button>
+            </li>
+            <li class="dropdown hidden-xs hidden-small">
+                        <button class="btn pos-tip" title="calculator" 
+                        data-placement="bottom"  data-toggle="dropdown">
+                        <FontAwesomeIcon icon={faCalculator} />
+                        </button>
+                        <ul class="dropdown-menu pull-right calc">
+                            <li class="dropdown-content">
+                                <span id="inlineCalc"></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small">
+                        <button class="btn pos-tip" title="shortcuts" data-placement="bottom" 
+                         data-toggle="modal" data-target="#sckModal">
+                        <FontAwesomeIcon icon={faKey} />
+                        </button>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small">
+                        <button   type="button" class="btn pos-tip" title="pole_display" 
+                        data-placement="bottom" id="rfd-pole-connect">
+                        <FontAwesomeIcon icon={faPlay} />
+                        </button>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small">
+                        <button class="btn pos-tip" title="view_bill_screen" 
+                        data-placement="bottom"  id="ouvrirFenetre"target="_blank">
+                        <FontAwesomeIcon icon={faLaptop} />
+                        </button>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small">
+                        <button class="btn pos-tip" id="opened_bills" title="suspended_sales" 
+                        data-placement="bottom" data-html="true"  data-toggle="ajax">
+                        <FontAwesomeIcon icon={faTh} />
+                        </button>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small" >
+                        <button class="btn pos-tip" id="register_details" 
+                        title="register_details" data-placement="bottom" data-html="true"  data-toggle="modal" data-target="#myModal">
+                        <FontAwesomeIcon icon={faCheckCircle} />
+                          
+                        </button>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small">
+                        <button class="btn pos-tip" id="close_register" title="close_register" 
+                        onClick={() =>{
+                          if(!isOnline()){
+                            auth.logOut();   
+                        }
+                        handleShow();
+            
+                    }} data-placement="bottom hidden-sm hidden-small" data-html="true" data-backdrop="static" >
+                        <FontAwesomeIcon icon={faTimesCircle} />
+                        </button>
+                    </li>
+                    <li class="dropdown hidden-sm hidden-small">
+                        <button class="btn  pos-tip" id="add_expense" title="<span>add_expense</span>" data-placement="bottom" data-html="true" data-toggle="modal" data-target="#myModal">
+                        <FontAwesomeIcon icon={faDollar} />
+                        </button>
+                    </li>
+					<li class="dropdown hidden-sm hidden-small">
+                      <button class="btn  pos-tip" href="/" id="addManuallyTransfer">
+                      <FontAwesomeIcon icon={faPlusCircle} />
+                    
+                    </button>
+                    </li>
+                    <li class="dropdown hidden-xs">
+                        <button class="btn  pos-tip" title="clear_ls" data-placement="bottom" id="clearLS" href="/">
+                        <FontAwesomeIcon icon={faEraser} />
+                           
+                        </button>
+                    </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right hidden-smallest">
+                    <li class="dropdown">
+                        <button href="/" class="btn bblack" style={{cursor:'default'}}><span id="display_time"></span></button>
+                    </li>
+            </ul>
+
+            </div>
+    </div>
+ 
+    </header>
+
+
+
+
 {/* this a modal window of  Fermer la caisse  */}
 <Modal  show={show} onHide={handleClose}>
 <Modal.Title>FERMER LA CAISSE</Modal.Title>

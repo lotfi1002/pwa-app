@@ -17,8 +17,6 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
 
-   
-
   const loginAction = async (action="api/auth" ,data , path) => {
       // get jwt from backend through credentials
        // Convert the JSON object into a query string
@@ -168,7 +166,7 @@ const AuthProvider = ({ children }) => {
 
             }else {
 
-                  setToken("localtoken");
+                  setToken("");
                   localStorage.setItem('isAuth', 0);
                   localStorage.removeItem('user_id');
                   
