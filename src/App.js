@@ -41,13 +41,13 @@ function App() {
   
        <Routes>
             <Route path='/login' element={<LoginPage/>}></Route>
-     
+            <Route path='/caisse' element={<CaissePage/>}></Route>
+
               <Route element={<PrivateRoute/>}>
                       <Route path='/' element={<DashboardPage/>}></Route>
                       <Route path='/dashboard' element={<DashboardPage/>}></Route>
                       <Route path='/product' element={<ProductPage/>}></Route>
                       <Route path='/lproducts' element={<ProductList/>}></Route>
-                      <Route path='/caisse' element={<CaissePage/>}></Route>
                       <Route path='/pos' element={<PosPage/>}></Route>
 </Route>
 </Routes>
