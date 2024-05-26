@@ -2,7 +2,7 @@ import React from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faKey, faSignOut } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../hooks/AuthProvider';
+import { useAuth } from '../../hooks/AuthProvider';
 
 
 const UserDropdown = () => {

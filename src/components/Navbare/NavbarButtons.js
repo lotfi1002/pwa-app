@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDashboard, faCalculator, faKey, faPlay, faLaptop, faTh, faCheckCircle, faTimesCircle, faDollar, faPlusCircle, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, Button, Modal } from 'react-bootstrap';
-import { useAuth } from '../hooks/AuthProvider';
-import CaisseRegisterServices from '../services/CaisseRegisterServices';
-import CaisseRegisterDao from '../dao/CaisseRegisterDao';
-import DateTime from '../utilities/DateTime';
-import { isOnline } from '../utilities/CheckOnline';
+import { useAuth } from '../../hooks/AuthProvider';
+import CaisseRegisterServices from '../../services/CaisseRegisterServices';
+import CaisseRegisterDao from '../../dao/CaisseRegisterDao';
+import DateTime from '../../utilities/DateTime';
+import { isOnline } from '../../utilities/CheckOnline';
 
 const NavbarButtons = () => {
 
@@ -127,13 +127,13 @@ const NavbarButtons = () => {
  
     return (
 <>
-        <ul className="nav navbar-nav pull-right">
-        <li className="dropdown hidden-xs hidden-small">
+    <ul className="nav navbar-nav pull-right d-flex align-items-center">
+      <li className="nav-item">
           <Button className="btn pos-tip" title="dashboard" data-placement="bottom">
             <FontAwesomeIcon icon={faDashboard} />
           </Button>
         </li>
-        <li className="dropdown hidden-xs hidden-small">
+        <li className="nav-item">
           <Dropdown>
             <Dropdown.Toggle className="btn pos-tip" title="calculator" data-placement="bottom">
               <FontAwesomeIcon icon={faCalculator} />
@@ -145,32 +145,32 @@ const NavbarButtons = () => {
             </Dropdown.Menu>
           </Dropdown>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" title="shortcuts" data-placement="bottom" data-toggle="modal" data-target="#sckModal">
             <FontAwesomeIcon icon={faKey} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" title="pole_display" data-placement="bottom" id="rfd-pole-connect">
             <FontAwesomeIcon icon={faPlay} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" title="view_bill_screen" data-placement="bottom" id="ouvrirFenetre" target="_blank">
             <FontAwesomeIcon icon={faLaptop} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" id="opened_bills" title="suspended_sales" data-placement="bottom" data-html="true" data-toggle="ajax">
             <FontAwesomeIcon icon={faTh} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" id="register_details" title="register_details" data-placement="bottom" data-html="true" data-toggle="modal" data-target="#myModal">
             <FontAwesomeIcon icon={faCheckCircle} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" id="close_register" title="close_register"  onClick={() =>{
                             if(!isOnline()){
                               auth.logOut();   
@@ -181,18 +181,18 @@ const NavbarButtons = () => {
             <FontAwesomeIcon icon={faTimesCircle} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
+        <li className="nav-item">
           <Button className="btn pos-tip" id="add_expense" title="add_expense" data-placement="bottom" data-html="true" data-toggle="modal" data-target="#myModal">
             <FontAwesomeIcon icon={faDollar} />
           </Button>
         </li>
-        <li className="dropdown hidden-sm hidden-small">
-          <Button className="btn pos-tip" id="addManuallyTransfer" href="/" title="addManuallyTransfer" data-placement="bottom" data-html="true">
+        <li className="nav-item">
+          <Button className="btn pos-tip" id="addManuallyTransfer"  title="addManuallyTransfer" data-placement="bottom" data-html="true">
             <FontAwesomeIcon icon={faPlusCircle} />
           </Button>
         </li>
-        <li className="dropdown hidden-xs">
-          <Button className="btn pos-tip" id="clearLS" href="/" title="clear_ls" data-placement="bottom" data-html="true">
+        <li className="nav-item">
+          <Button className="btn pos-tip" id="clearLS"  title="clear_ls" data-placement="bottom" data-html="true">
             <FontAwesomeIcon icon={faEraser} />
           </Button>
         </li>

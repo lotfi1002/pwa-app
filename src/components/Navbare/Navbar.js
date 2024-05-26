@@ -2,14 +2,13 @@ import React from 'react';
 
 import { APP_NAME } from '../../utilities/Params';
 import "../../css/navbare.css";
-import UserDropdown from '../UserDropdown';
-import NavbarButtons from '../NavbarButtons';
+import UserDropdown from './UserDropdown';
+import NavbarButtons from './NavbarButtons';
+import DateDisplay from './DateDisplay';
 
 
 
-export const Navbar = () => {
-
-      
+export const Navbar = () => { 
 
   return (
     <>
@@ -26,23 +25,14 @@ export const Navbar = () => {
        
               <UserDropdown />
          
-         <NavbarButtons/>
+              <NavbarButtons/>
         
-            <ul class="nav navbar-nav pull-right hidden-smallest">
-                    <li class="dropdown">
-                        <button href="/" class="btn bblack" style={{cursor:'default'}}><span id="display_time"></span></button>
-                    </li>
-            </ul>
+             <DateDisplay/>
 
             </div>
     </div>
  
     </header>
-
-
-
-
-
 
 </>
   )
