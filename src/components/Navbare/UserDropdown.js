@@ -8,7 +8,14 @@ import UserDao from '../../dao/UserDao';
 
 const UserDropdown = () => {
 
-  const [user, setUser] = useState({username : ''});
+  const [user, setUser] = useState({
+    id: '',
+    username : '' ,
+    password : '',
+    email:'',
+    gender : '',
+
+  });
     const auth = useAuth();
   const handleLogout = () => {
     auth.logOut();
@@ -25,12 +32,21 @@ const UserDropdown = () => {
 
           if(response != null ){
             console.log(response.username) ;
-            setUser({username : response.username});
+            setUser({
+              id: response.id,
+              username : response.username ,
+              password : response.password,
+              email:response.email,
+              gender : response.gender,
+              });
           }else {
 
             setUser({
-              username: '',
-              email: ''
+              id: '',
+              username : '' ,
+              password : '',
+              email:'',
+              gender : '',
               
             });
           }
@@ -39,8 +55,11 @@ const UserDropdown = () => {
         }catch (error) {
           console.error('Error fetching user data:', error);
           setUser({
-            username: '',
-            email: ''
+            id: '',
+            username : '' ,
+            password : '',
+            email:'',
+            gender : '',
             
           });
         }
@@ -60,12 +79,12 @@ const UserDropdown = () => {
         <div className="d-flex align-items-center">
           <img
             alt=""
-            src="images/male.png"
+            src={(user.gender === "female")? 'images/female.png' :'images/male.png'}
             className="mini_avatar img-rounded"
             style={{ width: '30px', marginRight: '10px' }}
           />
           <div className="user">
-            <span>{user.username}</span>
+            <span>Bonjour {user.username} !!</span>
           </div>
         </div>
       }

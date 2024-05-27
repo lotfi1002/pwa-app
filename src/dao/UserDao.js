@@ -36,9 +36,7 @@ class UserDao{
                 else
                   console.log ("Nothing was updated");
               }) ;  
-            
-          
-        
+ 
     }
 
 

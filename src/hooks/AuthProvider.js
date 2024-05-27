@@ -40,12 +40,12 @@ const AuthProvider = ({ children }) => {
                                // save user in indexd db database 
                                if( data.username.localeCompare(el.username)!==0){
                                 
-                                UserDao.putUser(new User(el.id , el.username , el.password , el.email , ''));
+                                UserDao.putUser(new User(el.id , el.username , el.password , el.email , '' , el.gender));
                               
                               }else{
                                 // crypted password 
                                 const hash = CryptoJS.SHA1(data.password,CryptoJS.enc.Utf8).toString(CryptoJS.enc.Hex);
-                               UserDao.putUser(new User(el.id , el.username , el.password , el.email , hash));
+                               UserDao.putUser(new User(el.id , el.username , el.password , el.email , hash, el.gender));
                               } 
                           } )   ;  }
                         
