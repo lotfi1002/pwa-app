@@ -7,6 +7,8 @@ import DateTime from "../utilities/DateTime";
 import CaisseRegisterDao from "../dao/CaisseRegisterDao";
 import Layout from '../components/Layout/Layout';
 
+import "../css/caissepage.css";
+
 export const CaissePage = () => {
   const [inputValue, setInputValue] = useState(""); // etat local de la valeur 
 
