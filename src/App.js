@@ -1,6 +1,3 @@
-import './App.css';
-import "./css/style.css";
-import "./css/theme.css";
 import React, {  useEffect,  } from 'react';
 import {LoginPage} from './pages/LoginPage';
 import{PosPage} from './pages/PosPage';
@@ -11,6 +8,8 @@ import CaisseRoute from './router/CaisseRoute';
 import AuthProvider from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
 import OtherServices from './services/OtherServices';
+
+import "./css/style.css";
 
 function App() {
 

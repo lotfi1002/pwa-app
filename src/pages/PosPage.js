@@ -1,7 +1,5 @@
 import Layout from "../components/Layout/Layout";
-import "../css/pos.css";
-import "../css/posajax.css";
-//import "../css/print.css";
+import "../css/style.css";
 
 
 export const PosPage = () => {

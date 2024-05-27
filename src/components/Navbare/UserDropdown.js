@@ -84,7 +84,7 @@ const UserDropdown = () => {
             style={{ width: '30px', marginRight: '10px' }}
           />
           <div className="user">
-            <span>Bonjour {user.username} !!</span>
+            <span>Bienvenue {user.username} </span>
           </div>
         </div>
       }

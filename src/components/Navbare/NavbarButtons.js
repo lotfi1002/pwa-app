@@ -127,7 +127,8 @@ const NavbarButtons = () => {
  
     return (
 <>
-    <ul className="nav d-flex align-items-center">
+
+    <ul className="nav  d-flex align-items-center">
       <li className="nav-item">
           <Button className="btn pos-tip" title="dashboard" data-placement="bottom">
             <FontAwesomeIcon icon={faDashboard} />
@@ -204,12 +205,12 @@ const NavbarButtons = () => {
 <div>
 <form onSubmit={handleClose}>
 <label>TOTAL ESPECE JOURNEE :</label>
-<input type="number"   onChange={(e) => setTotalJournne(e.target.value)} value="0.00"
+<input type="number"  required onChange={(e) => setTotalJournne(e.target.value)} 
  />
 <label>Total des relevés de carte bancaire : </label>
-<input type="number"  value="0.00" onChange={(e) => setTotalCarte(e.target.value)} />
+<input type="number"  required onChange={(e) => setTotalCarte(e.target.value)} />
 <label>VERSEMENT ESPECE JOURNEE : </label>
-<input type="number" value="0.00" onChange={(e) => setVespece(e.target.value)} />
+<input type="number" required onChange={(e) => setVespece(e.target.value)} />
 </form>
 
 </div>
@@ -223,6 +224,7 @@ const NavbarButtons = () => {
 </Button>
 </Modal.Footer>
 </Modal>
+
 </>
     ) ;
 

@@ -1,12 +1,10 @@
 import React from 'react';
 
 import { APP_NAME } from '../../utilities/Params';
-import "../../css/navbare.css";
 import UserDropdown from './UserDropdown';
 import NavbarButtons from './NavbarButtons';
 import DateDisplay from './DateDisplay';
 
-import "../../css/navbare.css";
 
 
 export const Navbar = () => { 
@@ -14,7 +12,7 @@ export const Navbar = () => {
   return (
     <>
     <header id="header" class="navbar">
-    <div className="container">
+    <div >
       <a className="navbar-brand" href="\pos">
         <span className="logo">
           <span className="pos-logo-lg">{APP_NAME}</span>
@@ -24,11 +22,13 @@ export const Navbar = () => {
 
       <div className="header-nav">
        
-              <UserDropdown />
+              <DateDisplay/>
          
               <NavbarButtons/>
+
+              <UserDropdown />
         
-             <DateDisplay/>
+           
 
             </div>
     </div>
