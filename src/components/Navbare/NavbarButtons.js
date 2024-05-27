@@ -127,7 +127,7 @@ const NavbarButtons = () => {
  
     return (
 <>
-    <ul className="nav navbar-nav pull-right d-flex align-items-center">
+    <ul className="nav d-flex align-items-center">
       <li className="nav-item">
           <Button className="btn pos-tip" title="dashboard" data-placement="bottom">
             <FontAwesomeIcon icon={faDashboard} />
@@ -156,7 +156,7 @@ const NavbarButtons = () => {
           </Button>
         </li>
         <li className="nav-item">
-          <Button className="btn pos-tip" title="view_bill_screen" data-placement="bottom" id="ouvrirFenetre" target="_blank">
+          <Button className="btn pos-tip" title="view_bill_screen" data-placement="bottom" id="ouvrirFenetre" >
             <FontAwesomeIcon icon={faLaptop} />
           </Button>
         </li>

@@ -8,14 +8,13 @@ import {CaissePage} from './pages/CaissePage';
 import { Routes,Route, useNavigate } from 'react-router-dom';
 import PrivateRoute from './router/PrivateRoute';
 import CaisseRoute from './router/CaisseRoute';
-import AuthProvider, { useAuth } from './hooks/AuthProvider';
+import AuthProvider from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
 import OtherServices from './services/OtherServices';
 
 function App() {
 
   const navigate = useNavigate();
-  const auth = useAuth();
 
   // each 1 second check the mode if online or offline
   useEffect(() => {
@@ -53,7 +52,10 @@ function App() {
 
             if(status === false && error === "Failed to access"){
 
-              auth.logOut();
+              localStorage.removeItem('token');
+              localStorage.removeItem('user_id');
+              //localStorage.removeItem('username');
+              localStorage.setItem('isAuth', 0);
             }
       
     });
@@ -67,7 +69,6 @@ function App() {
   
   return (
 <div>
-
 <AuthProvider>
   
        <Routes>
@@ -77,10 +78,9 @@ function App() {
                       <Route path='/' element={<PosPage/>}></Route>
                       <Route path='/pos' element={<PosPage/>}></Route>
               </Route>       
-              <Route path='/caisse' element={<CaissePage/>}></Route>
-                  
-</Route>
-</Routes>
+              <Route path='/caisse' element={<CaissePage/>}></Route>                
+              </Route>
+      </Routes>
 
 </AuthProvider>
 

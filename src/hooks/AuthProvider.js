@@ -8,6 +8,7 @@ import UserDao from "../dao/UserDao";
 import CryptoJS from 'crypto-js';
 import CaisseRegisterDao from "../dao/CaisseRegisterDao";
 import CaisseRegisterServices from "../services/CaisseRegisterServices";
+import DateTime from "../utilities/DateTime";
 
 const AuthContext = createContext();
 
@@ -28,6 +29,7 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem('token', token);
             localStorage.setItem('user_id', user.id);
             localStorage.setItem('isAuth', 1);
+            localStorage.setItem('connected_at' , DateTime.getCurrentDateTime());
 
             // get all users from backend 
             UserServices.getUsers("api/users/all").then( (rep) => {
@@ -116,7 +118,7 @@ const AuthProvider = ({ children }) => {
             setToken("");
             localStorage.removeItem('token');
             localStorage.removeItem('user_id');
-            //localStorage.removeItem('username');
+            localStorage.removeItem('connected_at');
             localStorage.setItem('isAuth', 0);
             //navigate('/login');
       }
@@ -135,6 +137,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem('user_id');
     localStorage.removeItem('username');
+    localStorage.removeItem('connected_at');
     localStorage.setItem('isAuth', 0);
     navigate("/login");
   };
@@ -149,6 +152,7 @@ const AuthProvider = ({ children }) => {
                  setToken("localtoken");
                  localStorage.setItem('isAuth', 1);
                  localStorage.setItem('user_id', response.id);
+                 localStorage.setItem('connected_at' , DateTime.getCurrentDateTime());
                   // get open register from idexddb by connected user 
                    CaisseRegisterDao.getOpenRegisterByUserId(response.id).then(
      
@@ -169,6 +173,7 @@ const AuthProvider = ({ children }) => {
                   setToken("");
                   localStorage.setItem('isAuth', 0);
                   localStorage.removeItem('user_id');
+                  localStorage.removeItem('connected_at');
                   
             }
 

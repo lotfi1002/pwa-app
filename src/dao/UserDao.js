@@ -20,6 +20,14 @@ class UserDao{
         .first() ;
     }
 
+
+    static async getUserById(id){
+
+        return await db.user.where("id")
+        .equals(id)
+        .first() ;
+    }
+
     static async UpdateUser(id , data ){
             //console.log(response);
             db.user.update(id,data).then( (updated)=> {

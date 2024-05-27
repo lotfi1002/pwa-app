@@ -6,6 +6,7 @@ import UserDropdown from './UserDropdown';
 import NavbarButtons from './NavbarButtons';
 import DateDisplay from './DateDisplay';
 
+import "../../css/navbare.css";
 
 
 export const Navbar = () => { 
