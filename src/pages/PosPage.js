@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Layout from "../components/Layout/Layout";
-import TabProduct from "../components/TabProduct";
-import { faChevronLeft, faChevronRight, faCreditCard, faEdit, faEye, faMoneyBill, faPencil, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import TabProduct from "../components/Pos/TabProduct";
+import {  faEdit, faEye, faMoneyBill, faPencil, faPlusCircle, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 import "../css/style.css";
 import "../css/posajax.css";
@@ -24,20 +24,24 @@ export const PosPage = () => {
         <h4 style={{ textTransform: 'uppercase' }}>Content</h4>
       </div>
       <div id="left-top">
-        <div style={{ position: 'absolute' }}></div>
+        <div style={{ position: 'absolute' }}>
+      <input type="text" name="test" id="test" className="kb-pad" />
+        </div>
         <div className="form-group">
           <div className="input-group" style={{ zIndex: 1 }}>
+          <input type="text" name="customer" id="poscustomer"  data-placeholder="select customer" required="required" 
+       class="form-control pos-input-tip" style={{width:"100%"}} />
             <div className="input-group-addon no-print" style={{ padding: '2px 8px', borderLeft: 0 }}>
-              <a href="/" id="toogle-customer-read-attr" className="external">
+              <button  id="toogle-customer-read-attr" className="external">
               <FontAwesomeIcon icon={faPencil} />
-               
-              </a>
+              
+              </button>
             </div>
             <div className="input-group-addon no-print" style={{ padding: '2px 7px', borderLeft: 0 }}>
-              <a href="/" id="view-customer" className="external" data-toggle="modal" data-target="#myModal">
+              <button   id="view-customer" className="external" data-toggle="modal" data-target="#myModal">
               <FontAwesomeIcon icon={faEye} />
           
-              </a>
+              </button >
             </div>
           </div>
           <div style={{ clear: 'both' }}></div>
@@ -45,7 +49,38 @@ export const PosPage = () => {
         <div className="no-print">
           <div className="form-group" id="ui">
             <div className="input-group">
-              <div style={{ clear: 'both' }}></div>
+            <select
+                    value="{selectedWarehouse}"
+                    
+                    className="form-control poswarehouse pos-input-tip"
+                    data-placeholder="Select Warehouse"
+                    required="required"
+                    style={{ width: '100%' }}
+                >
+                    <option value="">Select Warehouse</option>
+                    
+                </select>
+            </div>
+            <div className="form-group" id="ui">
+                <input
+                    type="text"
+                    value="Chercher"
+                  
+                    className="form-control pos-tip"
+                    inputMode="none"
+                    id="add_item"
+                    data-placement="top"
+                    data-trigger="focus"
+                    placeholder="Search product by name or code"
+                    title="Product name tip"
+                />
+                <div className="input-group-addon" style={{ padding: '2px 8px' }}>
+                    <button  >
+                      <FontAwesomeIcon icon={faPlusCircle} />
+                         </button>
+                </div>
+              <div style={{ clear: 'both' }}>
+              </div>
             </div>
           </div>
         </div>
@@ -56,9 +91,9 @@ export const PosPage = () => {
             <table className="table items table-striped table-bordered table-condensed table-hover sortable_table" id="posTable" style={{ marginBottom: 0 }}>
               <thead>
                 <tr>
-                  <th width="40%"></th>
-                  <th width="15%"></th>
-                  <th width="15%"></th>
+                  <th width="40%">Produit</th>
+                  <th width="15%">Prix</th>
+                  <th width="15%">Qty</th>
                   <th width="20%">Ss-Total</th>
                   <th style={{ width: '5%', textAlign: 'center' }}>
                   <FontAwesomeIcon icon={faTrashCan} />
@@ -72,13 +107,15 @@ export const PosPage = () => {
         </div>
         <div style={{ clear: 'both' }}></div>
         <div id="left-bottom">
+
+       
           <table id="totalTable" style={{ width: '100%', float: 'right', padding: '5px', color: '#000', background: '#FFF' }}>
             <tr>
-              <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}></td>
+              <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}>items</td>
               <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #DDD' }}>
                 <span id="titems">0</span>
               </td>
-              <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}></td>
+              <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}>total</td>
               <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #DDD' }}>
                 <span id="total">0.00</span>
                 <input id="newdiscount" style={{ display: 'none' }} defaultValue="0" />
@@ -141,22 +178,12 @@ export const PosPage = () => {
           <div id="botbuttons" className="col-xs-12 text-center">
             <input type="hidden" name="biller" id="biller" value="" />
             <div className="row">
-              <div className="col-xs-4" style={{ padding: 0 }}>
-                <div className="btn-group-vertical btn-block">
-                  <button type="button" className="btn btn-warning btn-block btn-flat" id="suspend"></button>
-                  <button type="button" className="btn btn-danger btn-block btn-flat" id="reset"></button>
-                </div>
-              </div>
-              <div className="col-xs-4" style={{ padding: 0 }}>
-                <div className="btn-group-vertical btn-block">
-                  <button type="button" className="btn btn-info btn-block" id="print_order"></button>
-                  <button type="button" className="btn btn-primary btn-block" id="print_bill"></button>
-                </div>
-              </div>
-              <div className="col-xs-4" style={{ padding: 0 }}>
+             
+             
+              <div className="col-xs-12" style={{ padding: 0 }}>
                 <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' }}>
                 <FontAwesomeIcon icon={faMoneyBill} />
-                 
+                 Paiement
                 </button>
               </div>
             </div>
@@ -224,43 +251,7 @@ export const PosPage = () => {
         style={{ height: '100px', minHeight: '100px' }}
       ></div>
       
-      <div className="btn-group btn-group-justified pos-grid-nav">
-        <div className="btn-group">
-          <button
-            style={{ zIndex: 10002 }}
-            className="btn btn-primary pos-tip"
-            title="Previous" 
-            type="button"
-            id="previous"
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-        </div>
-        
-        <div className="btn-group">
-          <button
-            style={{ zIndex: 10003 }}
-            className="btn btn-primary pos-tip"
-            type="button"
-            id="sellGiftCard"
-            title="" // Adjust this title as needed
-          >
-            <FontAwesomeIcon icon={faCreditCard} />
-          </button>
-        </div>
-        
-        <div className="btn-group">
-          <button
-            style={{ zIndex: 10004 }}
-            className="btn btn-primary pos-tip"
-            title="Next" // Adjust this title as needed
-            type="button"
-            id="next"
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </div>
-      </div>
+    
     </div>
 
 </div>
