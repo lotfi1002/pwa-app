@@ -71,7 +71,7 @@ const UserDropdown = () => {
  
 
   return (
-    <ul className="nav  align-items-left">
+   <>
     <li className="nav-item">
     <DropdownButton
       id="dropdown-basic-button"
@@ -84,7 +84,7 @@ const UserDropdown = () => {
             style={{ width: '30px', marginRight: '10px' }}
           />
           <div className="user">
-            <span>Bienvenue {user.username} </span>
+            <span>Bienvenue {user.username}</span>
           </div>
         </div>
       }
@@ -102,7 +102,8 @@ const UserDropdown = () => {
       </Dropdown.Item>
     </DropdownButton>
     </li>
-          </ul>
+
+    </> 
   );
 };
 

@@ -1,4 +1,4 @@
-import React, {  useEffect,  } from 'react';
+import React, {  useEffect  } from 'react';
 import {LoginPage} from './pages/LoginPage';
 import{PosPage} from './pages/PosPage';
 import {CaissePage} from './pages/CaissePage';

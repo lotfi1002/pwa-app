@@ -11,10 +11,15 @@ export const PosPage = () => {
       <div id="content">
         <div class="c1">
             <div class="pos">
-       <h1>POS Page</h1>
-       </div>
-       </div>
-       </div>
+                <div id="pos">
+              
+    Pos 
+
+  </div>
+        </div>
+       
+    </div>
+</div>
         </Layout>
       </>
     );

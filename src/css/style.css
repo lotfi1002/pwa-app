@@ -600,16 +600,19 @@ a:focus {
     min-height: 40px;
     border: none;
     background: #000;
-    border-radius: 0px;
+    border-radius: 0;
     z-index: 2;
 }
+
 .navbar a {
     color: #7b7b7b;
 }
+
 .navbar a i {
     margin-top: 2px;
 }
-.navbar #search {
+
+#search {
     position: relative;
     background: #282b2e;
     height: 30px;
@@ -617,41 +620,39 @@ a:focus {
     border-radius: 2px;
     margin: 5px;
 }
-.navbar #search input {
+
+#search input {
     margin: 5px 0;
     width: 90%;
     background: transparent;
     border: none;
     color: white;
 }
-.navbar #search i {
+
+#search i {
     position: absolute;
     top: 8px;
     right: 10px;
     color: white;
 }
+
 a.navbar-brand {
     text-align: left;
     padding: 9px 0 10px 10px !important;
 }
+
 a.navbar-brand span {
     color: #fff;
     text-shadow: none;
 }
+
 a.navbar-brand.noBg {
     background: transparent;
     border-bottom: none;
 }
-.btn-visible-sm .btn {
-    color: #fff;
-    width: auto !important;
-    padding: 8px 0 8px 15px;
-}
-.btn-visible-sm .navbar-toggle {
-    position: static;
-    top: auto;
-    margin: 0;
-}
+
+/* More styles... */
+
 .header-nav {
     position: relative;
     padding: 0px;
@@ -807,8 +808,7 @@ a#main-menu-act i:hover {
     font-size: 14px;
     white-space: nowrap;
 }
-.sidebar-nav > ul > li {
-}
+
 .sidebar-nav > ul > li > ul,
 .sidebar-nav > ul > li > ul > li > ul,
 .sidebar-nav > ul > li > ul > li > ul > li > ul {
@@ -2652,4 +2652,12 @@ img.calculator-trigger {
 .qr-svg {
     max-width: 100px !important;
     max-height: 100px !important;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.pull-left {
+    float: left !important;
 }

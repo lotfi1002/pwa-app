@@ -126,9 +126,7 @@ const NavbarButtons = () => {
    const handleShow = () => setShow(true);
  
     return (
-<>
-
-    <ul className="nav  d-flex align-items-center">
+      <>
       <li className="nav-item">
           <Button className="btn pos-tip" title="dashboard" data-placement="bottom">
             <FontAwesomeIcon icon={faDashboard} />
@@ -197,7 +195,7 @@ const NavbarButtons = () => {
             <FontAwesomeIcon icon={faEraser} />
           </Button>
         </li>
-      </ul>
+   
      
 <Modal  show={show} onHide={handleClose}>
 <Modal.Title>FERMER LA CAISSE</Modal.Title>
