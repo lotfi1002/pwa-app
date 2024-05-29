@@ -107,10 +107,6 @@ if(isOnline()){
         <tr> Ouvrir la caisse </tr>
 
           <tr>
-           
-            
-          </tr>
-          <tr>
             <td><input type="button" value="C" onClick={() => setInputValue("")} /></td> {}
             <td><input type="button" value="1" onClick={() => handleButtonClick("1")} /></td>
             <td><input type="button" value="2" onClick={() => handleButtonClick("2")} /></td>

@@ -21,14 +21,13 @@ export const Navbar = () => {
       </a>
 
       <div className="header-nav pull-right">
-      <ul className="nav">
-              <DateDisplay/>
-              <NavbarButtons/>
-              <UserDropdown />
-        </ul>
+              <ul className="nav">
+                      <DateDisplay/>
+                      <NavbarButtons/>
+                      <UserDropdown />
+                </ul>
            
-
-            </div>
+      </div>
     </div>
  
     </header>

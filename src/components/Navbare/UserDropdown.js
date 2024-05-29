@@ -71,39 +71,41 @@ const UserDropdown = () => {
  
 
   return (
-   <>
+    <>
     <li className="nav-item">
-    <DropdownButton
-      id="dropdown-basic-button"
-      title={
-        <div className="d-flex align-items-center">
+       <DropdownButton
+       id="dropdown-basic-button"
+       title={
+       <div className="d-flex align-items-center">
           <img
-            alt=""
-            src={(user.gender === "female")? 'images/female.png' :'images/male.png'}
-            className="mini_avatar img-rounded"
-            style={{ width: '30px', marginRight: '10px' }}
+          alt=""
+          src={(user.gender === "female")? 'images/female.png' :'images/male.png'}
+          className="mini_avatar img-rounded"
+          style={{ width: '30px', marginRight: '10px' }}
           />
           <div className="user">
-            <span>Bienvenue {user.username}</span>
+             <span>Bienvenue {user.username}</span>
           </div>
-        </div>
-      }
-      className="btn account"
-    >
-      <Dropdown.Item href="/profile">
-        <FontAwesomeIcon icon={faUser} /> Profile
-      </Dropdown.Item>
-      <Dropdown.Item href="/change-password">
-        <FontAwesomeIcon icon={faKey} /> Mot de passe
-      </Dropdown.Item>
-      <Dropdown.Divider />
-      <Dropdown.Item onClick={handleLogout}>
-        <FontAwesomeIcon icon={faSignOut} /> Logout
-      </Dropdown.Item>
-    </DropdownButton>
+       </div>
+       }
+       className="btn account"
+       >
+       <Dropdown.Item href="/profile">
+          <FontAwesomeIcon icon={faUser} />
+          Profile
+       </Dropdown.Item>
+       <Dropdown.Item href="/change-password">
+          <FontAwesomeIcon icon={faKey} />
+          Mot de passe
+       </Dropdown.Item>
+       <Dropdown.Divider />
+       <Dropdown.Item onClick={handleLogout}>
+          <FontAwesomeIcon icon={faSignOut} />
+          Logout
+       </Dropdown.Item>
+       </DropdownButton>
     </li>
-
-    </> 
+    </>
   );
 };
 

@@ -59,10 +59,40 @@ const AuthProvider = ({ children }) => {
 
                   (response)=>{
 
+                    let cUser = response ;
+
                     if (response) {
+                     
+                      // check the backend if not exist or closed open a new register
+
+                      CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user.id}).then(
+
+                        (rep)=>{
+                          const {status , response} = rep.data;
+                            if(status){
+                            if(response === false){ 
+
+                                // open a new register in backend 
+                                let data =  {
+                                  "id": cUser.id,
+                                  "user_id" : cUser.user_id,
+                                  "cash_in_hand":cUser.cash_in_hand,
+                                  "date" : cUser.date,
+                                  "status":cUser.status,
+                                  "commit": 1 
+                                };
+
+                                CaisseRegisterServices.openCaisse( "api/caisse/open_caisse", data);
+
+                            }
+
+                          }
+                        }
+
+                      ) ;
+
                       localStorage.setItem("isOpen" , 1 );
                       navigate('/pos');
-                    
                     }else {
 
                       // check the backend 
