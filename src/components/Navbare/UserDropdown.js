@@ -69,12 +69,7 @@ const UserDropdown = () => {
     fetchUserData();
   } , []) ;
 
-  const [isOpen, setIsOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-    //console.log("open :"+isOpen);
-  };
  
 
   return (
@@ -95,12 +90,12 @@ const UserDropdown = () => {
           alt=""
           src={(user.gender === "female")? 'images/female.png' :'images/male.png'}
           className="mini_avatar img-rounded"
-          style={{
-            padding: "0px",
-            margin: "-8px 10px -10px 0px",
-            cssFloat: "left",
-            maxHeight: "36px",
-          }}
+           style={{
+                      padding: "0px",
+                      margin: "-8px 8px -8px 0px",
+                      cssFloat: "left",
+                      maxHeight: "36px",
+                    }}
           />
           <div className="user">
           <span style={{ padding: "0px", margin: "0px" }}>Bienvenue {user.username}</span>
@@ -108,7 +103,7 @@ const UserDropdown = () => {
        </div>
        
        }
-       className="btn account"
+      
        style={{
         outline: "0px",
         border: "none",
@@ -116,16 +111,17 @@ const UserDropdown = () => {
         textAlign: "center",
         boxShadow: "none",
         position: "relative",
-        minWidth: "40px",
+        minWidth: "30px",
         fontSize: "12px",
         background: "transparent",
         margin: "0px 0px 0px 3px",
         height: "40px",
         width: "auto",
         borderRadius: "0px",
-        color: "rgb(255, 255, 255)",
+        color: "transparent",
         textShadow: "none",
-        padding: "10px 10px 5px",
+        
+        
       }}
        >
        <Dropdown.Item href="/profile">

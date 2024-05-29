@@ -3,9 +3,9 @@ import Layout from "../components/Layout/Layout";
 import TabProduct from "../components/Pos/TabProduct";
 import {  faEdit, faEye, faMoneyBill, faPencil, faPlusCircle, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-//import "../css/style.css";
+import "../css/style.css";
 import "../css/posajax.css";
-//import "../css/pos.css";
+import "../css/pos.css";
 //import "../css/header.css";
 export const PosPage = () => {
    

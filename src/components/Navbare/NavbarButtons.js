@@ -1,139 +1,30 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDashboard, faKey, faPlay, faLaptop, faTh, faCheckCircle, faTimesCircle, faDollar, faPlusCircle, faEraser, faCogs, faHourglassHalf, faHeart, faList } from '@fortawesome/free-solid-svg-icons';
-import {  Button, Modal } from 'react-bootstrap';
+import {  Button } from 'react-bootstrap';
 import { useAuth } from '../../hooks/AuthProvider';
-import CaisseRegisterServices from '../../services/CaisseRegisterServices';
-import CaisseRegisterDao from '../../dao/CaisseRegisterDao';
-import DateTime from '../../utilities/DateTime';
+
 import { isOnline } from '../../utilities/CheckOnline';
+import CloseCashRegisterModal from '../Modal/CloseCashRegisterModal';
 
 const NavbarButtons = () => {
 
     const auth = useAuth();
 
- // champs de fermer caisse 
- const [totaljournne , setTotalJournne] = useState('');
- const [totalcarte , setTotalCarte] = useState('');
- const [vespece , setVespece] = useState('');
-
  const [show, setShow] = useState(false);
 
  // close modale window 
  const handleClose = () =>{
-     
      setShow(false);
-   
-     if(totaljournne != null && totalcarte!= null 
-       && vespece !== null){
-         let user_id = localStorage.getItem("user_id");
-        
-         if(user_id != null){
- 
-            // check if it is a register already opened in backend 
- 
-            CaisseRegisterServices.chekCaisse("api/caisse/check" ,  {'user_id':user_id}).then(
- 
-             (rep)=>{
-               const { status , response} = rep.data ;
-             
-               if(status){
-                 if(response === false){ 
-                   CaisseRegisterDao.getOpenRegisterByUserId(user_id).then(
-                     
-                     (rep)=>{
- 
-                       if(rep != null){
- 
-                        CaisseRegisterDao.updateRegister(rep.id , {
-                         "status":"closed",
-                         "commit": 1 } );
-          
-                       }
-                       localStorage.setItem("isOpen" , 0);
-                         auth.logOut();
-                     }
- 
-                   );
-                 
-                 }else{// open caisse from backend in indexdb
-                  /* 
-                   let data_back =  {
-                     "id": response.id,
-                     "user_id" : response.user_id,
-                     "cash_in_hand":response.cash_in_hand,
-                     "date" : response.date,
-                     "status":response.status,
-                     "commit": 1 
-                   };*/
- 
-               let data =       { 
-               "user_id" : user_id,
-               "id_register":response.id ,
-               "closed_at"  : DateTime.getCurrentDateTime()           ,
-               "total_cash": totaljournne,
-               "total_cheques" : 0,
-               "total_cc_slips" : totalcarte,
-               "total_ba": 0,
-               "total_returned" : 0,
-               "total_refunds" : 0,
-               "total_cash_submitted": vespece,
-               "total_cheques_submitted"  : 0,
-               "total_cc_slips_submitted" : 0,
-               "note": vespece,
-               "status": "closed",
-               "transfer_opened_bills": 0 ,
-               "closed_by": user_id 
-               } ;
-                 
-               closeMycaisse(user_id , data);
-
-            }}});
-            
-           
-         }
-       }
- 
    } 
 
-
-   const closeMycaisse = async (user_id , data)=>{
-
-    CaisseRegisterServices.closeCaisse("api/caisse/close_caisse" , data ).then(
- 
-      (rep)=>{
-
-        const {status , response } = rep.data ;
-
-        if(status && response){
-
-          //  close local data of indexdb 
-
-          CaisseRegisterDao.getOpenRegisterByUserId(user_id).then(
-            (rep)=>{
-
-              if(rep){
-
-                CaisseRegisterDao.updateRegister(rep.id , data);
-                
-              }
-            }
-
-          ); }
-
-        localStorage.setItem("isOpen" , 0);
-          auth.logOut();
-
-      }
-    );
-   }
    const handleShow = () => setShow(true);
  
     return (
       <>
       <ul
-              className="nav navbar-nav pull-right"
-              style={{ padding: "0px", margin: "0px", display:"flex", alignItems: "center"}}
+              className="nav navbar-nav pull-right ml-auto"
+              style={{ padding: "0px", margin: "0px" }}
             >
       
             <li
@@ -411,7 +302,7 @@ const NavbarButtons = () => {
                   <FontAwesomeIcon icon={faTimesCircle} />
                 </Button>
               </li>
-
+                     <CloseCashRegisterModal show={show} handleClose={handleClose}/>
               <li
                 className="dropdown hidden-small"
                 style={{ padding: "0px", margin: "0px" }}
@@ -613,27 +504,7 @@ const NavbarButtons = () => {
                   <FontAwesomeIcon icon={faEraser} />
                 </a>
               </li>
-      <Modal  show={show} onHide={handleClose}>
-         <Modal.Title>FERMER LA CAISSE</Modal.Title>
-         <Modal.Body>
-            <div>
-               <form onSubmit={handleClose}>
-                  <label>TOTAL ESPECE JOURNEE :</label>
-                  <input type="number"  required onChange={(e) => setTotalJournne(e.target.value)} 
-                  />
-                  <label>Total des relevés de carte bancaire : </label>
-                  <input type="number"  required onChange={(e) => setTotalCarte(e.target.value)} />
-                  <label>VERSEMENT ESPECE JOURNEE : </label>
-                  <input type="number" required onChange={(e) => setVespece(e.target.value)} />
-               </form>
-            </div>
-         </Modal.Body>
-         <Modal.Footer>
-            <Button variant="primary" onClick={handleClose}>
-            Fermer la caisse
-            </Button>
-         </Modal.Footer>
-      </Modal>
+              
 
       </ul>
       </>

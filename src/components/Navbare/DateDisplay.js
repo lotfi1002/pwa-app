@@ -6,7 +6,7 @@ const DateDisplay = () => {
   return (
     <>
     <ul
-              className="nav navbar-nav pull-right hidden-smallest"
+              className="nav navbar-nav pull-right hidden-smallest ml-auto"
               style={{ padding: "0px", margin: "0px" }}
             >
       <li className="dropdown">

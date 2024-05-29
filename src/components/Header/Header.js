@@ -5,7 +5,7 @@ class Header extends React.Component {
   render() {
     return(
       <header id="header"
-      className="navbar"
+      className="navbar navbar-expand-lg"
       style={{
         padding: "0px",
         margin: "0px",
