@@ -149,29 +149,165 @@ export const PosPage = () => {
          </div>
          </div>
          <div id="print">
-         <div id="left-middle">
-         <div id="product-list" style={{ overflow: 'scroll!important' }}>
-         <table className="table items table-striped table-bordered table-condensed table-hover sortable_table" id="posTable" style={{ marginBottom: 0 }}>
-         <thead>
-         <tr>
-         <th width="40%">Produit</th>
-         <th width="15%">Prix</th>
-         <th width="15%">Qty</th>
-         <th width="20%">Ss-Total</th>
-         <th style={{ width: '5%', textAlign: 'center' }}>
-         <FontAwesomeIcon icon={faTrashCan} />
-         </th>
+         <div id="left-middle" 
+         style={{
+            padding: "0px",
+            margin: "0px",
+            position: "relative",
+            height: "231px",
+            minHeight: "278px",
+          }}>
+         <div id="product-list" className="ps-container"
+          style={{
+            padding: "0px",
+            margin: "0px",
+            borderBottom: "1px solid rgb(221, 221, 221)",
+            position: "absolute",
+            width: "100%",
+            height: "231px",
+            minHeight: "278px",
+            overflow: "scroll",
+          }}>
+         <table id="posTable"
+            className="table items table-striped table-bordered table-condensed table-hover sortable_table"
+            style={{ margin: "0px", padding: "0px", marginBottom: "0px" }}>
+        
+         <thead className="tableFloatingHeaderOriginal"
+              style={{ padding: "0px", margin: "0px" }}>
+   
+         <tr style={{ padding: "0px", margin: "0px" }}>
+                <th
+                  width="40%"
+                  style={{
+                    padding: "0px",
+                    margin: "0px",
+                    borderColor: "rgb(53, 126, 189)",
+                    backgroundColor: "rgb(66, 139, 202)",
+                    color: "white",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Produit
+                </th>
+                <th
+                  width="15%"
+                  style={{
+                    padding: "0px",
+                    margin: "0px",
+                    borderColor: "rgb(53, 126, 189)",
+                    backgroundColor: "rgb(66, 139, 202)",
+                    color: "white",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Prix
+                </th>
+                <th
+                  width="15%"
+                  style={{
+                    padding: "0px",
+                    margin: "0px",
+                    borderColor: "rgb(53, 126, 189)",
+                    backgroundColor: "rgb(66, 139, 202)",
+                    color: "white",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Qty
+                </th>
+                <th
+                  width="20%"
+                  style={{
+                    padding: "0px",
+                    margin: "0px",
+                    borderColor: "rgb(53, 126, 189)",
+                    backgroundColor: "rgb(66, 139, 202)",
+                    color: "white",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Ss-Total
+                </th>
+                <th
+                  style={{
+                    padding: "0px",
+                    margin: "0px",
+                    borderColor: "rgb(53, 126, 189)",
+                    backgroundColor: "rgb(66, 139, 202)",
+                    color: "white",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    width: "5%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrashCan} 
+                  style={{ padding: "0px", margin: "0px", opacity: 0.5 }}/>
+               </th>
          </tr>
          </thead>
-         <tbody>
+         <tbody className="ui-sortable"
+              style={{ padding: "0px", margin: "0px" }}>
          </tbody>
          </table>
          <div style={{ clear: 'both' }}></div>
-         </div>
-         </div>
+         <div
+              className="ps-scrollbar-x"
+              style={{
+                padding: "0px",
+                margin: "0px",
+                left: "0px",
+                width: "0px",
+              }}
+            />
+          </div>
+          <div
+            className="ps-scrollbar-y-rail"
+            style={{
+              padding: "0px",
+              margin: "0px",
+              top: "0px",
+              height: "277px",
+              display: "none",
+              right: "3px",
+            }}
+          >
+            <div
+              className="ps-scrollbar-y"
+              style={{
+                padding: "0px",
+                margin: "0px",
+                top: "0px",
+                height: "0px",
+              }}
+            />
+          </div>
+        </div>
+     
          <div style={{ clear: 'both' }}></div>
          <div id="left-bottom">
-         <table id="totalTable" style={{ width: '100%', float: 'right', padding: '5px', color: '#000', background: '#FFF' }}>
+         <table id="totalTable" 
+         style={{
+            margin: "0px",
+            padding: "5px",
+            background: "rgb(255, 255, 255)",
+            width: "100%",
+            cssFloat: "right",
+            color: "rgb(0, 0, 0)",
+          }}>
          <tr>
          <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}>Articles</td>
          <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #DDD' }}>
@@ -205,13 +341,14 @@ export const PosPage = () => {
          <tr>
          <td
          style={{
-         padding: '5px 10px',
-         borderTop: '1px solid #666',
-         borderBottom: '1px solid #333',
-         fontWeight: 'bold',
-         background: '#333',
-         color: '#FFF',
-         }}
+            margin: "0px",
+            padding: "5px 10px",
+            borderTop: "1px solid rgb(102, 102, 102)",
+            borderBottom: "1px solid rgb(51, 51, 51)",
+            background: "rgb(51, 51, 51)",
+            fontWeight: "bold",
+            color: "rgb(255, 255, 255)",
+          }}
          colSpan="2"
          >
          Total à payer
@@ -242,7 +379,7 @@ export const PosPage = () => {
          <input type="hidden" name="biller" id="biller" value="" />
          <div className="row">
          <div className="col-xs-12" style={{ padding: 0 }}>
-         <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' }}>
+         <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' ,width:'100%'}}>
          <FontAwesomeIcon icon={faMoneyBill} />
          Paiement
          </button>
