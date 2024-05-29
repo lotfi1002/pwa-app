@@ -279,7 +279,7 @@ export const PosPage = () => {
          </div>
          </div>
          </div> 
-         </form>
+                     </form>
          <div id="cp">
             <div id="cpinner">
                <div class="quick-menu">
@@ -334,9 +334,8 @@ export const PosPage = () => {
                      </div>
                   </div>
                </div>
-            </div>
-         </div>
-         <div id="ajaxproducts">
+
+               <div id="ajaxproducts">
             <div>
                <TabProduct/>
             </div>
@@ -348,6 +347,9 @@ export const PosPage = () => {
             </div>
          </div>
          </div>
+            </div>
+         </div>
+        
          <div style={{clear:'both'}}></div>
          </div>
          </div>
