@@ -6,6 +6,8 @@ import {  faEdit, faEye, faMoneyBill, faPencil, faPlusCircle, faPlusSquare, faTr
 import "../css/style.css";
 import "../css/posajax.css";
 import "../css/pos.css";
+import { APP_NAME } from "../utilities/Params";
+import CalculatorComponent from "../components/Pos/CalculatorComponent";
 //import "../css/header.css";
 export const PosPage = () => {
    
@@ -16,30 +18,97 @@ export const PosPage = () => {
             <div class="c1">
                <div class="pos">
                   <div id="pos">
-                     <form action="pos" method="post" >
-                        <div id="leftdiv">
-                           <div id="printhead">
-                              <h4 style={{ textTransform: 'uppercase' }}>Content</h4>
+                     <form id="pos-sale-form"
+                     acceptCharset="utf-8" action="pos" method="post" >
+                        <div id="leftdiv"
+                         style={{
+                           padding: "10px 10px 5px",
+                           background: "rgb(245, 245, 245)",
+                           margin: "0px",
+                           width: "100%",
+                         }}>
+                           <div id="printhead"
+                           style={{ padding: "0px", margin: "0px", display: "none" }}>
+                              <h4 style={{
+                              padding: "0px",
+                              margin: "0px",
+                              fontFamily: "Ubuntu, sans-serif",
+                              fontSize: "14px",
+                              lineHeight: "14px",
+                              textTransform: "uppercase",
+                           }}>{APP_NAME}</h4>
+                            <h5
+                              style={{
+                                 padding: "0px",
+                                 margin: "0px",
+                                 fontFamily: "Ubuntu, sans-serif",
+                                 fontSize: "13px",
+                                 lineHeight: "13px",
+                                 textTransform: "uppercase",
+                              }}
+                              >
+                           Liste des commandes
+                           </h5>
+                                 Date 29/05/2024 23:39{" "}
                            </div>
-                           <div id="left-top">
-                              <div style={{ position: 'absolute'  , left:'-9999px'}}>
-                              <input type="text" name="test" id="test" className="kb-pad" />
+                           <div id="left-top" style={{ padding: "0px", margin: "0px" }}>
+                              <div style={{
+                                    padding: "0px",
+                                    margin: "0px",
+                                    position: "absolute",
+                                    left: "-9999px",
+                                 }}>
+                                     <input
+                                       id="test"
+                                       className="kb-pad ui-keyboard-input ui-widget-content ui-corner-all"
+                                       name="test"
+                                       type="text"
+                                       aria-haspopup="true"
+                                       style={{ padding: "0px", margin: "0px", boxShadow: "none" }}
+                                    />
                            </div>
-                           <div className="form-group">
-                              <div className="input-group" style={{ zIndex: 1 }}>
-                              <input type="text" name="customer" id="poscustomer"  data-placeholder="select customer" required="required" 
-                                 class="form-control pos-input-tip" style={{width:"100%"}} />
+                           <div className="form-group"
+                            style={{ padding: "0px", margin: "0px", marginBottom: "5px" }}>
+                     
+                        <div className="input-group" style={{ zIndex: 1 }}>
+                              <div
+                                 id="s2id_poscustomer"
+                                 className="select2-container form-control pos-input-tip"
+                                 style={{
+                                 padding: "0px",
+                                 margin: "0px",
+                                 width: "100%",
+                                 borderRadius: "0px",
+                                 }}>
+                                    
+                                    <input id="poscustomer"
+                                       className="form-control"
+                                       name="customer"
+                                       type="text"
+                                       required
+                                       tabIndex="-1"
+                                        />
                               <div className="input-group-addon no-print" style={{ padding: '2px 8px', borderLeft: 0 }}>
-                              <button  id="toogle-customer-read-attr" className="external">
-                                 <FontAwesomeIcon icon={faPencil} />
+                              <button  id="toogle-customer-read-attr" >
+                                 <FontAwesomeIcon icon={faPencil} style={{
+                                 padding: "0px",
+                                 margin: "0px",
+                                 fontSize: "1.2em",
+                              }}/>
                               </button>
                            </div>
                            <div className="input-group-addon no-print" style={{ padding: '2px 7px', borderLeft: 0 }}>
                            <button   id="view-customer" className="external" data-toggle="modal" data-target="#myModal">
-                              <FontAwesomeIcon icon={faEye} />
+                              <FontAwesomeIcon icon={faEye} 
+                              style={{
+                                 padding: "0px",
+                                 margin: "0px",
+                                 fontSize: "1.2em",
+                              }}/>
                            </button >
                         </div>
-                  </div>
+                              </div>
+                           </div>
                   <div style={{ clear: 'both' }}>
                </div>
             </div>
@@ -214,13 +283,51 @@ export const PosPage = () => {
          <div id="cp">
             <div id="cpinner">
                <div class="quick-menu">
-                  <div id="proContainer">
+                  <div id="proContainer"
+                   style={{ margin: "0px", padding: "5px", display: "block" }}>
                      <div class="x">
                         <div class="pane">
                            <div class="input-box2">
                               <div class="input-group2">
-                                 <input type="text" class="form-control thedata big" />
-                                 <span class="input-group-addon2" style={{display:'none'}} id="s"><span class="glyphicon glyphicon-menu-down"></span>X</span>
+                                 <input type="text" className="form-control thedata big"
+                      
+                                    style={{
+                                       padding: "10px",
+                                       margin: "3px",
+                                       border: "none",
+                                       transition: "box-shadow 0.2s ease 0s",
+                                       color: "white",
+                                       backgroundColor: "rgb(80, 140, 255)",
+                                       boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 30px inset",
+                                       fontFamily: "Dosis, sans-serif",
+                                       fontSize: "2.5em",
+                                       borderRadius: "0px",
+                                    }} />
+                                  <span
+                      id="s"
+                      className="input-group-addon2"
+                      style={{
+                        margin: "0px",
+                        padding: "3px",
+                        border: "1px solid rgb(204, 204, 204)",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: 1,
+                        color: "rgb(85, 85, 85)",
+                        textAlign: "center",
+                        backgroundColor: "rgb(238, 238, 238)",
+                        display: "none",
+                      }}
+                    >
+                      <span
+                        className="glyphicon glyphicon-menu-down"
+                        style={{ padding: "0px", margin: "0px" }}
+                      />
+                      X
+                    </span>
+
+                        <CalculatorComponent />
+
                               </div>
                            </div>
                         </div>
