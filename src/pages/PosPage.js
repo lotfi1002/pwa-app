@@ -2,14 +2,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Layout from "../components/Layout/Layout";
 import TabProduct from "../components/Pos/TabProduct";
 import {  faEdit, faEye, faMoneyBill, faPencil, faPlusCircle, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { APP_NAME } from "../utilities/Params";
+import CalculatorComponent from "../components/Pos/CalculatorComponent";
 
+// css 
 import "../css/style.css";
 import "../css/posajax.css";
 import "../css/pos.css";
-import { APP_NAME } from "../utilities/Params";
-import CalculatorComponent from "../components/Pos/CalculatorComponent";
-//import "../css/header.css";
+
+
+
+
 export const PosPage = () => {
+
    
     return (
       <>
@@ -52,22 +57,24 @@ export const PosPage = () => {
                                  Date 29/05/2024 23:39{" "}
                            </div>
                            <div id="left-top" style={{ padding: "0px", margin: "0px" }}>
-                              <div style={{
-                                    padding: "0px",
-                                    margin: "0px",
-                                    position: "absolute",
-                                    left: "-9999px",
-                                 }}>
-                                     <input
-                                       id="test"
-                                       className="kb-pad ui-keyboard-input ui-widget-content ui-corner-all"
-                                       name="test"
-                                       type="text"
-                                       aria-haspopup="true"
-                                       style={{ padding: "0px", margin: "0px", boxShadow: "none" }}
-                                    />
-                           </div>
-                           <div className="form-group"
+                           <div
+          style={{
+            padding: "0px",
+            margin: "0px",
+            position: "absolute",
+            left: "-9999px",
+          }}
+        >
+          <input
+            id="test"
+            className="kb-pad ui-keyboard-input ui-widget-content ui-corner-all"
+            name="test"
+            type="text"
+            aria-haspopup="true"
+            
+            style={{ padding: "0px", margin: "0px", boxShadow: "none" }} />
+            </div>
+                  <div className="form-group"
                             style={{ padding: "0px", margin: "0px", marginBottom: "5px" }}>
                      
                         <div className="input-group" style={{ zIndex: 1 }}>
@@ -462,7 +469,7 @@ export const PosPage = () => {
                       />
                       X
                     </span>
-
+                         {/* calculator  component */}
                         <CalculatorComponent />
 
                               </div>
@@ -474,7 +481,10 @@ export const PosPage = () => {
 
                <div id="ajaxproducts">
             <div>
+               {/* tab product component */}
                <TabProduct/>
+
+              
             </div>
             <div>
                <div

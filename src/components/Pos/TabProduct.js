@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import VenteComponent from '../Modal/VenteComponent';
+
 
 const productData = [
   {
@@ -144,7 +146,19 @@ const productData = [
 ];
 
 const TabProduct = () => {
+
+
+   // vente modal window 
+   const [showvente , setShowvente] = useState('');
+
+   const handleCloseVente = ()=>{
+      
+         setShowvente(false);
+   }
+
+ const handleShowVente = () => setShowvente(true);
   return (
+    <>
     <div>
       {productData.map(product => (
         <button
@@ -156,6 +170,7 @@ const TabProduct = () => {
           className="btn-prni btn-default product pos-tip"
           data-container="body"
           style={{ backgroundColor: product.bgColor, position: 'relative', overflow: 'visible' }}
+          onClick={handleShowVente}
         >
           <img src={product.imgSrc} alt={product.title} className="img-rounded" />
           <span>{product.title}</span>
@@ -192,6 +207,8 @@ const TabProduct = () => {
         </button>
       ))}
     </div>
+    <VenteComponent show={showvente} handleClose={handleCloseVente}  code={1}  warehouse_id={1}  customer_id={1} />
+    </>
   );
 };
 
