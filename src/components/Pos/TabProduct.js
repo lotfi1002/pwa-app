@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import VenteComponent from '../Modal/VenteComponent';
 
 
@@ -149,14 +149,22 @@ const TabProduct = () => {
 
 
    // vente modal window 
-   const [showvente , setShowvente] = useState('');
+   const [showvente , setShowvente] = useState(false);
+
+   const [code , setCode ] = useState('');
 
    const handleCloseVente = ()=>{
       
          setShowvente(false);
    }
 
- const handleShowVente = () => setShowvente(true);
+ const handleShowVente = (event) =>{ 
+
+  const element = event.target;
+  const parent = element.parentElement;
+  setCode( parent.value);
+  console.log('Element that triggered the event:', parent.value);
+  setShowvente(true)  } ;
   return (
     <>
     <div>
@@ -207,7 +215,7 @@ const TabProduct = () => {
         </button>
       ))}
     </div>
-    <VenteComponent show={showvente} handleClose={handleCloseVente}  code={1}  warehouse_id={1}  customer_id={1} />
+    <VenteComponent show={showvente} handleClose={handleCloseVente}  code={code}  warehouse_id={1}  customer_id={1} />
     </>
   );
 };

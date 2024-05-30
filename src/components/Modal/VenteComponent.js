@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 
@@ -7,6 +7,12 @@ const VenteComponent = ({ show, handleClose , code, warehouse_id, customer_id })
     const [codeValue, setCode] = useState(code);
     const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
     const [customerIdValue, setCostumerId] = useState(customer_id);
+
+    useEffect(() => {
+      setCode(code);
+      setWareHouseId(warehouse_id);
+      setCostumerId(customer_id);
+    }, [code, warehouse_id, customer_id]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

@@ -79,7 +79,14 @@ export const LoginPage = () => {
             <div className="login-form-div">
                <div className="login-content">
                   <div className="div-title col-sm-12">
-                     <h3 className="text-primary">
+                     <h3 className="text-primary"
+                      style={{
+                        padding: "0px",
+                        fontFamily: "Ubuntu, sans-serif",
+                        fontSize: "15px",
+                        lineHeight: "15px",
+                        margin: "0px",
+                      }}>
                         Veuillez vous connecter à votre compte.
                      </h3>
                   </div>
@@ -113,10 +120,23 @@ export const LoginPage = () => {
                               placeholder=""
                               ref={identityUserNameRef}
                               className="form-control"
-                              style={{ display: "none" }}
+                              style={{
+                                 padding: "0px",
+                                 margin: "0px",
+                                 boxShadow: "none",
+                                 borderRadius: "0px",
+                                 display: "none" ,
+                               }}
+                              
                               />
                               <span className="input-group-edit" onClick={replaceWithInput}>
-                                 <FaEdit />
+                                 <FaEdit style={{
+                                    padding: "0px",
+                                    margin: "0px",
+                                    width: "30px",
+                                    paddingLeft: "10px",
+                                    paddingRight: "10px",
+                                 }}/>
                               </span>
                               <input
                                  required="required"
@@ -132,7 +152,13 @@ export const LoginPage = () => {
                         <div className="textbox-wrap form-group">
                            <div className="input-group input-group-flex">
                               <span className="input-group-icon">
-                                 <FaLock />
+                                 <FaLock style={{
+                                    padding: "0px",
+                                    margin: "0px",
+                                    width: "30px",
+                                    paddingLeft: "10px",
+                                    paddingRight: "10px",
+                                 }}/>
                               </span>
                               <input
                               type={showPassword ? "text" : "password"}
@@ -140,12 +166,30 @@ export const LoginPage = () => {
                               className="form-control"
                               name="password"
                               onChange={(e) => setPassword(e.target.value)}
+                              style={{
+                                 padding: "0px",
+                                 margin: "0px",
+                                 boxShadow: "none",
+                                 borderRadius: "0px",
+                               }}
                               />
                               <span className="input-group-icon" onClick={togglePasswordVisibility}>
                                  {showPassword ? 
-                                 <FaEyeSlash />
+                                 <FaEyeSlash  style={{
+                                    padding: "0px",
+                                    margin: "0px",
+                                    width: "30px",
+                                    paddingLeft: "10px",
+                                    paddingRight: "10px",
+                                  }}/>
                                  : 
-                                 <FaEye />
+                                 <FaEye style={{
+                                    padding: "0px",
+                                    margin: "0px",
+                                    width: "30px",
+                                    paddingLeft: "10px",
+                                    paddingRight: "10px",
+                                  }}/>
                                  }
                               </span>
                            </div>
@@ -156,7 +200,16 @@ export const LoginPage = () => {
                            <div className="custom-checkbox"></div>
                            <span className="checkbox-text pull-left">
                            <input type="checkbox" />
-                           <label htmlFor="remember">Se rappeler de moi</label>
+                           <label htmlFor="remember"
+                          style={{
+                            padding: "0px",
+                            margin: "0px",
+                            cursor: "pointer",
+                            fontWeight: 400,
+                            marginBottom: "0px",
+                            paddingLeft: "0px",
+                            marginTop: "0px",
+                          }}>Se rappeler de moi</label>
                            </span>
                         </div>
                         <button type="submit" className="btn btn-success pull-right">
