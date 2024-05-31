@@ -432,19 +432,7 @@ export const PosPage = () => {
                            <div class="input-box2">
                               <div class="input-group2">
                                  <input type="text" className="form-control thedata big"
-                      
-                                        style={{
-                                          padding: "10px",
-                                          margin: "3px",
-                                          border: "none",
-                                          transition: "box-shadow 0.2s ease 0s",
-                                          color: "white",
-                                          backgroundColor: "rgb(80, 140, 255)",
-                                          boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 30px inset",
-                                          fontFamily: "Dosis, sans-serif",
-                                          fontSize: "2.5em",
-                                          borderRadius: "0px",
-                                        }} />
+                                         />
                                   <span
                       id="s"
                       className="input-group-addon2"
