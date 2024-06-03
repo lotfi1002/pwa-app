@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Layout from "../components/Layout/Layout";
 import TabProduct from "../components/Pos/TabProduct";
-import {  faEdit, faEye, faMoneyBill, faPencil, faPlusCircle, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {  faEdit, faEye, faMoneyBill, faPencil, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { APP_NAME } from "../utilities/Params";
 import CalculatorComponent from "../components/Pos/CalculatorComponent";
 
@@ -76,25 +76,26 @@ export const PosPage = () => {
                         <div className="input-group" style={{ zIndex: 1 }}>
                               <div
                                  id="s2id_poscustomer"
-                                 className="form-control pos-input-tip">
+                                 className="form-control ">
                                     
                                   <input id="poscustomer"
-                                       className="form-control"
+                                      
                                        name="customer"
                                        type="text"
                                        required
                                        tabIndex="-1"
+                                     style={{width : '310px'}}
                                         />
-                            <div className="input-group-addon " >
+                            
                               <button  id="toogle-customer-read-attr" >
                                  <FontAwesomeIcon icon={faPencil} />
                               </button>
                            
-                           <button   id="view-customer" className="external" data-toggle="modal" data-target="#myModal">
+                           <button   id="view-customer" >
                               <FontAwesomeIcon icon={faEye}/>
                            </button >
                         </div>
-                              </div>
+                           
                   </div>
                   <div style={{ clear: 'both' }}>
                </div>
@@ -115,13 +116,12 @@ export const PosPage = () => {
             <div className="form-group" id="ui">
             <input
                type="text"
-               value=""
                className="form-control pos-tip"
                inputMode="none"
                id="add_item"
                data-placement="top"
                data-trigger="focus"
-               placeholder="Search product by name or code"
+               placeholder="Numeriser/ Rechercher un produit par nom/ Code "
                title="Product name tip"
                />
              
@@ -362,8 +362,8 @@ export const PosPage = () => {
          <div id="botbuttons" className="col-xs-12 text-center">
          <input type="hidden" name="biller" id="biller" value="" />
          <div className="row">
-         <div className="col-xs-12" style={{ padding: 0 }}>
-         <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' ,width:'100%'}}>
+         <div className="col-xs-4" style={{ padding: 0 }}>
+         <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' ,width:'94%'}}>
          <FontAwesomeIcon icon={faMoneyBill} />
          Paiement
          </button>

@@ -6,9 +6,9 @@ import { useAuth } from '../../hooks/AuthProvider';
 import DateTime from '../../utilities/DateTime';
 
 const CloseCashRegisterModal = ({ show, handleClose }) => {
-  const [totalJournee, setTotalJournee] = useState('');
-  const [totalCarte, setTotalCarte] = useState('');
-  const [versementEspece, setVersementEspece] = useState('');
+  const [totalJournee, setTotalJournee] = useState(0);
+  const [totalCarte, setTotalCarte] = useState(0);
+  const [versementEspece, setVersementEspece] = useState(0);
 
   const auth = useAuth();
 
@@ -30,9 +30,7 @@ const CloseCashRegisterModal = ({ show, handleClose }) => {
                 (rep)=>{
 
                 if(rep){
-
-                    CaisseRegisterDao.updateRegister(rep.id , data);
-                    
+                    CaisseRegisterDao.updateRegister(rep.id , data);   
                 }
                 }
 
@@ -132,6 +130,7 @@ const CloseCashRegisterModal = ({ show, handleClose }) => {
               type="number"
               required
               value={totalJournee}
+              placeholder="0,00"
               onChange={(e) => setTotalJournee(e.target.value)}
             />
           </Form.Group>
@@ -140,6 +139,7 @@ const CloseCashRegisterModal = ({ show, handleClose }) => {
             <Form.Control
               type="number"
               required
+              placeholder="0,00"
               value={totalCarte}
               onChange={(e) => setTotalCarte(e.target.value)}
             />
@@ -150,6 +150,7 @@ const CloseCashRegisterModal = ({ show, handleClose }) => {
               type="number"
               required
               value={versementEspece}
+              placeholder="0,00"
               onChange={(e) => setVersementEspece(e.target.value)}
             />
           </Form.Group>
