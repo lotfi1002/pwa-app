@@ -11,7 +11,7 @@ export const Navbar = () => {
 
   return (
     <>
-     <div className="container">
+     <div className="container"  style={{display:'block'}}>
        <a
             className="navbar-brand"
             href="\pos"
@@ -32,8 +32,7 @@ export const Navbar = () => {
           </a>
     
           <div
-            className="header-nav "
-           >
+            className="header-nav">
                       <DateDisplay/>
                       <NavbarButtons/>
                       <UserDropdown />

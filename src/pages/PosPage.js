@@ -6,7 +6,6 @@ import { APP_NAME } from "../utilities/Params";
 import CalculatorComponent from "../components/Pos/CalculatorComponent";
 
 // css 
-import "../css/style.css";
 import "../css/posajax.css";
 import "../css/pos.css";
 
