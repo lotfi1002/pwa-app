@@ -313,11 +313,12 @@ export const PosPage = () => {
          <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px', fontWeight: 'bold' }}>
          <span id="ttax2">0.00</span>
          </td>
-         <td style={{ padding: '5px 10px' }}>Remise</td>
+         <td style={{ padding: '5px 10px' }}>Remise
          <a href="/" id="ppdiscount">
          <FontAwesomeIcon icon={faEdit}  />                
          </a>
-         <td className="text-right" style={{ padding: '5px 10px', fontWeight: 'bold' }}>
+         </td>
+         <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px' , fontWeight: 'bold' }}>
          <span id="tds">0.00</span>
          </td>
          </tr>
