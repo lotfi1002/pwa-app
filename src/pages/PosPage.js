@@ -8,11 +8,25 @@ import CalculatorComponent from "../components/Pos/CalculatorComponent";
 // css 
 import "../css/posajax.css";
 import "../css/pos.css";
+import Pai from "../components/Modal/Pai";
+import { useState } from "react";
 
 
 export const PosPage = () => {
 
-   
+  const [showpaie , setShowPaie] = useState(false);
+
+  const handleClosePaie = ()=>{
+      
+    setShowPaie(false);
+}
+
+const handleShowPaie = (event) =>{ 
+
+
+  setShowPaie(true)  
+
+} ;
     return (
       <>
       <Layout>
@@ -363,12 +377,14 @@ export const PosPage = () => {
          <input type="hidden" name="biller" id="biller" value="" />
          <div className="row">
          <div className="col-xs-4" style={{ padding: 0 }}>
-         <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' ,width:'94%'}}>
+         <button type="button" className="btn btn-success btn-block" id="payment" style={{ height: '67px' ,width:'94%'}}
+         onClick={handleShowPaie}>
          <FontAwesomeIcon icon={faMoneyBill} />
          Paiement
          </button>
          </div>
          </div>
+         <Pai  show={showpaie} handleClose={handleClosePaie}  />
          </div>
          <div style={{ clear: 'both', height: '5px' }}></div>
          <div id="num">

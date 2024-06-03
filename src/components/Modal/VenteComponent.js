@@ -19,7 +19,7 @@ const VenteComponent = ({ show, handleClose , code, warehouse_id, customer_id })
 
     }
 
-    console.log(codeValue);
+    //console.log(codeValue);
     return (<> 
     
     <Modal show={show} onHide={handleClose}>
