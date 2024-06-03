@@ -319,7 +319,7 @@ input {
     box-shadow: none;
 }
 .input-group-addon {
-    padding: 3px;
+    padding: 2px;
     border-radius: 0;
 }
 .enlarge .img-thumbnail {
@@ -663,7 +663,7 @@ a.navbar-brand.noBg {
     background: #000 !important;
 }
 .header-nav .btn {
-    display: inline-block;
+    display: flex;
     margin: 0px;
     font-size: 15px;
     text-align: center;
@@ -686,7 +686,7 @@ a.navbar-brand.noBg {
     font-size: 12px;
 }
 .header-nav a.btn .number {
-    position: absolute;
+    position: relative;
     font-size: 8px;
     line-height: 10px;
     top: 0;

@@ -72,48 +72,31 @@ export const PosPage = () => {
             
             style={{ padding: "0px", margin: "0px", boxShadow: "none" }} />
             </div>
-                  <div className="form-group"
-                            style={{ padding: "0px", margin: "0px", marginBottom: "5px" }}>
+                  <div className="form-group">
                      
                         <div className="input-group" style={{ zIndex: 1 }}>
                               <div
                                  id="s2id_poscustomer"
-                                 className="select2-container form-control pos-input-tip"
-                                 style={{
-                                 padding: "0px",
-                                 margin: "0px",
-                                 width: "100%",
-                                 borderRadius: "0px",
-                                 }}>
+                                 className="form-control pos-input-tip">
                                     
-                                    <input id="poscustomer"
+                                  <input id="poscustomer"
                                        className="form-control"
                                        name="customer"
                                        type="text"
                                        required
                                        tabIndex="-1"
                                         />
-                              <div className="input-group-addon no-print" style={{ padding: '2px 8px', borderLeft: 0 }}>
+                            <div className="input-group-addon " >
                               <button  id="toogle-customer-read-attr" >
-                                 <FontAwesomeIcon icon={faPencil} style={{
-                                 padding: "0px",
-                                 margin: "0px",
-                                 fontSize: "1.2em",
-                              }}/>
+                                 <FontAwesomeIcon icon={faPencil} />
                               </button>
-                           </div>
-                           <div className="input-group-addon no-print" style={{ padding: '2px 7px', borderLeft: 0 }}>
+                           
                            <button   id="view-customer" className="external" data-toggle="modal" data-target="#myModal">
-                              <FontAwesomeIcon icon={faEye} 
-                              style={{
-                                 padding: "0px",
-                                 margin: "0px",
-                                 fontSize: "1.2em",
-                              }}/>
+                              <FontAwesomeIcon icon={faEye}/>
                            </button >
                         </div>
                               </div>
-                           </div>
+                  </div>
                   <div style={{ clear: 'both' }}>
                </div>
             </div>
@@ -142,11 +125,7 @@ export const PosPage = () => {
                placeholder="Search product by name or code"
                title="Product name tip"
                />
-            <div className="input-group-addon" style={{ padding: '2px 8px' }}>
-            <button  >
-            <FontAwesomeIcon icon={faPlusCircle} />
-            </button>
-            </div>
+             
             <div style={{ clear: 'both' }}>
             </div>
             </div>
@@ -421,7 +400,7 @@ export const PosPage = () => {
          </div>
          </div>
          </div> 
-                     </form>
+  </form>
          <div id="cp">
             <div id="cpinner">
                <div class="quick-menu">
