@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
 
 const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => {
     const [vente, setVente] = useState(false);
     const [codeValue, setCode] = useState(code);
     const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
     const [customerIdValue, setCostumerId] = useState(customer_id);
+    const keyboard = useRef();
 
     useEffect(() => {
       setCode(code);
@@ -18,6 +20,25 @@ const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => 
         e.preventDefault();
 
     }
+
+    const onChange = input => {
+      setVente(input);
+      console.log("Input changed", input);
+    };
+
+  
+    const onKeyPress = button => {
+      console.log("Button pressed", button);
+  
+    };
+  
+    const onChangeInput = event => {
+      const input = event.target.value;
+      setVente(input);
+      keyboard.current.setInput(input);
+    };
+
+   
 
     //console.log(codeValue);
     return (<> 
@@ -34,10 +55,27 @@ const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => 
               type="number"
               required
               value={vente}
-              onChange={(e) => setVente(e.target.value)}
+              onChange={onChangeInput}
             />
           </Form.Group>
-        
+          <Keyboard
+        keyboardRef={r => (keyboard.current = r)}
+        onChange={onChange}
+        onKeyPress={onKeyPress}
+        layout={{
+          default: [
+            "1 2 3",
+            "4 5 6",
+            "7 8 9",
+            "0 {bksp}"
+          ]
+        }}
+        display={{
+          "{bksp}": "⌫"
+        }}
+        theme={"hg-theme-default hg-layout-numeric numeric-theme"}
+
+      />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary"  type="submit" onClick={handleClose}>
@@ -45,7 +83,9 @@ const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => 
         </Button>
       </Modal.Footer>
       </Form>
+     
     </Modal>
+   
     </>);
 
 

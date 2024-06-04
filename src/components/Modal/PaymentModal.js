@@ -37,7 +37,6 @@ const PaymentModal = ({ show, handleClose, billers, posSettings, sessionBillerId
                                
                                     
                                 >
-                                    
                                         <option key={1} value={1}>
                                            "XXX"
                                         </option>

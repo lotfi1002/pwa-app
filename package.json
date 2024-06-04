@@ -25,6 +25,7 @@
     "react-ios-pwa-prompt": "^1.8.4",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-simple-keyboard": "^3.7.124",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.6.0",
     "workbox-broadcast-update": "^6.6.0",
