@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 
-const VenteComponent = ({ show, handleClose , code, warehouse_id, customer_id }) => {
+const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => {
     const [vente, setVente] = useState(false);
     const [codeValue, setCode] = useState(code);
     const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
@@ -52,4 +52,4 @@ const VenteComponent = ({ show, handleClose , code, warehouse_id, customer_id })
 }
 
 
-export default VenteComponent ;
+export default VenteModal ;

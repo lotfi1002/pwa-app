@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import VenteComponent from '../Modal/VenteComponent';
+import VenteComponent from '../Modal/VenteModal';
 
 
 const productData = [

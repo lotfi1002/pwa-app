@@ -8,8 +8,8 @@ import CalculatorComponent from "../components/Pos/CalculatorComponent";
 // css 
 import "../css/posajax.css";
 import "../css/pos.css";
-import Pai from "../components/Modal/Pai";
 import { useState } from "react";
+import PaymentModal from "../components/Modal/PaymentModal";
 
 
 export const PosPage = () => {
@@ -384,7 +384,7 @@ const handleShowPaie = (event) =>{
          </button>
          </div>
          </div>
-         <Pai  show={showpaie} handleClose={handleClosePaie}  />
+         <PaymentModal  show={showpaie} handleClose={handleClosePaie}  />
          </div>
          <div style={{ clear: 'both', height: '5px' }}></div>
          <div id="num">
