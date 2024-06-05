@@ -3,8 +3,8 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 
-const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => {
-    const [vente, setVente] = useState(false);
+const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, customer_id }) => {
+    const [vente, setVente] = useState(0);
     const [codeValue, setCode] = useState(code);
     const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
     const [customerIdValue, setCostumerId] = useState(customer_id);
@@ -14,7 +14,8 @@ const VenteModal = ({ show, handleClose , code, warehouse_id, customer_id }) => 
       setCode(code);
       setWareHouseId(warehouse_id);
       setCostumerId(customer_id);
-    }, [code, warehouse_id, customer_id]);
+      setVente(initvente);
+    }, [initvente ,code, warehouse_id, customer_id]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

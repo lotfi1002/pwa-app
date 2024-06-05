@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import VenteComponent from '../Modal/VenteModal';
+import VenteModal from '../Modal/VenteModal';
 
 
 const productData = [
@@ -215,7 +215,7 @@ const TabProduct = () => {
         </button>
       ))}
     </div>
-    <VenteComponent show={showvente} handleClose={handleCloseVente}  code={code}  warehouse_id={1}  customer_id={1} />
+    <VenteModal show={showvente} handleClose={handleCloseVente} initvente={0} code={code}  warehouse_id={1}  customer_id={1} />
     </>
   );
 };
