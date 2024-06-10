@@ -12,6 +12,8 @@ import { useState } from "react";
 import PaymentModal from "../components/Modal/PaymentModal";
 
 
+
+
 export const PosPage = () => {
 
   const [showpaie , setShowPaie] = useState(false);

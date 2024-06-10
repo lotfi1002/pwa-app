@@ -1,45 +1,55 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import Keyboard from 'react-simple-keyboard';
-import 'react-simple-keyboard/build/css/index.css';
+// key board jquery
+import $ from 'jquery';
+import 'jquery-ui-dist/jquery-ui';
+import 'virtual-keyboard/dist/css/keyboard.min.css';
+import 'virtual-keyboard/dist/js/jquery.keyboard.js';
 
 const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, customer_id }) => {
-    const [vente, setVente] = useState(0);
+    const [vente, setVente] = useState('');
     const [codeValue, setCode] = useState(code);
     const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
     const [customerIdValue, setCostumerId] = useState(customer_id);
-    const keyboard = useRef();
+    const inputRef = useRef(null);
+    
 
     useEffect(() => {
       setCode(code);
       setWareHouseId(warehouse_id);
       setCostumerId(customer_id);
       setVente(initvente);
+      
+      // Initialize the virtual keyboard on the input field
+      $(inputRef.current).keyboard({
+        layout: 'custom',
+        customLayout: {
+          default: [
+            '1 2 3', '4 5 6', '7 8 9', '0 {bksp}',
+            '% .', '{clear}{space}'
+          ] , 
+          clear: 'Clear'
+        },
+        autoAccept: true,
+        alwaysOpen: false,
+        initialFocus: true,
+        restrictInput: true, // Enable input restriction
+        restrictInclude: /[0-9%]/, // Allow numerical values and the percentage symbol
+        change: (e, keyboard) => {
+          setVente(keyboard.value);
+        }
+      });
+
     }, [initvente ,code, warehouse_id, customer_id]);
+
+  
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
     }
 
-    const onChange = input => {
-      setVente(input);
-      console.log("Input changed", input);
-    };
 
-  
-    const onKeyPress = button => {
-      console.log("Button pressed", button);
-  
-    };
-  
-    const onChangeInput = event => {
-      const input = event.target.value;
-      setVente(input);
-      keyboard.current.setInput(input);
-    };
-
-   
 
     //console.log(codeValue);
     return (<> 
@@ -53,30 +63,14 @@ const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, custome
           <Form.Group>
             <Form.Label>Vente :</Form.Label>
             <Form.Control
-              type="number"
+              type="text"
               required
               value={vente}
-              onChange={onChangeInput}
+              ref={inputRef}
+              className='keyboard-input'
             />
           </Form.Group>
-          <Keyboard
-        keyboardRef={r => (keyboard.current = r)}
-        onChange={onChange}
-        onKeyPress={onKeyPress}
-        layout={{
-          default: [
-            "1 2 3",
-            "4 5 6",
-            "7 8 9",
-            "0 {bksp}"
-          ]
-        }}
-        display={{
-          "{bksp}": "⌫"
-        }}
-        theme={"hg-theme-default hg-layout-numeric numeric-theme"}
-
-      />
+      
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary"  type="submit" onClick={handleClose}>
