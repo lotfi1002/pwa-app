@@ -1175,8 +1175,8 @@ footer {
     height: 40px;
     padding: 12px 20px 18px 20px !important;
     margin: 0 !important;
-    /*position: absolute;
-    bottom: 0;*/
+    position: fixed;
+    bottom: 0;
     width: 100%;
     font-size: 12px;
 }

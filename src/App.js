@@ -10,6 +10,7 @@ import { isAppOnline } from './utilities/CheckOnline';
 import OtherServices from './services/OtherServices';
 
 import "./css/style.css";
+import BillView from './pages/BillView';
 
 function App() {
 
@@ -76,7 +77,10 @@ function App() {
               <Route element={<CaisseRoute/>}>
                       <Route path='/' element={<PosPage/>}></Route>
                       <Route path='/pos' element={<PosPage/>}></Route>
-              </Route>       
+                      <Route path='/view_bill' element={<BillView/>}></Route> 
+              </Route>    
+                
+              
               <Route path='/caisse' element={<CaissePage/>}></Route>                
               </Route>
       </Routes>

@@ -6,7 +6,7 @@ import 'jquery-ui-dist/jquery-ui';
 import 'virtual-keyboard/dist/css/keyboard.min.css';
 import 'virtual-keyboard/dist/js/jquery.keyboard.js';
 
-const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, customer_id }) => {
+const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, customer_id , saleValue, setSaleValue, handleAddToTable }) => {
     const [vente, setVente] = useState('');
     const [codeValue, setCode] = useState(code);
     const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
@@ -15,39 +15,74 @@ const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, custome
     
 
     useEffect(() => {
+    if (show) {
       setCode(code);
       setWareHouseId(warehouse_id);
       setCostumerId(customer_id);
-      setVente(initvente);
+      setSaleValue(initvente);
       
-      // Initialize the virtual keyboard on the input field
-      $(inputRef.current).keyboard({
+      const keyboard = $(inputRef.current).keyboard({
         layout: 'custom',
         customLayout: {
           default: [
-            '1 2 3', '4 5 6', '7 8 9', '0 {bksp}',
-            '% .', '{clear}{space}'
-          ] , 
-          clear: 'Clear'
+            '1 2 3 {bksp}',
+            '4 5 6 . C',
+            '7 8 9 0 %',
+            '{accept} {cancel}'
+          ],
+          accept: 'Accept',
+          cancel: 'Cancel',
+          bksp: '\u2190', // Unicode for left arrow
+          clear: 'C'
         },
         autoAccept: true,
         alwaysOpen: false,
         initialFocus: true,
-        restrictInput: true, // Enable input restriction
-        restrictInclude: /[0-9%]/, // Allow numerical values and the percentage symbol
+        restrictInput: true,
+        restrictInclude: /[0-9%]/,
         change: (e, keyboard) => {
-          setVente(keyboard.value);
+          setSaleValue(keyboard.$preview.val());
+        },
+        css: {   'keyboard-key-backspace': {
+          backgroundColor: 'orange',
+          color: 'white'
+        },
+        'keyboard-key-accept': {
+          backgroundColor: 'green',
+          color: 'white'
+        },
+        'keyboard-key-cancel': {
+          backgroundColor: 'red',
+          color: 'white'
+        },
+        'keyboard-key-clear': {
+          backgroundColor: 'blue',
+          color: 'white'
         }
+      }
       });
+   
+      
+      // Focus the input to show the keyboard
+      $(inputRef.current).focus();
 
-    }, [initvente ,code, warehouse_id, customer_id]);
+    }
+  }, [show]);
 
   
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-    }
+    } 
+
+    const handleAdd = () => {
+      // Call the parent component function to add to table
+      handleAddToTable(saleValue);
+      setSaleValue('');
+    };
+
+    
 
 
 
@@ -63,9 +98,10 @@ const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, custome
           <Form.Group>
             <Form.Label>Vente :</Form.Label>
             <Form.Control
+              value={saleValue}
+              onChange={(e) => setSaleValue(e.target.value)}
               type="text"
               required
-              value={vente}
               ref={inputRef}
               className='keyboard-input'
             />
@@ -73,7 +109,7 @@ const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, custome
       
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary"  type="submit" onClick={handleClose}>
+        <Button onClick={handleAdd} variant="primary"  type="submit" >
         Mettre a jour 
         </Button>
       </Modal.Footer>

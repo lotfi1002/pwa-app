@@ -145,77 +145,63 @@ const productData = [
   }
 ];
 
-const TabProduct = () => {
+const TabProduct = ({ salesHistory, setSalesHistory }) => {
+  const [saleValue, setSaleValue] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showVente, setShowVente] = useState(false);
 
+  const handleProductSelect = (product) => {
+    setSelectedProduct(product);
+    setShowVente(true);
+  };
 
-   // vente modal window 
-   const [showvente , setShowvente] = useState(false);
+  const handleAddToTable = (saleValue) => {
+    if (selectedProduct) {
+      const newSale = {
+        product: selectedProduct.value + " - " + selectedProduct.title,
+        price: parseFloat(saleValue),
+        qty: 1,
+        ssTotal: 1 * parseFloat(saleValue)
+      };
+      setSalesHistory([...salesHistory, newSale]);
+    }
+    handleCloseVente();
+  };
 
-   const [code , setCode ] = useState('');
+  const handleCloseVente = () => {
+    setShowVente(false);
+  };
 
-   const handleCloseVente = ()=>{
-      
-         setShowvente(false);
-   }
-
- const handleShowVente = (event) =>{ 
-
-  const element = event.target;
-  const parent = element.parentElement;
-  setCode( parent.value);
-  console.log('Element that triggered the event:', parent.value);
-  setShowvente(true)  } ;
   return (
     <>
-    <div>
-      {productData.map(product => (
-        <button
-          key={product.id}
-          id={`product-${product.id}`}
-          type="button"
-          value={product.value}
-          title={product.title}
-          className="btn-prni btn-default product pos-tip"
-          data-container="body"
-          style={{ backgroundColor: product.bgColor, position: 'relative', overflow: 'visible' }}
-          onClick={handleShowVente}
-        >
-          <img src={product.imgSrc} alt={product.title} className="img-rounded" />
-          <span>{product.title}</span>
-          <div
-            className="quantity-badge"
-            style={{
-              position: 'absolute',
-              top: '0px',
-              right: '0px',
-              backgroundColor: '#ff0000',
-              color: '#ffffff',
-              borderRadius: '10%',
-              padding: '5px',
-              fontSize: '12px'
-            }}
+      <div > {/*style={{paddingBottom:'100px'}}*/}
+        {productData.map(product => (
+          <button
+            key={product.id}
+            id={`product-${product.id}`}
+            type="button"
+            value={product.value}
+            title={product.title}
+            className="btn-prni btn-default product pos-tip"
+            data-container="body"
+            style={{ backgroundColor: product.bgColor, position: 'relative', overflow: 'visible' }}
+            onClick={() => handleProductSelect(product)}
+            
           >
-            0
-          </div>
-          <div
-            className="quantity-badge"
-            style={{
-              position: 'absolute',
-              top: '30px',
-              right: '0px',
-              backgroundColor: 'green',
-              color: '#ffffff',
-              borderRadius: '10%',
-              padding: '5px',
-              fontSize: '12px'
-            }}
-          >
-            0
-          </div>
-        </button>
-      ))}
-    </div>
-    <VenteModal show={showvente} handleClose={handleCloseVente} initvente={0} code={code}  warehouse_id={1}  customer_id={1} />
+            <img src={product.imgSrc} alt={product.title} className="img-rounded" />
+            <span>{product.title}</span>
+            <div className="quantity-badge" style={{ position: 'absolute', top: '0px', right: '0px', backgroundColor: '#ff0000', color: '#ffffff', borderRadius: '10%', padding: '5px', fontSize: '12px' }}>0</div>
+            <div className="quantity-badge" style={{ position: 'absolute', top: '30px', right: '0px', backgroundColor: 'green', color: '#ffffff', borderRadius: '10%', padding: '5px', fontSize: '12px' }}>0</div>
+          </button>
+        ))}
+      </div>
+      <VenteModal
+        saleValue={saleValue}
+        setSaleValue={setSaleValue}
+        handleAddToTable={handleAddToTable}
+        show={showVente}
+        handleClose={handleCloseVente}
+      />
     </>
   );
 };

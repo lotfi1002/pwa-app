@@ -18,6 +18,18 @@ const NavbarButtons = () => {
      setShow(false);
    } 
 
+   const openBillView = () => {
+    const width = 600;
+    const height = 600;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+
+    const popup = window.open('/view_bill', '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+    if (!popup) {
+      alert('Popup blocked! Please enable popups for this site.');
+    }
+  };
+
    const handleShow = () => setShow(true);
  
     return (
@@ -194,8 +206,10 @@ const NavbarButtons = () => {
                     color: "rgb(255, 255, 255)",
                     textShadow: "none",
                   }}
+                  onClick={openBillView}
+
                 >
-                   <FontAwesomeIcon icon={faLaptop} />
+                   <FontAwesomeIcon icon={faLaptop}  />
                 </a>
               </li>
               <li
