@@ -1,26 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-// key board jquery
 import $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui';
 import 'virtual-keyboard/dist/css/keyboard.min.css';
 import 'virtual-keyboard/dist/js/jquery.keyboard.js';
 
-const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, customer_id , saleValue, setSaleValue, handleAddToTable }) => {
-    const [vente, setVente] = useState('');
-    const [codeValue, setCode] = useState(code);
-    const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
-    const [customerIdValue, setCostumerId] = useState(customer_id);
-    const inputRef = useRef(null);
-    
-
-    useEffect(() => {
+const GainsModal = ({ show, handleClose, initvente, code, warehouse_id, customer_id, selectedProduct, saleValue, setSaleValue, handleAddToTable }) => {
+  const [codeValue, setCode] = useState(code);
+  const [warehouseIdValue, setWareHouseId] = useState(warehouse_id);
+  const [customerIdValue, setCostumerId] = useState(customer_id);
+  const inputRef = useRef(null);
+  
+  useEffect(() => {
     if (show) {
       setCode(code);
       setWareHouseId(warehouse_id);
       setCostumerId(customer_id);
       // setSaleValue(initvente);
-      
       
       const keyboard = $(inputRef.current).keyboard({
         layout: 'custom',
@@ -65,63 +61,46 @@ const VenteModal = ({ show, handleClose , initvente, code, warehouse_id, custome
    
       
       // Focus the input to show the keyboard
-      $(inputRef.current).focus();
+      // $(inputRef.current).focus();
 
     }
   }, [show]);
 
-  
+  const handleAdd = () => {
+    handleAddToTable(saleValue);
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
-    } 
-
-    const handleAdd = () => {
-      // Call the parent component function to add to table
-      handleAddToTable(saleValue);
-      setSaleValue('');
-    };
-
-    
-
-
-
-    //console.log(codeValue);
-    return (<> 
-    
+  return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>VENTES</Modal.Title>
+        <Modal.Title>GAINS</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
-      <Modal.Body>
+        <Modal.Body>
           <Form.Group>
-            <Form.Label>Vente :</Form.Label>
+            <Form.Label>Gains :</Form.Label>
             <Form.Control
-              value={saleValue}
-              onChange={(e) => setSaleValue(e.target.value)}
               type="text"
               required
+              value={saleValue}
+              onChange={(e) => setSaleValue(e.target.value)}
               ref={inputRef}
-              className='keyboard-input'
+              className="keyboard-input"
             />
           </Form.Group>
-      
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleAdd} variant="primary"  type="submit" >
-        Mettre a jour 
-        </Button>
-      </Modal.Footer>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" type="submit" onClick={handleAdd}>
+            Mettre à jour
+          </Button>
+        </Modal.Footer>
       </Form>
-     
     </Modal>
-   
-    </>);
+  );
+};
 
-
-}
-
-
-export default VenteModal ;
+export default GainsModal;

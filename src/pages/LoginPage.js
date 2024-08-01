@@ -36,13 +36,17 @@ export const LoginPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     isAppOnline().then((value) => {
-      if (value) // online mode
+      if (value){ // online mode
         onlineSubmit().then(() => {
           console.log("token :" + localStorage.getItem('token'));
-          
         });
+        console.log("is online");
+
+      }
       else // offline mode
         offlinelineSubmit();
+        console.log("is offline");
+
     });
   };
 

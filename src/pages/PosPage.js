@@ -13,6 +13,8 @@ import "../css/posajax.css";
 import "../css/pos.css";
 import { useEffect, useRef, useState } from 'react';
 import PaymentModal from "../components/Modal/PaymentModal";
+import { isAppOnline } from "../utilities/CheckOnline";
+import ProductDao from "../dao/ProductsDao";
 
 
 
@@ -22,12 +24,14 @@ export const PosPage = () => {
   const [showpaie , setShowPaie] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [salesHistory, setSalesHistory] = useState(JSON.parse(localStorage.getItem('salesHistory'))|| []); // State for Sales History
+  const [salesHistory, setSalesHistory] = useState(localStorage.getItem('salesHistory')?JSON.parse(localStorage.getItem('salesHistory')):[]); // State for Sales History
   const [nbrArticles , setNbrArticles] = useState("0");
   const [total , setTotal] = useState("0.00");
   const [qtyArticles , setQtyArticles] = useState("0");
   const [showComment, setShowComment] = useState(false);
   const [commentProduct, setCommentProduct] = useState(null);
+  const [isOnline, setIsOnline] = useState(false);
+
 
   //
   const inputRef = useRef(null);
@@ -58,32 +62,69 @@ export const PosPage = () => {
     localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
 
   }
+//
 
-  const handleSearchChange = async (event) => {
-    const term = event.target.value;
-    setSearchTerm(term);
+const onlineHandleChangeSuggestion = async (term) => {
+  try {
+    const response = await api.get('api/product/search', {
+      params: { term }
+    });
 
-    if (term.length > 0) {
-      try {
-        const response = await api.get('api/product/search', {
-          params: { term }
-        });
-
-        if (response.data.length > 0) {
-          setSuggestions(response.data);
-        } else {
-          setSuggestions([{ id: 0, label: 'No items found', value: term }]);
-        }
-      } catch (error) {
-        console.error('Error fetching product suggestions:', error);
-      }
+    if (response.data.length > 0) {
+      setSuggestions(response.data);
     } else {
-      setSuggestions([]);
+      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching product suggestions:', error);
+  }
+};
+
+
+const offlineHandleChangeSuggestion = async (term) => {
+  try {
+    const suggestions = await ProductDao.getSuggestionsByTerm(term);
+    if (suggestions.length > 0) {
+      setSuggestions(suggestions);
+    } else {
+      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+    }
+  } catch (error) {
+    console.error('Error fetching offline product suggestions:', error);
+  }
+};
+
+
+
+const handleSearchChange = (event) => {
+  console.log("clicked");
+  const term = event.target.value;
+  setSearchTerm(term);
+
+  if (term.length > 0) {
+    isAppOnline().then((onlineStatus) => {
+      console.log("status" + onlineStatus);
+
+      if (onlineStatus) { // Online mode
+        return onlineHandleChangeSuggestion(term).then(() => {
+          console.log("Online Suggestion");
+        });
+      } else { // Offline mode
+        return offlineHandleChangeSuggestion(term).then(() => {
+          console.log("Offline Suggestion");
+        });
+      }
+    }).catch((error) => {
+      console.error('Error determining app status:', error);
+    });
+  } else {
+    setSuggestions([]);
+  }
+};
+
 
   const handleSuggestionClick = async (suggestion) => {
-    if(suggestion.id!=0){
+    if(suggestion.id!==0){
 
       const newSale = {
         product: suggestion.code + " - "+ suggestion.name ,
@@ -92,20 +133,44 @@ export const PosPage = () => {
         ssTotal:1*parseFloat(suggestion.price)
       };
 
-      try {
-        const response = await api.get('api/pos/getProductDataByCode', {params:{
-          code: suggestion.code,
-          warehouse_id: 1,
-          customer_id: 1
-        }});
-        const data = response.data;
-        newSale.category=data.category;
-      } catch (error) {
-        console.error('Error fetching product data:', error);
-      }
+      isAppOnline().then( async (onlineStatus) => {
+  
+        if (onlineStatus) { // Online mode
+          try {
+            const response = await api.get('api/pos/getProductDataByCode', {params:{
+              code: suggestion.code,
+              
+            }});
+            console.log(response);
+            const data = response.data;
+            newSale.category=data.category;
+            setSalesHistory([...salesHistory, newSale]); // Add new sale to sales history
+
+          } catch (error) {
+            console.error('Error fetching product data:', error);
+          }
+    
+        } else { // Offline mode
+          try {
+            const product = await ProductDao.getProductByCode(suggestion.code)
+            if (product) {
+              newSale.category = product.category;      
+              setSalesHistory([...salesHistory, newSale]); // Add new sale to sales history
+
+            } else {
+              console.error('Product not found in IndexedDB');
+            }
+          } catch (error) {
+            console.error('Error fetching product from IndexedDB:', error);
+          }
+        }
+      }).catch((error) => {
+        console.error('Error determining app status:', error);
+      });
+
+     
     
    
-      setSalesHistory([...salesHistory, newSale]); // Add new sale to sales history
     
     setSearchTerm("");
     setSuggestions([]);
@@ -162,7 +227,15 @@ export const PosPage = () => {
     };
 
   useEffect(() => {
+    isAppOnline().then((value) => {
+      if (value){ // online mode
+        setIsOnline(true);
+        }
 
+      else // offline mode
+      setIsOnline(false);
+  
+    });
     updateSummary();
     // Initialize the search input keyboard
     try {
@@ -180,29 +253,48 @@ export const PosPage = () => {
         initialFocus: true,
         restrictInput: true,
         restrictInclude: /[0-9a-zA-Z%]/,
-        change: async (e, keyboard) => {
-          setSearchTerm(keyboard.$preview.val());
-          if (keyboard.$preview.val().length > 0) {
-            try {
-              const response = await api.get('api/product/search', {
-                params: { term: keyboard.$preview.val() }
-              });
-  
-              if (response.data.length > 0) {
-                setSuggestions(response.data);
-              } else {
-                setSuggestions([{ id: 0, label: 'No items found', value: keyboard.$preview.val() }]);
+        change: (e, keyboard) => {
+          const term = keyboard.$preview.val();
+          setSearchTerm(term);
+        
+          if (term.length > 0) {
+            isAppOnline().then(onlineStatus => {
+              if (onlineStatus) { // Online mode
+                api.get('api/product/search', { params: { term } })
+                  .then(response => {
+                    if (response.data.length > 0) {
+                      setSuggestions(response.data);
+                    } else {
+                      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error fetching product suggestions:', error);
+                  });
+              } else { // Offline mode
+                offlineHandleChangeSuggestion(term)
+                  .then(results => {
+                    if (results.length > 0) {
+                      setSuggestions(results);
+                    } else {
+                      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error fetching offline suggestions:', error);
+                  });
               }
-            } catch (error) {
-              console.error('Error fetching product suggestions:', error);
-            }
+            }).catch(error => {
+              console.error('Error determining app status:', error);
+            });
           } else {
             setSuggestions([]);
           }
-  
+        
           // Focus the input to show the keyboard
           $(inputRef.current).focus();
         }
+        
       });
   
       // Select and assign refs dynamically for quantity inputs
@@ -271,7 +363,7 @@ export const PosPage = () => {
     }
 
 
-  }, [salesHistory,showComment,commentProduct]);
+  }, [salesHistory,showComment,commentProduct,isOnline]);
 
     return (
       <>
