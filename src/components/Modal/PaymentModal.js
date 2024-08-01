@@ -19,6 +19,7 @@ const PaymentModal = ({
   sessionBillerId,
   itemCount,
   totalPayable,
+  salesHistory
 }) => {
   const [selectedBiller, setSelectedBiller] = useState("");
   const [saleNote, setSaleNote] = useState("");
@@ -49,6 +50,18 @@ const PaymentModal = ({
   const paymentsNoteRefs = useRef([]);
   const noteRefs = useRef([]);
 
+    const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime(new Date());
+      initializeKeyboards();
+
+    }, 500); 
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     if (show) {
       initializeKeyboards();
@@ -63,11 +76,22 @@ const PaymentModal = ({
           .toFixed(2)
       );
 
+
       const sum = payments.reduce((total, payment) => total + parseFloat(payment.amount || 0), 0);
       setTotalPaying(sum);
+      
     }
-  }, [totalPayable, show, payments]); // Add payments to dependencies
+  }, [totalPayable, show, payments ]); // Add payments to dependencies
   
+  useEffect(() => {
+     setPayments([{
+        amount: totalPayable,
+        paidBy: "cash",
+        giftCardNo: "",
+        chequeNo: "",
+        paymentNote: "",
+      }])
+  }, [salesHistory ,totalPayable]);
 
   const initializeKeyboards = () => {
     // Initialize keyboard for amount inputs
@@ -334,6 +358,8 @@ const handlePaymentChange = (index, field, value) => {
     newPayments[index][field] = value;
     setPayments(newPayments);
     calculateTotalPayingAndBalance(newPayments);
+    initializeKeyboards();
+
   };
   
 

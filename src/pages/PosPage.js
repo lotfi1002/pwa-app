@@ -756,7 +756,7 @@ const handleSearchChange = (event) => {
          </button>
          </div>
          </div>
-         <PaymentModal  show={showpaie} handleClose={handleClosePaie} itemCount={qtyArticles} totalPayable={total} />
+         <PaymentModal  show={showpaie} handleClose={handleClosePaie} itemCount={qtyArticles} totalPayable={total}  salesHistory={salesHistory}/>
          </div>
          <div style={{ clear: 'both', height: '5px' }}></div>
          <div id="num">
