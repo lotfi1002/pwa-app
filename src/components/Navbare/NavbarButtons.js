@@ -6,17 +6,34 @@ import { useAuth } from '../../hooks/AuthProvider';
 
 import { isOnline } from '../../utilities/CheckOnline';
 import CloseCashRegisterModal from '../Modal/CloseCashRegisterModal';
+import ProductTransformationModal from '../Modal/ProductTransformationModal'
 
 const NavbarButtons = () => {
 
     const auth = useAuth();
 
  const [show, setShow] = useState(false);
+ const [showTransferModal, setShowTransferModal] = useState(false);
 
  // close modale window 
  const handleClose = () =>{
      setShow(false);
    } 
+
+   const handleShowTransferModal = () => setShowTransferModal(true);
+   const handleCloseTransferModal = () => setShowTransferModal(false);
+
+   const openBillView = () => {
+    const width = 600;
+    const height = 600;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+
+    const popup = window.open('/view_bill', '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+    if (!popup) {
+      alert('Popup blocked! Please enable popups for this site.');
+    }
+  };
 
    const handleShow = () => setShow(true);
  
@@ -194,8 +211,10 @@ const NavbarButtons = () => {
                     color: "rgb(255, 255, 255)",
                     textShadow: "none",
                   }}
+                  onClick={openBillView}
+
                 >
-                   <FontAwesomeIcon icon={faLaptop} />
+                   <FontAwesomeIcon icon={faLaptop}  />
                 </a>
               </li>
               <li
@@ -340,32 +359,9 @@ const NavbarButtons = () => {
                 className="dropdown"
                 style={{ padding: "0px", margin: "0px" }}
               >
-                <a
-                  id="addManuallyTransfer"
-                  className="btn borange pos-tip"
-                  href="/"
-                  tabIndex="-1"
-                  style={{
-                    outline: "0px",
-                    border: "none",
-                    display: "inline-block",
-                    textAlign: "center",
-                    boxShadow: "none",
-                    margin: "5px 3px",
-                    position: "relative",
-                    height: "30px",
-                    minWidth: "40px",
-                    width: "auto",
-                    fontSize: "12px",
-                    borderRadius: "0px",
-                    background: "rgb(250, 96, 61)",
-                    padding: "5px 10px",
-                    color: "rgb(255, 255, 255)",
-                    textShadow: "none",
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </a>
+               <Button id="addManuallyTransfer" className="btn bdarkGreen pos-tip" tabIndex="-1" title="<span>Ajouter un transfert manuel</span>" style={{ outline: "0px", border: "none", display: "inline-block", textAlign: "center", boxShadow: "none", background: "rgb(92, 184, 92)", margin: "5px 3px", position: "relative", height: "30px", minWidth: "40px", width: "auto", fontSize: "12px", borderRadius: "0px", padding: "5px 10px", color: "rgb(255, 255, 255)", textShadow: "none" }} onClick={handleShowTransferModal}>
+                    <FontAwesomeIcon icon={faPlusCircle} />
+                </Button>
               </li>
 
               <li
@@ -507,6 +503,7 @@ const NavbarButtons = () => {
               
 
       </ul>
+      <ProductTransformationModal show={showTransferModal} handleClose={handleCloseTransferModal} />
       </>
     ) ;
 

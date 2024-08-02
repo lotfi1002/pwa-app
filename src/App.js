@@ -8,8 +8,10 @@ import CaisseRoute from './router/CaisseRoute';
 import AuthProvider from './hooks/AuthProvider';
 import { isAppOnline } from './utilities/CheckOnline';
 import OtherServices from './services/OtherServices';
+import Receipt from './components/Other/Receipt';
 
 import "./css/style.css";
+import BillView from './pages/BillView';
 
 function App() {
 
@@ -76,7 +78,11 @@ function App() {
               <Route element={<CaisseRoute/>}>
                       <Route path='/' element={<PosPage/>}></Route>
                       <Route path='/pos' element={<PosPage/>}></Route>
-              </Route>       
+                      <Route path='/view_bill' element={<BillView/>}></Route> 
+                      <Route path='/receipt/:sale_id' element={<Receipt/>}></Route>
+              </Route>    
+                
+              
               <Route path='/caisse' element={<CaissePage/>}></Route>                
               </Route>
       </Routes>

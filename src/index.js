@@ -5,14 +5,16 @@ import App from './App';
 import * as serviceWorkerRegistration from './utilities/serviceWorkerRegistration';
 import reportWebVitals from './utilities/reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import PWAPrompt from 'react-ios-pwa-prompt';
+//import PWAPrompt from 'react-ios-pwa-prompt';
+//import View from './pages/View';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
     <App />
-    <PWAPrompt promptOnVisit={100} timesToShow={3} copyClosePrompt="Close" permanentlyHideOnDismiss={true}/>
+    {/* <PWAPrompt promptOnVisit={100} timesToShow={3} copyClosePrompt="Close" permanentlyHideOnDismiss={true}/> */}
+    {/* <View/> */}
 
     </BrowserRouter>
   </React.StrictMode>

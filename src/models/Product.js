@@ -1,17 +1,21 @@
 class Product{
 
-    constructor(libelle , pu){
-        this.libelle = libelle ;
-        this.pu = pu ;
-    }
-
-    getLibelle(){
-        return this.libelle ;
-        }
+    constructor(id, item_id, label, category, row, combo_items, tax_rate, units, options,code) {
+        this.id = id;
+        this.label = label;
+        this.item_id = item_id;
+        this.category = category;
+        this.combo_items = combo_items;
+        this.row = row;
+        this.tax_rate = tax_rate;
+        this.units = units;
+        this.options = options;
+        this.code = code;
+      }
     
-        getPu(){
-            return this.pu ;
-            }
+      static from(json) {
+        return Object.assign(new Product(), json);
+      }
             
 
 }

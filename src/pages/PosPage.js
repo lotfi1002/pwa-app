@@ -1,15 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Layout from "../components/Layout/Layout";
 import TabProduct from "../components/Pos/TabProduct";
-import {  faEdit, faEye, faMoneyBill, faPencil, faPlusSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {  faEdit, faMoneyBill, faPlusSquare, faTrashCan,faGift,faArrowRight,faComment   } from "@fortawesome/free-solid-svg-icons";
 import { APP_NAME } from "../utilities/Params";
 import CalculatorComponent from "../components/Pos/CalculatorComponent";
+import api from "../utilities/Api";
+import $ from 'jquery';
+import CommentModal from "../components/Modal/CommentModal";
 
 // css 
 import "../css/posajax.css";
 import "../css/pos.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import PaymentModal from "../components/Modal/PaymentModal";
+import { isAppOnline } from "../utilities/CheckOnline";
+import ProductDao from "../dao/ProductsDao";
 
 
 
@@ -17,21 +22,352 @@ import PaymentModal from "../components/Modal/PaymentModal";
 export const PosPage = () => {
 
   const [showpaie , setShowPaie] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [salesHistory, setSalesHistory] = useState(localStorage.getItem('salesHistory')?JSON.parse(localStorage.getItem('salesHistory')):[]); // State for Sales History
+  const [nbrArticles , setNbrArticles] = useState("0");
+  const [total , setTotal] = useState("0.00");
+  const [qtyArticles , setQtyArticles] = useState("0");
+  const [showComment, setShowComment] = useState(false);
+  const [commentProduct, setCommentProduct] = useState(null);
+  const [isOnline, setIsOnline] = useState(false);
 
-  const handleClosePaie = ()=>{
-      
+
+  //
+  const inputRef = useRef(null);
+  const qtyRefs = useRef([]);
+
+  const handleQtyChange = (e, index) => {
+    const updatedSalesHistory = [...salesHistory];
+    const newQty = parseInt(e.target.value, 10);
+    console.log("=================");
+    console.log(updatedSalesHistory);
+    if (!isNaN(newQty) && newQty >= 1) {
+      updatedSalesHistory[index].qty = newQty;
+      updatedSalesHistory[index].ssTotal = newQty * updatedSalesHistory[index].price;
+      setSalesHistory(updatedSalesHistory);
+      updateSummary();
+    }
+  };
+  
+  //
+  const [thedata , setThedata] = useState("");
+
+
+
+  const updateSummary = () =>{
+    setTotal(salesHistory.reduce((sum, item) => sum + item.ssTotal, 0).toFixed(2))
+    setNbrArticles(salesHistory.length)
+    setQtyArticles(salesHistory.reduce((sum, item) => sum + item.qty, 0).toFixed(2))
+    localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
+
+  }
+//
+
+const onlineHandleChangeSuggestion = async (term) => {
+  try {
+    const response = await api.get('api/product/search', {
+      params: { term }
+    });
+
+    if (response.data.length > 0) {
+      setSuggestions(response.data);
+    } else {
+      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+    }
+  } catch (error) {
+    console.error('Error fetching product suggestions:', error);
+  }
+};
+
+
+const offlineHandleChangeSuggestion = async (term) => {
+  try {
+    const suggestions = await ProductDao.getSuggestionsByTerm(term);
+    if (suggestions.length > 0) {
+      setSuggestions(suggestions);
+    } else {
+      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+    }
+  } catch (error) {
+    console.error('Error fetching offline product suggestions:', error);
+  }
+};
+
+
+
+const handleSearchChange = (event) => {
+  console.log("clicked");
+  const term = event.target.value;
+  setSearchTerm(term);
+
+  if (term.length > 0) {
+    isAppOnline().then((onlineStatus) => {
+      console.log("status" + onlineStatus);
+
+      if (onlineStatus) { // Online mode
+        return onlineHandleChangeSuggestion(term).then(() => {
+          console.log("Online Suggestion");
+        });
+      } else { // Offline mode
+        return offlineHandleChangeSuggestion(term).then(() => {
+          console.log("Offline Suggestion");
+        });
+      }
+    }).catch((error) => {
+      console.error('Error determining app status:', error);
+    });
+  } else {
+    setSuggestions([]);
+  }
+};
+
+
+  const handleSuggestionClick = async (suggestion) => {
+    if(suggestion.id!==0){
+
+      const newSale = {
+        product: suggestion.code + " - "+ suggestion.name ,
+        price: parseFloat(suggestion.price),
+        qty:1,
+        ssTotal:1*parseFloat(suggestion.price)
+      };
+
+      isAppOnline().then( async (onlineStatus) => {
+  
+        if (onlineStatus) { // Online mode
+          try {
+            const response = await api.get('api/pos/getProductDataByCode', {params:{
+              code: suggestion.code,
+              
+            }});
+            console.log(response);
+            const data = response.data;
+            newSale.category=data.category;
+            setSalesHistory([...salesHistory, newSale]); // Add new sale to sales history
+
+          } catch (error) {
+            console.error('Error fetching product data:', error);
+          }
+    
+        } else { // Offline mode
+          try {
+            const product = await ProductDao.getProductByCode(suggestion.code)
+            if (product) {
+              newSale.category = product.category;      
+              setSalesHistory([...salesHistory, newSale]); // Add new sale to sales history
+
+            } else {
+              console.error('Product not found in IndexedDB');
+            }
+          } catch (error) {
+            console.error('Error fetching product from IndexedDB:', error);
+          }
+        }
+      }).catch((error) => {
+        console.error('Error determining app status:', error);
+      });
+
+     
+    
+   
+    
+    setSearchTerm("");
+    setSuggestions([]);
+    updateSummary();
+    }
+  };
+
+  const handleClosePaie = () => {
     setShowPaie(false);
-}
+  };
 
-const handleShowPaie = (event) =>{ 
+  const handleShowPaie = () => {
+    if (salesHistory.length === 0) {
+      return alert('Veuillez ajouter le produit avant le paiement. Merci!');
+    }
+    setShowPaie(true);
+  };
+
+  const handleDeleteItem = (index) => {
+    const updatedSalesHistory = [...salesHistory];
+    updatedSalesHistory.splice(index, 1);
+    setSalesHistory(updatedSalesHistory);
+    updateSummary();
+  };
+
+  const handleGiftItemClick = (index) => {
+    const updatedSalesHistory = [...salesHistory];
+    updatedSalesHistory[index].price = 0;
+    updatedSalesHistory[index].ssTotal = 0;
+    updatedSalesHistory[index].comment = "Cadeau Client";
+    setSalesHistory(updatedSalesHistory);
+    updateSummary(); // Update any summary calculations if needed
+  };
+
+  const handleFraistItemClick = (index) => {
+    const updatedSalesHistory = [...salesHistory];
+    updatedSalesHistory[index].price = 0;
+    updatedSalesHistory[index].ssTotal = 0;
+    updatedSalesHistory[index].comment = "Frais de fonctionnement";
+    setSalesHistory(updatedSalesHistory);
+    updateSummary(); // Update any summary calculations if needed
+  };
+  
+
+    const handleCommentClick = (item) => {
+        setCommentProduct(item);
+        setShowComment(true);
+
+    };
+
+    const handleCloseComment = () => {
+        setShowComment(false);
+        setCommentProduct(null)
+    };
+
+  useEffect(() => {
+    isAppOnline().then((value) => {
+      if (value){ // online mode
+        setIsOnline(true);
+        }
+
+      else // offline mode
+      setIsOnline(false);
+  
+    });
+    updateSummary();
+    // Initialize the search input keyboard
+    try {
+      $(inputRef.current).keyboard({
+        layout: 'qwerty',
+        customLayout: {
+          default: [
+            '1 2 3', '4 5 6', '7 8 9', '0 {bksp}',
+            'Q W E R T Y', 'A S D F G', 'Z X C V B', '% .', '{clear}{space}'
+          ],
+          clear: 'Clear',
+        },
+        autoAccept: true,
+        alwaysOpen: false,
+        initialFocus: true,
+        restrictInput: true,
+        restrictInclude: /[0-9a-zA-Z%]/,
+        change: (e, keyboard) => {
+          const term = keyboard.$preview.val();
+          setSearchTerm(term);
+        
+          if (term.length > 0) {
+            isAppOnline().then(onlineStatus => {
+              if (onlineStatus) { // Online mode
+                api.get('api/product/search', { params: { term } })
+                  .then(response => {
+                    if (response.data.length > 0) {
+                      setSuggestions(response.data);
+                    } else {
+                      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error fetching product suggestions:', error);
+                  });
+              } else { // Offline mode
+                offlineHandleChangeSuggestion(term)
+                  .then(results => {
+                    if (results.length > 0) {
+                      setSuggestions(results);
+                    } else {
+                      setSuggestions([{ id: 0, label: 'No items found', value: term }]);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error fetching offline suggestions:', error);
+                  });
+              }
+            }).catch(error => {
+              console.error('Error determining app status:', error);
+            });
+          } else {
+            setSuggestions([]);
+          }
+        
+          // Focus the input to show the keyboard
+          $(inputRef.current).focus();
+        }
+        
+      });
+  
+      // Select and assign refs dynamically for quantity inputs
+      const qtyRefsArray = [];
+  
+      for (let i = 0; i < salesHistory.length; i++) {
+        const element = document.getElementById(`item-qty-${i}`);
+
+        if (element) {
+          qtyRefsArray.push(element);
+        }
+      }
+      console.log("elements");
+      console.log(qtyRefs.current);
+      qtyRefs.current = qtyRefsArray;
+  
+      // Initialize the keyboard for each quantity input
+      // qtyRefs.current.forEach((ref, index) => {
+      //   if (ref) {
+      //     $(ref).keyboard({
+      //       layout: 'custom',
+      //       customLayout: {
+      //         default: [
+      //           '1 2 3 {bksp}',
+      //           '4 5 6 . C',
+      //           '7 8 9 0 %',
+      //           '{accept} {cancel}'
+      //         ],
+      //         accept: 'Accept',
+      //         cancel: 'Cancel',
+      //         bksp: '\u2190',
+      //         clear: 'C'
+      //       },
+      //       autoAccept: true,
+      //       alwaysOpen: false,
+      //       initialFocus: true,
+      //       restrictInput: true,
+      //       restrictInclude: /[0-9%]/,
+      //       change: (e, keyboard) => {
+      //         const newValue = keyboard.$preview.val();
+      //         handleQtyChange({ target: { value: newValue } }, index);     
+      //       },
+      //       css: {
+      //         'keyboard-key-backspace': {
+      //           backgroundColor: 'orange',
+      //           color: 'white'
+      //         },
+      //         'keyboard-key-accept': {
+      //           backgroundColor: 'green',
+      //           color: 'white'
+      //         },
+      //         'keyboard-key-cancel': {
+      //           backgroundColor: 'red',
+      //           color: 'white'
+      //         },
+      //         'keyboard-key-clear': {
+      //           backgroundColor: 'blue',
+      //           color: 'white'
+      //         }
+      //       }
+      //     });
+      //   }
+      // });
+    } catch (error) {
+      console.error('Error initializing keyboards:', error);
+    }
 
 
-  setShowPaie(true)  
+  }, [salesHistory,showComment,commentProduct,isOnline]);
 
-} ;
     return (
       <>
-      <Layout>
+      <Layout >
          <div id="content">
             <div class="c1">
                <div class="pos">
@@ -78,69 +414,36 @@ const handleShowPaie = (event) =>{
             left: "-9999px",
           }}
         >
-          <input
-            id="test"
-            className="kb-pad ui-keyboard-input ui-widget-content ui-corner-all"
-            name="test"
-            type="text"
-            aria-haspopup="true"
-            
-            style={{ padding: "0px", margin: "0px", boxShadow: "none" }} />
-            </div>
-                  <div className="form-group">
-                     
-                        <div className="input-group" style={{ zIndex: 1 }}>
-                              <div
-                                 id="s2id_poscustomer"
-                                 className="form-control ">
-                                    
-                                  <input id="poscustomer"
-                                      
-                                       name="customer"
-                                       type="text"
-                                       required
-                                       tabIndex="-1"
-                                     style={{width : '310px'}}
-                                        />
-                            
-                              <button  id="toogle-customer-read-attr" >
-                                 <FontAwesomeIcon icon={faPencil} />
-                              </button>
-                           
-                           <button   id="view-customer" >
-                              <FontAwesomeIcon icon={faEye}/>
-                           </button >
-                        </div>
-                           
-                  </div>
-                  <div style={{ clear: 'both' }}>
-               </div>
+       
             </div>
             <div className="no-print">
             <div className="form-group" id="ui">
-            <div className="input-group">
-            <select
-            value="{selectedWarehouse}"
-            className="form-control poswarehouse pos-input-tip"
-            data-placeholder="Select Warehouse"
-            required="required"
-            style={{ width: '100%' }}
-            >
-            <option value="">Select Warehouse</option>
-            </select>
-            </div>
             <div className="form-group" id="ui">
-            <input
-               type="text"
-               className="form-control pos-tip"
-               inputMode="none"
-               id="add_item"
-               data-placement="top"
-               data-trigger="focus"
-               placeholder="Numeriser/ Rechercher un produit par nom/ Code "
-               title="Product name tip"
-               />
-             
+          <input
+            type="text"
+            className="form-control pos-tip keyboard-input"
+            inputMode="none"
+            id="add_item"
+            data-placement="top"
+            data-trigger="focus"
+            placeholder="Numeriser/ Rechercher un produit par nom/ Code"
+            title="Product name tip"
+            value={searchTerm}
+            ref={inputRef}
+            onChange={handleSearchChange}
+          />
+          {suggestions.length > 0 && (
+  <ul className="suggestions-list">
+    {suggestions.map((suggestion) => (
+      <li key={suggestion.id} onClick={() => handleSuggestionClick(suggestion)}>
+        {suggestion.label}
+      </li>
+    ))}
+  </ul>
+)}
+
+      
+
             <div style={{ clear: 'both' }}>
             </div>
             </div>
@@ -163,7 +466,7 @@ const handleShowPaie = (event) =>{
             borderBottom: "1px solid rgb(221, 221, 221)",
             position: "absolute",
             width: "100%",
-            height: "231px",
+            height: "350px",
             minHeight: "278px",
             overflow: "scroll",
           }}>
@@ -260,6 +563,72 @@ const handleShowPaie = (event) =>{
          </thead>
          <tbody className="ui-sortable"
               style={{ padding: "0px", margin: "0px" }}>
+          {salesHistory.map((item, index) => (
+  <tr key={index}>
+    <td>
+      {item.product} ({item.category})
+      <br />
+      <span>En stock: 0 <FontAwesomeIcon icon={faComment} style={{ color: 'black', fontSize: '12px', cursor: 'pointer', marginLeft: '5px' }} onClick={()=>handleCommentClick(item)} /></span>
+
+      {item.category !== "27" && (
+        <>
+          <br />
+          <br />
+          <div className="label-wrapper">
+            <div>
+              Cadeau client
+              <FontAwesomeIcon
+                icon={faGift}
+                className="fa-gift tip pointer edit3"
+                title="Cadeau"
+                style={{ cursor: 'pointer', color: 'green' }}
+                onClick={() => handleGiftItemClick(index)}
+              />
+            </div>
+            <div>
+              Frais
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="fa-arrow-right tip pointer edit3"
+                title="Frais"
+                style={{ cursor: 'pointer', color: 'blue' }}
+                onClick={() => handleFraistItemClick(index)}
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </td>
+    <td>{item.price}</td>
+    <td style={{ textAlign: "center" }}>
+      <input
+        type="number"
+        min="1"
+        value={item.qty}
+        onChange={(e) => handleQtyChange(e, index)}
+        style={{
+          width: "60px",
+          textAlign: "center",
+          padding: "5px 8px",
+          fontSize: "14px",
+        }}
+      />
+    </td>
+      {/* tab product component */}
+      {showComment && <CommentModal show={showComment} handleClose={handleCloseComment} salesHistory={salesHistory} setSalesHistory={setSalesHistory} index={index} item={commentProduct} />}
+    <td>{item.ssTotal}</td>
+    <td>
+      <button
+        type="button"
+        className="btn btn-sm btn-danger"
+        onClick={() => handleDeleteItem(index)}
+      >
+        <FontAwesomeIcon icon={faTrashCan} />
+      </button>
+    </td>
+  </tr>
+))}
+
          </tbody>
          </table>
          <div style={{ clear: 'both' }}></div>
@@ -304,17 +673,18 @@ const handleShowPaie = (event) =>{
             padding: "5px",
             background: "rgb(255, 255, 255)",
             width: "100%",
+            marginTop:'101.6px',
             cssFloat: "right",
             color: "rgb(0, 0, 0)",
           }}>
          <tr>
          <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}>Articles</td>
          <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #DDD' }}>
-         <span id="titems">0</span>
+         <span id="titems">{nbrArticles} ({qtyArticles})</span>
          </td>
          <td style={{ padding: '5px 10px', borderTop: '1px solid #DDD' }}>Total</td>
          <td className="text-right" style={{ padding: '5px 10px', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #DDD' }}>
-         <span id="total">0.00</span>
+         <span id="total">{total}</span>
          <input id="newdiscount" style={{ display: 'none' }} defaultValue="0" />
          <input id="maxbon" style={{ display: 'none' }} defaultValue="" />
          <span id="newdiscount2"></span>
@@ -386,7 +756,7 @@ const handleShowPaie = (event) =>{
          </button>
          </div>
          </div>
-         <PaymentModal  show={showpaie} handleClose={handleClosePaie}  />
+         <PaymentModal  show={showpaie} handleClose={handleClosePaie} itemCount={qtyArticles} totalPayable={total}  salesHistory={salesHistory}/>
          </div>
          <div style={{ clear: 'both', height: '5px' }}></div>
          <div id="num">
@@ -428,8 +798,18 @@ const handleShowPaie = (event) =>{
                         <div class="pane">
                            <div class="input-box2">
                               <div class="input-group2">
-                                 <input type="text" className="form-control thedata big"
-                                         />
+                              <input
+  type="text"
+  className="form-control thedata big"
+  value={thedata}
+  onChange={(e) => setThedata(e.currentTarget.value)}
+  style={{
+    fontSize: '1.5em',       
+    backgroundColor: '#508cff', 
+    color: 'white'  
+  }}
+/>
+                            
                                   <span
                       id="s"
                       className="input-group-addon2"
@@ -453,7 +833,7 @@ const handleShowPaie = (event) =>{
                       X
                     </span>
                          {/* calculator  component */}
-                        <CalculatorComponent />
+                        <CalculatorComponent setThedata={setThedata}/>
 
                               </div>
                            </div>
@@ -465,7 +845,7 @@ const handleShowPaie = (event) =>{
                <div id="ajaxproducts">
             <div>
                {/* tab product component */}
-               <TabProduct/>
+               <TabProduct salesHistory={salesHistory} setSalesHistory={setSalesHistory} setNbrArticles={setNbrArticles} thedata={thedata} setThedata={setThedata}/>
 
               
             </div>
@@ -492,3 +872,53 @@ const handleShowPaie = (event) =>{
       </>
     );
 }
+
+
+//   const initializeKeyboard = (input, index) => {
+//   $(input).keyboard({
+//     layout: 'custom',
+//     customLayout: {
+//       default: [
+//         '1 2 3 {bksp}',
+//         '4 5 6 . C',
+//         '7 8 9 0 %',
+//         '{accept} {cancel}'
+//       ],
+//       accept: 'Accept',
+//       cancel: 'Cancel',
+//       bksp: '\u2190', // Unicode for left arrow
+//       clear: 'C'
+//     },
+//     autoAccept: true,
+//     alwaysOpen: false,
+//     initialFocus: true,
+//     restrictInput: true,
+//     restrictInclude: /[0-9%]/,
+//     change: (e, keyboard) => {
+//       console.log("00000000000000000");
+//       console.log(salesHistory);
+//       const newValue = keyboard.$preview.val();
+//       handleQtyChange({ target: { value: newValue } }, index);
+//     },
+//     css: {
+//       'keyboard-key-backspace': {
+//         backgroundColor: 'orange',
+//         color: 'white'
+//       },
+//       'keyboard-key-accept': {
+//         backgroundColor: 'green',
+//         color: 'white'
+//       },
+//       'keyboard-key-cancel': {
+//         backgroundColor: 'red',
+//         color: 'white'
+//       },
+//       'keyboard-key-clear': {
+//         backgroundColor: 'blue',
+//         color: 'white'
+//       }
+//     }
+//   });
+// };
+
+// ref={(input) => input && initializeKeyboard(input, index)}

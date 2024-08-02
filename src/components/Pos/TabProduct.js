@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import VenteModal from '../Modal/VenteModal';
+import GainsModal from '../Modal/GainsModal';
+import api from '../../utilities/Api';
+import { isAppOnline } from '../../utilities/CheckOnline';
+import ProductDao from '../../dao/ProductsDao';
+
 
 
 const productData = [
@@ -145,79 +150,207 @@ const productData = [
   }
 ];
 
-const TabProduct = () => {
+const TabProduct = ({ salesHistory, setSalesHistory,  thedata, setThedata }) => {
+  const [saleValue, setSaleValue] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showVente, setShowVente] = useState(false);
+
+   const [showGains, setShowGains] = useState(false);  
+   const [productCategory, setProductCategory] = useState(null);
+
+   const handleProductSelect = async  (product) => {
+    setSelectedProduct(product);
+  
+    isAppOnline().then( async (onlineStatus) => {
+    
+      if (onlineStatus) { // Online mode
+        try {
+          const response = await api.get('api/pos/getProductDataByCode', {params:{
+            code: product.value,
+            warehouse_id: 1,
+            customer_id: 1
+          }});
+          console.log(response.data);
+          const data = response.data;
+          console.log(data);
+          setProductCategory(data.category);
+          if (data.category === "27") {
+            setShowGains(true);
+          } else if (["12", "6", "30", "28", "3", "1", "4"].includes(data.category)) {
+            setShowVente(true);
+          }
+          if(thedata!==""){
+            setSaleValue(thedata)
+            setThedata('')
+          }
+         
+        } catch (error) {
+          console.error('Error fetching product data:', error);
+        }
+      } else { // Offline mode
+        try {
+          const productFroIndexedDB = await ProductDao.getProductByCode(product.value)
+          if (productFroIndexedDB) {
+            setProductCategory(productFroIndexedDB.category);
+            if (productFroIndexedDB.category === "27") {
+              setShowGains(true);
+            } else if (["12", "6", "30", "28", "3", "1", "4"].includes(productFroIndexedDB.category)) {
+              setShowVente(true);
+            }
+            if(thedata!==""){
+              setSaleValue(thedata)
+              setThedata('')
+            }
+   
+          } else {
+            console.error('Product not found in IndexedDB');
+          }
+        } catch (error) {
+          console.error('Error fetching product from IndexedDB:', error);
+        }
+      }
+    }).catch((error) => {
+      console.error('Error determining app status:', error);
+    });
+  
+  
+    
+  };
+
+  const handleCloseGains = () => {
+    setSelectedProduct(null);
+    setSaleValue('');
+    setShowGains(false);
+  };
 
 
-   // vente modal window 
-   const [showvente , setShowvente] = useState(false);
+   //
+   function verifyAndSplit(input) {
+    const pattern = /^(\d+)%(\d+)$/;
 
-   const [code , setCode ] = useState('');
+    const match = String(input).match(pattern);
+    
 
-   const handleCloseVente = ()=>{
-      
-         setShowvente(false);
-   }
+    if (match) {
+      return [parseInt(match[1], 10), parseInt(match[2], 10)];
+    } else {
+        return null;
+    }
+}
 
- const handleShowVente = (event) =>{ 
+  const handleAddToTable = (saleValue) => {
+    if (selectedProduct) {
+  
+      const newSale = {
+        product: selectedProduct.value + " - "+ selectedProduct.title ,
+        price: parseFloat(saleValue),
+        category:productCategory,
+      };
+  
+      if(verifyAndSplit(saleValue)!=null){
+        newSale.qty=verifyAndSplit(saleValue)[1]
+        newSale.ssTotal=newSale.qty*verifyAndSplit(saleValue)[0]
+      }else{
+        newSale.qty=1
+        newSale.ssTotal=1*parseFloat(saleValue)
+      }
+      if(newSale.category === "27"){
+        newSale.price=(-1)* newSale.price
+        newSale.ssTotal=(-1)* newSale.ssTotal
+      }
+     
+      setSalesHistory([...salesHistory, newSale]); // Add new sale to sales history
+    }
+    handleCloseVente();
+    handleCloseGains();
+  
+  };
 
-  const element = event.target;
-  const parent = element.parentElement;
-  setCode( parent.value);
-  console.log('Element that triggered the event:', parent.value);
-  setShowvente(true)  } ;
+  const handleCloseVente = () => {
+    setShowVente(false);
+  };
+
   return (
     <>
-    <div>
-      {productData.map(product => (
-        <button
-          key={product.id}
-          id={`product-${product.id}`}
-          type="button"
-          value={product.value}
-          title={product.title}
-          className="btn-prni btn-default product pos-tip"
-          data-container="body"
-          style={{ backgroundColor: product.bgColor, position: 'relative', overflow: 'visible' }}
-          onClick={handleShowVente}
-        >
-          <img src={product.imgSrc} alt={product.title} className="img-rounded" />
-          <span>{product.title}</span>
-          <div
-            className="quantity-badge"
-            style={{
-              position: 'absolute',
-              top: '0px',
-              right: '0px',
-              backgroundColor: '#ff0000',
-              color: '#ffffff',
-              borderRadius: '10%',
-              padding: '5px',
-              fontSize: '12px'
-            }}
+      <div style={{ paddingBottom: '100px' }}>
+        {productData.map(product => (
+          <button
+            key={product.id}
+            id={`product-${product.id}`}
+            type="button"
+            value={product.value}
+            title={product.title}
+            className="btn-prni btn-default product pos-tip"
+            data-container="body"
+            style={{ backgroundColor: product.bgColor, position: 'relative', overflow: 'visible' }}
+            onClick={() => handleProductSelect(product)} 
           >
-            0
-          </div>
-          <div
-            className="quantity-badge"
-            style={{
-              position: 'absolute',
-              top: '30px',
-              right: '0px',
-              backgroundColor: 'green',
-              color: '#ffffff',
-              borderRadius: '10%',
-              padding: '5px',
-              fontSize: '12px'
-            }}
-          >
-            0
-          </div>
-        </button>
-      ))}
-    </div>
-    <VenteModal show={showvente} handleClose={handleCloseVente} initvente={0} code={code}  warehouse_id={1}  customer_id={1} />
+            <img src={product.imgSrc} alt={product.title} className="img-rounded" />
+            <span>{product.title}</span>
+            <div
+              className="quantity-badge"
+              style={{
+                position: 'absolute',
+                top: '0px',
+                right: '0px',
+                backgroundColor: '#ff0000',
+                color: '#ffffff',
+                borderRadius: '10%',
+                padding: '5px',
+                fontSize: '12px'
+              }}
+            >
+              0
+            </div>
+            <div
+              className="quantity-badge"
+              style={{
+                position: 'absolute',
+                top: '30px',
+                right: '0px',
+                backgroundColor: 'green',
+                color: '#ffffff',
+                borderRadius: '10%',
+                padding: '5px',
+                fontSize: '12px'
+              }}
+            >
+              0
+            </div>
+          </button>
+        ))}
+      </div>
+      {showVente && (
+        <VenteModal
+          show={showVente}
+          handleClose={handleCloseVente}
+          initvente=""
+          code={0}
+          warehouse_id={1}
+          customer_id={1}
+          selectedProduct={selectedProduct}
+          saleValue={saleValue}
+          setSaleValue={setSaleValue}
+          handleAddToTable={handleAddToTable}
+        />
+      )}
+      {showGains && (
+        <GainsModal
+          show={showGains}
+          handleClose={handleCloseGains}
+          initvente=""
+          code={0}
+          warehouse_id={1}
+          customer_id={1}
+          selectedProduct={selectedProduct}
+          saleValue={saleValue}
+          setSaleValue={setSaleValue}
+          handleAddToTable={handleAddToTable}
+        />
+      )}
     </>
   );
+  
 };
 
 export default TabProduct;
